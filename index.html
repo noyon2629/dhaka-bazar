@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -172,6 +173,7 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:10px;
 }
 
 .section-title h2{
@@ -197,6 +199,13 @@ header{
     border-radius:15px;
     padding:15px 8px;
     text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.category:hover{
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
 .category-icon{
@@ -227,6 +236,12 @@ header{
     border:1px solid var(--border);
     border-radius:16px;
     overflow:hidden;
+    transition:.2s;
+}
+
+.product:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(0,0,0,.08);
 }
 
 .product-img{
@@ -260,11 +275,24 @@ header{
     font-weight:800;
 }
 
+.delivery-charge{
+    margin-top:5px;
+    font-size:11px;
+    color:#666;
+}
+
+.seller-name{
+    margin-top:8px;
+    font-size:11px;
+    color:#555;
+}
+
 .product-bottom{
     display:flex;
     justify-content:space-between;
     align-items:center;
     margin-top:12px;
+    gap:5px;
 }
 
 .add-btn{
@@ -287,7 +315,7 @@ header{
     font-size:12px;
 }
 
-.wallet{
+.cod-banner{
     margin-top:28px;
     background:white;
     border:1px solid var(--border);
@@ -295,35 +323,26 @@ header{
     padding:20px;
 }
 
-.wallet-card{
-    background:linear-gradient(135deg,#101827,#25334a);
+.cod-card{
+    background:linear-gradient(135deg,#087f4c,#11a968);
     color:white;
     border-radius:18px;
     padding:22px;
 }
 
-.wallet-label{
-    opacity:.7;
+.cod-icon{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+.cod-card h2{
+    margin-bottom:7px;
+}
+
+.cod-card p{
     font-size:13px;
-}
-
-.wallet-balance{
-    font-size:34px;
-    font-weight:800;
-    margin:8px 0 20px;
-}
-
-.wallet-actions{
-    display:flex;
-    gap:10px;
-}
-
-.wallet-actions button{
-    padding:9px 15px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,.25);
-    background:rgba(255,255,255,.1);
-    color:white;
+    line-height:1.6;
+    opacity:.95;
 }
 
 .features{
@@ -402,7 +421,7 @@ header{
     max-width:600px;
     margin:auto;
     display:grid;
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(4,1fr);
 }
 
 .nav-item{
@@ -486,6 +505,12 @@ header{
     outline:none;
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:var(--primary);
+}
+
 .primary-btn{
     width:100%;
     padding:13px;
@@ -528,23 +553,39 @@ header{
     border-radius:6px;
 }
 
-.total{
+.summary-box{
+    background:#f8faf9;
+    padding:14px;
+    border-radius:12px;
+}
+
+.summary-row{
     display:flex;
     justify-content:space-between;
-    padding:16px 0;
+    gap:10px;
+    margin-bottom:9px;
+    font-size:13px;
+}
+
+.summary-total{
+    display:flex;
+    justify-content:space-between;
+    padding-top:12px;
+    border-top:1px solid #ddd;
     font-size:19px;
     font-weight:800;
 }
 
-.payment-option{
-    border:1px solid var(--border);
-    padding:13px;
-    border-radius:10px;
-    margin-bottom:8px;
+.cod-only{
+    border:1px solid #b7e4c7;
+    background:#f0fdf4;
+    padding:14px;
+    border-radius:12px;
+    margin:15px 0;
 }
 
-.payment-option input{
-    margin-right:8px;
+.cod-only strong{
+    color:var(--primary-dark);
 }
 
 .order-success{
@@ -570,6 +611,17 @@ header{
     border-radius:12px;
     padding:13px;
     margin-bottom:10px;
+}
+
+.order-status{
+    display:inline-block;
+    margin-top:8px;
+    padding:5px 9px;
+    border-radius:20px;
+    background:#dcfce7;
+    color:#166534;
+    font-size:11px;
+    font-weight:700;
 }
 
 .toast{
@@ -598,6 +650,22 @@ header{
     text-align:center;
     color:var(--muted);
     padding:25px;
+}
+
+.small-note{
+    color:#777;
+    font-size:11px;
+    line-height:1.5;
+    margin-top:7px;
+}
+
+.delivery-highlight{
+    background:#fff7ed;
+    color:#9a3412;
+    padding:8px 10px;
+    border-radius:8px;
+    font-size:11px;
+    margin-top:10px;
 }
 
 @media(max-width:900px){
@@ -665,6 +733,11 @@ header{
         font-size:16px;
     }
 
+    .add-btn{
+        padding:7px 9px;
+        font-size:11px;
+    }
+
 }
 
 </style>
@@ -672,7 +745,7 @@ header{
 
 <body>
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 
 <header>
 
@@ -699,12 +772,6 @@ oninput="searchProducts()">
 
 <button
 class="icon-btn"
-onclick="openModal('walletModal')">
-💳
-</button>
-
-<button
-class="icon-btn"
 onclick="openModal('accountModal')">
 👤
 </button>
@@ -712,7 +779,6 @@ onclick="openModal('accountModal')">
 </div>
 
 </div>
-
 
 <div class="location-bar">
 
@@ -735,10 +801,9 @@ onclick="openModal('accountModal')">
 </header>
 
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 
 <main class="container">
-
 
 <section class="hero">
 
@@ -749,8 +814,9 @@ onclick="openModal('accountModal')">
 </h1>
 
 <p>
-ঢাকা বাজারে পণ্য খুঁজুন, কার্টে যোগ করুন,
-Checkout করুন এবং অর্ডার Confirmation পান।
+ঢাকা বাজারে বাংলাদেশের বিভিন্ন ধরনের পণ্য
+খুঁজুন, কার্টে যোগ করুন এবং সহজে
+Cash on Delivery-তে অর্ডার করুন।
 </p>
 
 <button onclick="scrollToProducts()">
@@ -762,7 +828,7 @@ Checkout করুন এবং অর্ডার Confirmation পান।
 </section>
 
 
-<!-- CATEGORY -->
+<!-- ================= CATEGORY ================= -->
 
 <div class="section-title">
 
@@ -810,7 +876,7 @@ Checkout করুন এবং অর্ডার Confirmation পান।
 </section>
 
 
-<!-- PRODUCTS -->
+<!-- ================= PRODUCTS ================= -->
 
 <div class="section-title" id="productSection">
 
@@ -822,55 +888,31 @@ Checkout করুন এবং অর্ডার Confirmation পান।
 
 </div>
 
-
 <section class="products" id="products"></section>
 
 
-<!-- WALLET -->
+<!-- ================= COD ================= -->
 
-<section class="wallet">
+<section class="cod-banner">
 
-<div class="section-title" style="margin-top:0">
+<div class="cod-card">
 
-<h2>💳 আমার Wallet</h2>
+<div class="cod-icon">💵</div>
 
-<button onclick="openModal('walletModal')">
-বিস্তারিত
-</button>
+<h2>Cash on Delivery</h2>
 
-</div>
-
-
-<div class="wallet-card">
-
-<div class="wallet-label">
-বর্তমান ব্যালেন্স
-</div>
-
-<div
-class="wallet-balance"
-id="walletBalance">
-৳ 0.00
-</div>
-
-<div class="wallet-actions">
-
-<button onclick="openModal('walletModal')">
-💰 Wallet
-</button>
-
-<button onclick="openOrders()">
-📦 Orders
-</button>
-
-</div>
+<p>
+আপনার পণ্য হাতে পাওয়ার পর টাকা পরিশোধ করুন।
+ঢাকার ভিতরে Delivery-এর জন্য Seller নিজের
+Delivery Charge নির্ধারণ করতে পারবেন।
+</p>
 
 </div>
 
 </section>
 
 
-<!-- FEATURES -->
+<!-- ================= FEATURES ================= -->
 
 <section class="features">
 
@@ -878,11 +920,11 @@ id="walletBalance">
 
 <div class="feature-icon">🚚</div>
 
-<h3>দ্রুত ডেলিভারি</h3>
+<h3>ঢাকার ভিতরে Delivery</h3>
 
 <p>
-আপনার নির্ধারিত ঠিকানায় পণ্য পৌঁছে দেওয়ার
-জন্য Order system প্রস্তুত।
+বর্তমানে ঢাকা শহরের ভিতরে Delivery দেওয়ার
+জন্য সিস্টেমটি প্রস্তুত করা হয়েছে।
 </p>
 
 </div>
@@ -890,13 +932,13 @@ id="walletBalance">
 
 <div class="feature">
 
-<div class="feature-icon">🔐</div>
+<div class="feature-icon">💵</div>
 
-<h3>নিরাপদ পেমেন্ট</h3>
+<h3>Cash on Delivery</h3>
 
 <p>
-বাস্তব পেমেন্ট চালু করার জন্য অনুমোদিত
-Payment Gateway যুক্ত করতে হবে।
+কোনো Online Payment নেই। পণ্য হাতে পাওয়ার
+পর Cash Payment করুন।
 </p>
 
 </div>
@@ -909,8 +951,8 @@ Payment Gateway যুক্ত করতে হবে।
 <h3>Seller Product</h3>
 
 <p>
-Seller সরাসরি Product Add করে
-বাজারে পণ্য প্রদর্শন করতে পারবে।
+Seller নিজের Product এবং Delivery Charge
+দিয়ে সরাসরি Product Add করতে পারবেন।
 </p>
 
 </div>
@@ -920,7 +962,7 @@ Seller সরাসরি Product Add করে
 </main>
 
 
-<!-- FLOATING CART -->
+<!-- ================= FLOATING CART ================= -->
 
 <div class="cart-floating">
 
@@ -941,7 +983,7 @@ id="cartCount">
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- ================= BOTTOM NAV ================= -->
 
 <nav class="bottom-nav">
 
@@ -950,36 +992,37 @@ id="cartCount">
 <button
 class="nav-item active"
 onclick="goHome(this)">
+
 <span>🏠</span>
 হোম
+
 </button>
 
 <button
 class="nav-item"
 onclick="scrollToProducts();setActive(this)">
+
 <span>🛍️</span>
 বাজার
+
 </button>
 
 <button
 class="nav-item"
 onclick="openCart();setActive(this)">
+
 <span>🛒</span>
 কার্ট
-</button>
 
-<button
-class="nav-item"
-onclick="openModal('walletModal');setActive(this)">
-<span>💳</span>
-Wallet
 </button>
 
 <button
 class="nav-item"
 onclick="openModal('accountModal');setActive(this)">
+
 <span>👤</span>
 Account
+
 </button>
 
 </div>
@@ -987,7 +1030,7 @@ Account
 </nav>
 
 
-<!-- ACCOUNT MODAL -->
+<!-- ================= ACCOUNT MODAL ================= -->
 
 <div class="modal" id="accountModal">
 
@@ -1005,7 +1048,6 @@ onclick="closeModal('accountModal')">
 
 </div>
 
-
 <div class="form-group">
 
 <label>আপনার নাম</label>
@@ -1016,7 +1058,6 @@ type="text"
 placeholder="আপনার নাম">
 
 </div>
-
 
 <div class="form-group">
 
@@ -1030,7 +1071,6 @@ placeholder="01XXXXXXXXX">
 
 </div>
 
-
 <button
 class="primary-btn"
 onclick="saveAccount()">
@@ -1038,7 +1078,6 @@ onclick="saveAccount()">
 Account Save করুন
 
 </button>
-
 
 <div
 style="
@@ -1062,7 +1101,7 @@ Login করা হয়নি
 </div>
 
 
-<!-- LOCATION MODAL -->
+<!-- ================= LOCATION MODAL ================= -->
 
 <div class="modal" id="locationModal">
 
@@ -1079,7 +1118,6 @@ onclick="closeModal('locationModal')">
 </button>
 
 </div>
-
 
 <div class="form-group">
 
@@ -1105,7 +1143,6 @@ onclick="closeModal('locationModal')">
 
 </div>
 
-
 <div class="form-group">
 
 <label>সম্পূর্ণ ঠিকানা</label>
@@ -1117,7 +1154,6 @@ placeholder="বাড়ি/রোড/এলাকার ঠিকানা">
 </textarea>
 
 </div>
-
 
 <button
 class="primary-btn"
@@ -1132,7 +1168,7 @@ onclick="saveLocation()">
 </div>
 
 
-<!-- SELLER MODAL -->
+<!-- ================= SELLER MODAL ================= -->
 
 <div class="modal" id="sellerModal">
 
@@ -1150,7 +1186,6 @@ onclick="closeModal('sellerModal')">
 
 </div>
 
-
 <div class="form-group">
 
 <label>Product Name</label>
@@ -1160,7 +1195,6 @@ id="sellerProductName"
 placeholder="যেমন: বাসমতি চাল">
 
 </div>
-
 
 <div class="form-group">
 
@@ -1172,10 +1206,9 @@ placeholder="যেমন: ৫ কেজি প্যাক">
 
 </div>
 
-
 <div class="form-group">
 
-<label>Price</label>
+<label>Product Price (৳)</label>
 
 <input
 id="sellerProductPrice"
@@ -1185,6 +1218,22 @@ placeholder="যেমন: 500">
 
 </div>
 
+<div class="form-group">
+
+<label>Delivery Charge (৳)</label>
+
+<input
+id="sellerDeliveryCharge"
+type="number"
+min="0"
+placeholder="যেমন: 60">
+
+<div class="small-note">
+ঢাকার ভিতরে এই Product-এর Delivery Charge কত
+রাখবেন তা এখানে লিখুন।
+</div>
+
+</div>
 
 <div class="form-group">
 
@@ -1198,11 +1247,17 @@ placeholder="যেমন: 500">
 <option value="electronics">ইলেকট্রনিক্স</option>
 <option value="home">হোম</option>
 <option value="beauty">বিউটি</option>
+<option value="mobile">মোবাইল ও এক্সেসরিজ</option>
+<option value="computer">কম্পিউটার</option>
+<option value="baby">বেবি পণ্য</option>
+<option value="sports">স্পোর্টস</option>
+<option value="books">বই</option>
+<option value="automotive">অটোমোটিভ</option>
+<option value="other">অন্যান্য</option>
 
 </select>
 
 </div>
-
 
 <div class="form-group">
 
@@ -1214,17 +1269,26 @@ placeholder="যেমন: 500">
 <option>🍚</option>
 <option>🥬</option>
 <option>🍔</option>
+<option>🍗</option>
 <option>👕</option>
+<option>👖</option>
+<option>👟</option>
 <option>📱</option>
 <option>🎧</option>
+<option>💻</option>
+<option>⌚</option>
 <option>🏠</option>
+<option>🛏️</option>
 <option>🧴</option>
 <option>🔌</option>
+<option>🍼</option>
+<option>⚽</option>
+<option>📚</option>
+<option>🚗</option>
 
 </select>
 
 </div>
-
 
 <button
 class="primary-btn"
@@ -1239,96 +1303,7 @@ onclick="addSellerProduct()">
 </div>
 
 
-<!-- WALLET MODAL -->
-
-<div class="modal" id="walletModal">
-
-<div class="modal-box">
-
-<div class="modal-header">
-
-<h3>💳 Wallet</h3>
-
-<button
-class="close"
-onclick="closeModal('walletModal')">
-×
-</button>
-
-</div>
-
-
-<div
-style="
-background:#f0fdf4;
-padding:20px;
-border-radius:15px;
-text-align:center;
-margin-bottom:18px;
-">
-
-<div style="font-size:12px;color:#666">
-Wallet Balance
-</div>
-
-<div
-id="modalBalance"
-style="
-font-size:30px;
-font-weight:800;
-color:#087f4c;
-margin-top:5px;
-">
-
-৳ 0.00
-
-</div>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Demo Wallet Amount</label>
-
-<input
-id="walletAmount"
-type="number"
-min="1"
-placeholder="500">
-
-</div>
-
-
-<button
-class="primary-btn"
-onclick="demoAddMoney()">
-
-Demo Balance যোগ করুন
-
-</button>
-
-
-<p
-style="
-font-size:11px;
-color:#777;
-margin-top:12px;
-line-height:1.5;
-">
-
-⚠️ এটি Demo Wallet। বাস্তব টাকা যোগ করার
-জন্য অনুমোদিত Payment Gateway এবং Backend
-প্রয়োজন হবে।
-
-</p>
-
-</div>
-
-</div>
-
-
-<!-- CART MODAL -->
+<!-- ================= CART MODAL ================= -->
 
 <div class="modal" id="cartModal">
 
@@ -1346,20 +1321,9 @@ onclick="closeModal('cartModal')">
 
 </div>
 
-
 <div id="cartList"></div>
 
-
-<div class="total">
-
-<span>মোট</span>
-
-<span id="cartTotal">
-৳ 0
-</span>
-
-</div>
-
+<div id="cartTotals"></div>
 
 <button
 class="primary-btn"
@@ -1374,7 +1338,7 @@ Checkout →
 </div>
 
 
-<!-- CHECKOUT MODAL -->
+<!-- ================= CHECKOUT MODAL ================= -->
 
 <div class="modal" id="checkoutModal">
 
@@ -1392,14 +1356,11 @@ onclick="closeModal('checkoutModal')">
 
 </div>
 
-
 <div id="checkoutSummary"></div>
-
 
 <h4 style="margin:15px 0 10px">
 Delivery Information
 </h4>
-
 
 <div class="form-group">
 
@@ -1411,7 +1372,6 @@ type="text"
 placeholder="আপনার নাম">
 
 </div>
-
 
 <div class="form-group">
 
@@ -1425,7 +1385,6 @@ placeholder="01XXXXXXXXX">
 
 </div>
 
-
 <div class="form-group">
 
 <label>Delivery Address</label>
@@ -1438,62 +1397,22 @@ placeholder="সম্পূর্ণ ঠিকানা">
 
 </div>
 
+<div class="cod-only">
 
-<h4 style="margin:15px 0 10px">
-Payment Method
-</h4>
+<strong>💵 Payment Method</strong>
 
+<div style="margin-top:7px;font-size:13px">
 
-<label class="payment-option">
+🚚 <b>Cash on Delivery</b>
 
-<input
-type="radio"
-name="payment"
-value="COD"
-checked>
+</div>
 
-🚚 Cash on Delivery
+<div class="small-note">
+পণ্য হাতে পাওয়ার সময় Cash Payment করতে হবে।
+বর্তমানে অন্য কোনো Online Payment option নেই।
+</div>
 
-</label>
-
-
-<label class="payment-option">
-
-<input
-type="radio"
-name="payment"
-value="WALLET">
-
-💳 Dhaka Bazar Wallet
-
-</label>
-
-
-<label class="payment-option">
-
-<input
-type="radio"
-name="payment"
-value="BKASH">
-
-📱 bKash
-
-</label>
-
-
-<p
-style="
-font-size:11px;
-color:#777;
-margin:10px 0 15px;
-">
-
-bKash optionটি এখন Demo। বাস্তব bKash
-লেনদেনের জন্য অনুমোদিত API/Payment Gateway
-সংযুক্ত করতে হবে।
-
-</p>
-
+</div>
 
 <button
 class="primary-btn"
@@ -1508,7 +1427,7 @@ onclick="placeOrder()">
 </div>
 
 
-<!-- ORDER SUCCESS -->
+<!-- ================= SUCCESS MODAL ================= -->
 
 <div class="modal" id="successModal">
 
@@ -1530,10 +1449,10 @@ margin-top:8px;
 color:#666;
 ">
 
-আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে।
+আপনার Cash on Delivery অর্ডার সফলভাবে
+গ্রহণ করা হয়েছে।
 
 </p>
-
 
 <div
 class="order-id"
@@ -1542,7 +1461,6 @@ id="successOrderId">
 Order ID
 
 </div>
-
 
 <div
 id="successDetails"
@@ -1553,7 +1471,6 @@ line-height:1.7;
 ">
 
 </div>
-
 
 <button
 class="primary-btn"
@@ -1571,7 +1488,7 @@ onclick="closeModal('successModal')">
 </div>
 
 
-<!-- ORDERS MODAL -->
+<!-- ================= ORDERS MODAL ================= -->
 
 <div class="modal" id="ordersModal">
 
@@ -1589,7 +1506,6 @@ onclick="closeModal('ordersModal')">
 
 </div>
 
-
 <div id="ordersList"></div>
 
 </div>
@@ -1597,7 +1513,7 @@ onclick="closeModal('ordersModal')">
 </div>
 
 
-<!-- TOAST -->
+<!-- ================= TOAST ================= -->
 
 <div
 class="toast"
@@ -1624,6 +1540,7 @@ id:"P001",
 name:"মিনিকেট চাল",
 desc:"৫ কেজি প্যাক",
 price:450,
+deliveryCharge:60,
 category:"grocery",
 icon:"🍚",
 seller:"Dhaka Bazar"
@@ -1634,6 +1551,7 @@ id:"P002",
 name:"সয়াবিন তেল",
 desc:"২ লিটার",
 price:380,
+deliveryCharge:60,
 category:"grocery",
 icon:"🫗",
 seller:"Dhaka Bazar"
@@ -1644,6 +1562,7 @@ id:"P003",
 name:"চিকেন বার্গার",
 desc:"ফ্রেশ ও সুস্বাদু",
 price:180,
+deliveryCharge:50,
 category:"food",
 icon:"🍔",
 seller:"Dhaka Bazar"
@@ -1654,6 +1573,7 @@ id:"P004",
 name:"ওয়্যারলেস হেডফোন",
 desc:"Bluetooth",
 price:990,
+deliveryCharge:70,
 category:"electronics",
 icon:"🎧",
 seller:"Dhaka Bazar"
@@ -1664,6 +1584,7 @@ id:"P005",
 name:"কটন টি-শার্ট",
 desc:"Premium Cotton",
 price:550,
+deliveryCharge:60,
 category:"fashion",
 icon:"👕",
 seller:"Dhaka Bazar"
@@ -1674,6 +1595,7 @@ id:"P006",
 name:"সফট বালিশ",
 desc:"আরামদায়ক",
 price:350,
+deliveryCharge:70,
 category:"home",
 icon:"🛏️",
 seller:"Dhaka Bazar"
@@ -1684,6 +1606,7 @@ id:"P007",
 name:"হারবাল শ্যাম্পু",
 desc:"৪০০ ml",
 price:290,
+deliveryCharge:60,
 category:"beauty",
 icon:"🧴",
 seller:"Dhaka Bazar"
@@ -1694,6 +1617,7 @@ id:"P008",
 name:"ফাস্ট চার্জার",
 desc:"20W USB-C",
 price:650,
+deliveryCharge:60,
 category:"electronics",
 icon:"🔌",
 seller:"Dhaka Bazar"
@@ -1712,12 +1636,6 @@ let orders =
 JSON.parse(
 localStorage.getItem("dhakaOrders")
 ) || [];
-
-
-let walletBalance =
-Number(
-localStorage.getItem("dhakaWallet")
-) || 0;
 
 
 let currentLocation =
@@ -1750,8 +1668,6 @@ renderProducts();
 
 updateCart();
 
-updateWallet();
-
 updateLocation();
 
 updateAccount();
@@ -1779,11 +1695,6 @@ JSON.stringify(cart)
 localStorage.setItem(
 "dhakaOrders",
 JSON.stringify(orders)
-);
-
-localStorage.setItem(
-"dhakaWallet",
-walletBalance
 );
 
 }
@@ -1865,6 +1776,9 @@ document.createElement("div");
 
 card.className = "product";
 
+const delivery =
+Number(product.deliveryCharge || 0);
+
 card.innerHTML = `
 
 <div class="product-img">
@@ -1883,6 +1797,14 @@ ${escapeHTML(product.desc)}
 
 <div class="price">
 ৳${Number(product.price).toLocaleString("bn-BD")}
+</div>
+
+<div class="delivery-charge">
+🚚 Delivery: ৳${delivery.toLocaleString("bn-BD")}
+</div>
+
+<div class="seller-name">
+🏪 Seller: ${escapeHTML(product.seller || "Seller")}
 </div>
 
 <div class="product-bottom">
@@ -1963,6 +1885,13 @@ document
 .value
 );
 
+const deliveryCharge =
+Number(
+document
+.getElementById("sellerDeliveryCharge")
+.value
+);
+
 const category =
 document
 .getElementById("sellerProductCategory")
@@ -1994,7 +1923,34 @@ return;
 
 if(!price || price <= 0){
 
-showToast("সঠিক Price দিন");
+showToast("সঠিক Product Price দিন");
+
+return;
+
+}
+
+
+if(
+isNaN(deliveryCharge) ||
+deliveryCharge < 0
+){
+
+showToast("সঠিক Delivery Charge দিন");
+
+return;
+
+}
+
+
+if(!currentUser){
+
+closeModal("sellerModal");
+
+openModal("accountModal");
+
+showToast(
+"আগে Seller Account তৈরি করুন"
+);
 
 return;
 
@@ -2013,16 +1969,14 @@ desc:desc,
 
 price:price,
 
+deliveryCharge:deliveryCharge,
+
 category:category,
 
 icon:icon,
 
 seller:
-currentUser
-?
 currentUser.name
-:
-"Local Seller"
 
 };
 
@@ -2046,6 +2000,10 @@ document
 
 document
 .getElementById("sellerProductPrice")
+.value="";
+
+document
+.getElementById("sellerDeliveryCharge")
 .value="";
 
 
@@ -2135,7 +2093,11 @@ id:id,
 
 name:product.name,
 
-price:product.price,
+price:Number(product.price),
+
+deliveryCharge:Number(product.deliveryCharge || 0),
+
+seller:product.seller,
 
 qty:1
 
@@ -2152,6 +2114,45 @@ showToast(
 product.name +
 " কার্টে যোগ হয়েছে ✓"
 );
+
+}
+
+
+/* ======================================
+   CART TOTAL
+====================================== */
+
+function calculateCartTotals(){
+
+let productTotal = 0;
+
+let deliveryTotal = 0;
+
+
+cart.forEach(function(item){
+
+productTotal +=
+Number(item.price) *
+Number(item.qty);
+
+deliveryTotal +=
+Number(item.deliveryCharge || 0) *
+Number(item.qty);
+
+});
+
+
+return {
+
+productTotal:productTotal,
+
+deliveryTotal:deliveryTotal,
+
+grandTotal:
+productTotal +
+deliveryTotal
+
+};
 
 }
 
@@ -2197,26 +2198,30 @@ list.innerHTML =
 `;
 
 document
-.getElementById("cartTotal")
-.innerText =
-"৳ 0";
+.getElementById("cartTotals")
+.innerHTML = "";
 
 return;
 
 }
 
 
-let total = 0;
-
 list.innerHTML = "";
 
 
 cart.forEach(function(item,index){
 
-const itemTotal =
-item.price * item.qty;
+const itemProductTotal =
+Number(item.price) *
+Number(item.qty);
 
-total += itemTotal;
+const itemDeliveryTotal =
+Number(item.deliveryCharge || 0) *
+Number(item.qty);
+
+const itemTotal =
+itemProductTotal +
+itemDeliveryTotal;
 
 
 const div =
@@ -2239,7 +2244,21 @@ font-size:12px;
 color:#777;
 margin-top:5px">
 
-৳${item.price} × ${item.qty}
+Product:
+৳${Number(item.price).toLocaleString("bn-BD")}
+× ${item.qty}
+
+</div>
+
+<div
+style="
+font-size:12px;
+color:#777;
+margin-top:3px">
+
+Delivery:
+৳${Number(item.deliveryCharge || 0).toLocaleString("bn-BD")}
+× ${item.qty}
 
 </div>
 
@@ -2270,7 +2289,7 @@ style="text-align:right">
 <strong
 style="color:var(--primary)">
 
-৳${itemTotal}
+৳${itemTotal.toLocaleString("bn-BD")}
 
 </strong>
 
@@ -2298,11 +2317,51 @@ list.appendChild(div);
 });
 
 
+const totals =
+calculateCartTotals();
+
+
 document
-.getElementById("cartTotal")
-.innerText =
-"৳ " +
-total.toLocaleString("bn-BD");
+.getElementById("cartTotals")
+.innerHTML = `
+
+<div class="summary-box" style="margin:15px 0">
+
+<div class="summary-row">
+
+<span>পণ্যের মোট</span>
+
+<strong>
+৳${totals.productTotal.toLocaleString("bn-BD")}
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Delivery Charge</span>
+
+<strong>
+৳${totals.deliveryTotal.toLocaleString("bn-BD")}
+</strong>
+
+</div>
+
+<div class="summary-total">
+
+<span>সর্বমোট</span>
+
+<span style="color:var(--primary)">
+
+৳${totals.grandTotal.toLocaleString("bn-BD")}
+
+</span>
+
+</div>
+
+</div>
+
+`;
 
 }
 
@@ -2406,6 +2465,11 @@ return;
 
 }
 
+
+/*
+   বর্তমানে ঢাকা Delivery-এর জন্য
+   নির্বাচিত এলাকা সংরক্ষণ করা হচ্ছে।
+*/
 
 currentLocation = area;
 
@@ -2570,76 +2634,6 @@ info.innerText =
 
 
 /* ======================================
-   WALLET
-====================================== */
-
-function updateWallet(){
-
-const formatted =
-"৳ " +
-walletBalance.toLocaleString(
-"bn-BD",
-{
-minimumFractionDigits:2
-}
-);
-
-
-document
-.getElementById("walletBalance")
-.innerText =
-formatted;
-
-
-document
-.getElementById("modalBalance")
-.innerText =
-formatted;
-
-}
-
-
-function demoAddMoney(){
-
-const amount =
-Number(
-document
-.getElementById("walletAmount")
-.value
-);
-
-
-if(!amount || amount <= 0){
-
-showToast(
-"সঠিক Amount দিন"
-);
-
-return;
-
-}
-
-
-walletBalance += amount;
-
-saveAll();
-
-updateWallet();
-
-
-document
-.getElementById("walletAmount")
-.value = "";
-
-
-showToast(
-"Demo Balance যোগ হয়েছে ✓"
-);
-
-}
-
-
-/* ======================================
    SEARCH
 ====================================== */
 
@@ -2662,7 +2656,14 @@ product.name
 .includes(query)
 
 ||
+
 product.desc
+.toLowerCase()
+.includes(query)
+
+||
+
+String(product.seller)
 .toLowerCase()
 .includes(query)
 
@@ -2733,6 +2734,39 @@ return;
 }
 
 
+/*
+   ঢাকা বাজার বর্তমানে শুধু
+   ঢাকা অঞ্চলের Delivery-এর জন্য।
+*/
+
+const allowedAreas = [
+
+"ঢাকা",
+"কেরানীগঞ্জ",
+"মিরপুর",
+"উত্তরা",
+"ধানমন্ডি",
+"মোহাম্মদপুর",
+"যাত্রাবাড়ী"
+
+];
+
+
+if(
+!allowedAreas.includes(
+currentLocation
+)
+){
+
+showToast(
+"বর্তমানে শুধু ঢাকার ভিতরে Delivery দেওয়া হচ্ছে"
+);
+
+return;
+
+}
+
+
 if(!currentUser){
 
 closeModal("cartModal");
@@ -2768,26 +2802,36 @@ document
 .getElementById("checkoutSummary");
 
 
-let total = 0;
+const totals =
+calculateCartTotals();
+
 
 let html =
-"<div style='background:#f8faf9;padding:12px;border-radius:10px'>";
+"<div class='summary-box'>";
 
 
 cart.forEach(function(item){
 
-const itemTotal =
-item.price * item.qty;
+const productTotal =
+Number(item.price) *
+Number(item.qty);
 
-total += itemTotal;
-
+const deliveryTotal =
+Number(item.deliveryCharge || 0) *
+Number(item.qty);
 
 html += `
+
+<div
+style="
+padding-bottom:10px;
+margin-bottom:10px;
+border-bottom:1px solid #eee">
+
 <div
 style="
 display:flex;
 justify-content:space-between;
-margin-bottom:8px;
 font-size:13px">
 
 <span>
@@ -2796,10 +2840,24 @@ ${escapeHTML(item.name)}
 </span>
 
 <strong>
-৳${itemTotal}
+৳${productTotal.toLocaleString("bn-BD")}
 </strong>
 
 </div>
+
+<div
+style="
+font-size:11px;
+color:#777;
+margin-top:4px">
+
+🚚 Delivery Charge:
+৳${deliveryTotal.toLocaleString("bn-BD")}
+
+</div>
+
+</div>
+
 `;
 
 });
@@ -2807,25 +2865,39 @@ ${escapeHTML(item.name)}
 
 html += `
 
-<hr style="
-border:0;
-border-top:1px solid #ddd;
-margin:10px 0">
-
-<div
-style="
-display:flex;
-justify-content:space-between;
-font-weight:800">
+<div class="summary-row">
 
 <span>
-মোট
+পণ্যের মোট
 </span>
 
-<span
-style="color:var(--primary)">
+<strong>
+৳${totals.productTotal.toLocaleString("bn-BD")}
+</strong>
 
-৳${total.toLocaleString("bn-BD")}
+</div>
+
+<div class="summary-row">
+
+<span>
+Delivery Charge
+</span>
+
+<strong>
+৳${totals.deliveryTotal.toLocaleString("bn-BD")}
+</strong>
+
+</div>
+
+<div class="summary-total">
+
+<span>
+সর্বমোট
+</span>
+
+<span style="color:var(--primary)">
+
+৳${totals.grandTotal.toLocaleString("bn-BD")}
 
 </span>
 
@@ -2891,13 +2963,6 @@ document
 .value.trim();
 
 
-const payment =
-document
-.querySelector(
-'input[name="payment"]:checked'
-).value;
-
-
 if(!name){
 
 showToast(
@@ -2931,38 +2996,20 @@ return;
 }
 
 
-let total = 0;
-
-
-cart.forEach(function(item){
-
-total +=
-item.price *
-item.qty;
-
-});
-
-
-/* WALLET PAYMENT */
-
-if(payment === "WALLET"){
-
-if(walletBalance < total){
+if(!currentLocation){
 
 showToast(
-"Wallet Balance যথেষ্ট নয়"
+"Delivery Location দিন"
 );
 
 return;
 
 }
 
-walletBalance -= total;
 
-}
+const totals =
+calculateCartTotals();
 
-
-/* ORDER ID */
 
 const orderId =
 "DB-" +
@@ -2977,13 +3024,24 @@ customerName:name,
 
 phone:phone,
 
+location:currentLocation,
+
 address:address,
 
-paymentMethod:payment,
+paymentMethod:
+"Cash on Delivery",
 
-total:total,
+productTotal:
+totals.productTotal,
 
-items:JSON.parse(
+deliveryCharge:
+totals.deliveryTotal,
+
+total:
+totals.grandTotal,
+
+items:
+JSON.parse(
 JSON.stringify(cart)
 ),
 
@@ -3009,8 +3067,6 @@ cart = [];
 saveAll();
 
 updateCart();
-
-updateWallet();
 
 
 closeModal("checkoutModal");
@@ -3052,6 +3108,13 @@ ${escapeHTML(order.phone)}
 <br>
 
 <strong>
+Location:
+</strong>
+${escapeHTML(order.location)}
+
+<br>
+
+<strong>
 Address:
 </strong>
 ${escapeHTML(order.address)}
@@ -3059,9 +3122,23 @@ ${escapeHTML(order.address)}
 <br>
 
 <strong>
+Product Total:
+</strong>
+৳${order.productTotal.toLocaleString("bn-BD")}
+
+<br>
+
+<strong>
+Delivery Charge:
+</strong>
+৳${order.deliveryCharge.toLocaleString("bn-BD")}
+
+<br>
+
+<strong>
 Payment:
 </strong>
-${getPaymentName(order.paymentMethod)}
+Cash on Delivery
 
 <br>
 
@@ -3075,6 +3152,7 @@ Total:
 <strong>
 Status:
 </strong>
+
 <span style="color:var(--primary)">
 অর্ডার Confirmed ✓
 </span>
@@ -3083,35 +3161,6 @@ Status:
 
 
 openModal("successModal");
-
-}
-
-
-/* ======================================
-   PAYMENT NAME
-====================================== */
-
-function getPaymentName(payment){
-
-if(payment === "COD"){
-
-return "Cash on Delivery";
-
-}
-
-if(payment === "WALLET"){
-
-return "Dhaka Bazar Wallet";
-
-}
-
-if(payment === "BKASH"){
-
-return "bKash — Demo";
-
-}
-
-return payment;
 
 }
 
@@ -3153,7 +3202,7 @@ div.className =
 div.innerHTML = `
 
 <strong>
-${order.id}
+${escapeHTML(order.id)}
 </strong>
 
 <div
@@ -3162,7 +3211,7 @@ font-size:12px;
 color:#777;
 margin-top:5px">
 
-${order.createdAt}
+${escapeHTML(order.createdAt)}
 
 </div>
 
@@ -3173,22 +3222,31 @@ border-top:1px solid #eee;
 margin:10px 0">
 
 <div>
-মোট:
+Location:
 <strong>
-৳${order.total.toLocaleString("bn-BD")}
+${escapeHTML(order.location)}
 </strong>
 </div>
 
-<div>
-Payment:
-${getPaymentName(order.paymentMethod)}
+<div style="margin-top:4px">
+মোট:
+<strong>
+৳${Number(order.total).toLocaleString("bn-BD")}
+</strong>
 </div>
 
-<div>
-Status:
-<span style="color:var(--primary)">
-${order.status}
-</span>
+<div style="margin-top:4px">
+Delivery:
+৳${Number(order.deliveryCharge).toLocaleString("bn-BD")}
+</div>
+
+<div style="margin-top:4px">
+Payment:
+Cash on Delivery
+</div>
+
+<div class="order-status">
+অর্ডার Confirmed
 </div>
 
 `;
