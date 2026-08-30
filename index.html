@@ -7,6 +7,7 @@
 <title>Dhaka Bazar - ঢাকা বাজার</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -18,7 +19,7 @@
     --primary:#0b8f55;
     --primary-dark:#067443;
     --light:#f4f7f5;
-    --white:#ffffff;
+    --white:#fff;
     --text:#202124;
     --muted:#6b7280;
     --border:#e5e7eb;
@@ -31,12 +32,15 @@ body{
     color:var(--text);
 }
 
-/* HEADER */
+button{
+    cursor:pointer;
+}
+
 header{
     position:sticky;
     top:0;
     z-index:1000;
-    background:var(--white);
+    background:white;
     box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 
@@ -70,12 +74,11 @@ header{
 
 .search input{
     width:100%;
-    padding:12px 42px 12px 15px;
+    padding:12px 45px 12px 15px;
     border:1px solid var(--border);
     border-radius:25px;
     outline:none;
     background:#f8faf9;
-    font-size:14px;
 }
 
 .search button{
@@ -88,7 +91,6 @@ header{
     border-radius:50%;
     background:var(--primary);
     color:white;
-    cursor:pointer;
 }
 
 .header-actions{
@@ -97,20 +99,14 @@ header{
 }
 
 .icon-btn{
-    border:1px solid var(--border);
-    background:white;
     width:42px;
     height:42px;
     border-radius:50%;
-    cursor:pointer;
+    border:1px solid var(--border);
+    background:white;
     font-size:18px;
 }
 
-.icon-btn:hover{
-    background:#f0fdf4;
-}
-
-/* LOCATION */
 .location-bar{
     background:#f0fdf4;
     border-top:1px solid #e2eee7;
@@ -122,56 +118,33 @@ header{
     margin:auto;
     padding:9px 16px;
     display:flex;
-    align-items:center;
     gap:10px;
+    align-items:center;
     font-size:13px;
 }
 
 .location-inner button{
     margin-left:auto;
     border:0;
-    background:transparent;
+    background:none;
     color:var(--primary);
-    font-weight:600;
-    cursor:pointer;
+    font-weight:700;
 }
 
-/* MAIN */
 .container{
     max-width:1200px;
     margin:auto;
     padding:20px 16px 100px;
 }
 
-/* HERO */
 .hero{
     background:linear-gradient(135deg,#087f4c,#11a968);
     color:white;
     border-radius:20px;
-    padding:28px;
-    min-height:210px;
+    padding:30px;
+    min-height:220px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    overflow:hidden;
-    position:relative;
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-    width:250px;
-    height:250px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    right:-80px;
-    top:-70px;
-}
-
-.hero-content{
-    position:relative;
-    z-index:2;
 }
 
 .hero h1{
@@ -180,23 +153,20 @@ header{
 }
 
 .hero p{
-    max-width:600px;
-    opacity:.95;
+    max-width:650px;
     line-height:1.6;
 }
 
 .hero button{
     margin-top:18px;
-    border:0;
     padding:12px 20px;
+    border:0;
     border-radius:25px;
     background:white;
     color:var(--primary-dark);
     font-weight:700;
-    cursor:pointer;
 }
 
-/* CATEGORIES */
 .section-title{
     margin:28px 0 15px;
     display:flex;
@@ -210,10 +180,9 @@ header{
 
 .section-title button{
     border:0;
-    background:transparent;
+    background:none;
     color:var(--primary);
-    font-weight:600;
-    cursor:pointer;
+    font-weight:700;
 }
 
 .categories{
@@ -228,19 +197,12 @@ header{
     border-radius:15px;
     padding:15px 8px;
     text-align:center;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.category:hover{
-    transform:translateY(-3px);
-    box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
 .category-icon{
     width:52px;
     height:52px;
-    margin:0 auto 8px;
+    margin:auto auto 8px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -251,10 +213,9 @@ header{
 
 .category p{
     font-size:13px;
-    font-weight:600;
+    font-weight:700;
 }
 
-/* PRODUCTS */
 .products{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -266,12 +227,6 @@ header{
     border:1px solid var(--border);
     border-radius:16px;
     overflow:hidden;
-    transition:.2s;
-}
-
-.product:hover{
-    transform:translateY(-3px);
-    box-shadow:0 8px 22px rgba(0,0,0,.08);
 }
 
 .product-img{
@@ -294,22 +249,15 @@ header{
 }
 
 .product-desc{
-    font-size:12px;
     color:var(--muted);
+    font-size:12px;
     margin-bottom:10px;
 }
 
 .price{
-    font-size:18px;
     color:var(--primary);
+    font-size:18px;
     font-weight:800;
-}
-
-.old-price{
-    font-size:12px;
-    color:#999;
-    text-decoration:line-through;
-    margin-left:5px;
 }
 
 .product-bottom{
@@ -325,20 +273,25 @@ header{
     color:white;
     padding:8px 13px;
     border-radius:20px;
-    cursor:pointer;
-    font-weight:600;
+    font-weight:700;
 }
 
-.add-btn:hover{
-    background:var(--primary-dark);
+.seller-delete{
+    margin-top:8px;
+    width:100%;
+    padding:7px;
+    border:0;
+    border-radius:8px;
+    background:#fee2e2;
+    color:#b91c1c;
+    font-size:12px;
 }
 
-/* WALLET */
 .wallet{
     margin-top:28px;
     background:white;
-    border-radius:18px;
     border:1px solid var(--border);
+    border-radius:18px;
     padding:20px;
 }
 
@@ -347,31 +300,17 @@ header{
     color:white;
     border-radius:18px;
     padding:22px;
-    min-height:170px;
-    position:relative;
-    overflow:hidden;
-}
-
-.wallet-card::after{
-    content:"";
-    position:absolute;
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    background:rgba(255,255,255,.06);
-    right:-50px;
-    bottom:-70px;
 }
 
 .wallet-label{
+    opacity:.7;
     font-size:13px;
-    opacity:.75;
 }
 
 .wallet-balance{
     font-size:34px;
     font-weight:800;
-    margin:8px 0 25px;
+    margin:8px 0 20px;
 }
 
 .wallet-actions{
@@ -385,10 +324,8 @@ header{
     border:1px solid rgba(255,255,255,.25);
     background:rgba(255,255,255,.1);
     color:white;
-    cursor:pointer;
 }
 
-/* FEATURES */
 .features{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -409,7 +346,6 @@ header{
 }
 
 .feature h3{
-    font-size:16px;
     margin-bottom:6px;
 }
 
@@ -419,7 +355,6 @@ header{
     line-height:1.5;
 }
 
-/* CART */
 .cart-floating{
     position:fixed;
     right:18px;
@@ -435,9 +370,8 @@ header{
     background:var(--primary);
     color:white;
     font-size:23px;
-    cursor:pointer;
-    box-shadow:0 7px 20px rgba(0,0,0,.2);
     position:relative;
+    box-shadow:0 7px 20px rgba(0,0,0,.2);
 }
 
 .cart-count{
@@ -445,7 +379,6 @@ header{
     top:-4px;
     right:-3px;
     background:var(--danger);
-    color:white;
     min-width:20px;
     height:20px;
     border-radius:50%;
@@ -455,7 +388,6 @@ header{
     justify-content:center;
 }
 
-/* BOTTOM NAV */
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -463,14 +395,12 @@ header{
     right:0;
     background:white;
     border-top:1px solid var(--border);
-    display:flex;
-    justify-content:center;
     z-index:800;
 }
 
 .nav-inner{
     max-width:600px;
-    width:100%;
+    margin:auto;
     display:grid;
     grid-template-columns:repeat(5,1fr);
 }
@@ -480,7 +410,6 @@ header{
     background:white;
     padding:9px 4px;
     color:#777;
-    cursor:pointer;
     font-size:11px;
 }
 
@@ -495,7 +424,6 @@ header{
     font-weight:700;
 }
 
-/* MODAL */
 .modal{
     position:fixed;
     inset:0;
@@ -504,7 +432,7 @@ header{
     align-items:center;
     justify-content:center;
     z-index:2000;
-    padding:20px;
+    padding:15px;
 }
 
 .modal.show{
@@ -514,11 +442,11 @@ header{
 .modal-box{
     background:white;
     width:100%;
-    max-width:430px;
+    max-width:480px;
+    max-height:92vh;
+    overflow:auto;
     border-radius:20px;
     padding:22px;
-    max-height:90vh;
-    overflow:auto;
 }
 
 .modal-header{
@@ -528,17 +456,12 @@ header{
     margin-bottom:20px;
 }
 
-.modal-header h3{
-    font-size:20px;
-}
-
 .close{
-    border:0;
-    background:#f3f4f6;
     width:35px;
     height:35px;
+    border:0;
     border-radius:50%;
-    cursor:pointer;
+    background:#f3f4f6;
     font-size:18px;
 }
 
@@ -549,12 +472,13 @@ header{
 .form-group label{
     display:block;
     font-size:13px;
-    font-weight:600;
+    font-weight:700;
     margin-bottom:6px;
 }
 
 .form-group input,
-.form-group select{
+.form-group select,
+.form-group textarea{
     width:100%;
     padding:12px;
     border:1px solid var(--border);
@@ -564,56 +488,90 @@ header{
 
 .primary-btn{
     width:100%;
+    padding:13px;
     border:0;
+    border-radius:10px;
     background:var(--primary);
     color:white;
-    padding:13px;
-    border-radius:10px;
     font-weight:700;
-    cursor:pointer;
 }
 
-.primary-btn:hover{
-    background:var(--primary-dark);
-}
-
-/* CART LIST */
-.cart-list{
-    margin-bottom:15px;
+.secondary-btn{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:white;
+    font-weight:700;
 }
 
 .cart-item{
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    gap:10px;
+    padding:13px 0;
     border-bottom:1px solid var(--border);
-    padding:12px 0;
 }
 
-.cart-item-name{
-    font-weight:600;
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:7px;
 }
 
-.cart-item-price{
-    color:var(--primary);
-    font-weight:700;
-}
-
-.cart-empty{
-    text-align:center;
-    color:var(--muted);
-    padding:30px 0;
+.qty-box button{
+    width:25px;
+    height:25px;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:6px;
 }
 
 .total{
     display:flex;
     justify-content:space-between;
+    padding:16px 0;
+    font-size:19px;
     font-weight:800;
-    font-size:18px;
-    padding:15px 0;
 }
 
-/* ALERT */
+.payment-option{
+    border:1px solid var(--border);
+    padding:13px;
+    border-radius:10px;
+    margin-bottom:8px;
+}
+
+.payment-option input{
+    margin-right:8px;
+}
+
+.order-success{
+    text-align:center;
+    padding:20px 5px;
+}
+
+.success-icon{
+    font-size:65px;
+    margin-bottom:10px;
+}
+
+.order-id{
+    background:#f0fdf4;
+    padding:12px;
+    border-radius:10px;
+    margin:15px 0;
+    font-weight:700;
+}
+
+.order-card{
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px;
+    margin-bottom:10px;
+}
+
 .toast{
     position:fixed;
     left:50%;
@@ -623,11 +581,12 @@ header{
     color:white;
     padding:12px 18px;
     border-radius:25px;
-    font-size:13px;
     opacity:0;
     pointer-events:none;
     transition:.3s;
     z-index:3000;
+    font-size:13px;
+    white-space:nowrap;
 }
 
 .toast.show{
@@ -635,8 +594,14 @@ header{
     transform:translateX(-50%) translateY(0);
 }
 
-/* RESPONSIVE */
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:25px;
+}
+
 @media(max-width:900px){
+
     .categories{
         grid-template-columns:repeat(3,1fr);
     }
@@ -648,9 +613,11 @@ header{
     .features{
         grid-template-columns:1fr;
     }
+
 }
 
 @media(max-width:600px){
+
     .topbar{
         flex-wrap:wrap;
     }
@@ -661,13 +628,11 @@ header{
 
     .search{
         order:3;
-        width:100%;
         flex-basis:100%;
     }
 
     .hero{
         padding:22px;
-        min-height:230px;
     }
 
     .hero h1{
@@ -677,16 +642,6 @@ header{
     .categories{
         grid-template-columns:repeat(3,1fr);
         gap:8px;
-    }
-
-    .category{
-        padding:12px 5px;
-    }
-
-    .category-icon{
-        width:45px;
-        height:45px;
-        font-size:21px;
     }
 
     .products{
@@ -699,7 +654,7 @@ header{
     }
 
     .product-info{
-        padding:11px;
+        padding:10px;
     }
 
     .product-name{
@@ -709,1202 +664,2620 @@ header{
     .price{
         font-size:16px;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
+
 <header>
-    <div class="topbar">
 
-        <div class="logo">
-            🛒 ঢাকা বাজার
-            <span>Dhaka Bazar</span>
-        </div>
+<div class="topbar">
 
-        <div class="search">
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="পণ্য খুঁজুন..."
-                oninput="searchProducts()"
-            >
-            <button onclick="searchProducts()">🔍</button>
-        </div>
+<div class="logo">
+🛒 ঢাকা বাজার
+<span>Dhaka Bazar</span>
+</div>
 
-        <div class="header-actions">
-            <button class="icon-btn" onclick="openModal('walletModal')">💳</button>
-            <button class="icon-btn" onclick="openModal('loginModal')">👤</button>
-        </div>
+<div class="search">
 
-    </div>
+<input
+id="searchInput"
+type="text"
+placeholder="পণ্য খুঁজুন..."
+oninput="searchProducts()">
 
-    <div class="location-bar">
-        <div class="location-inner">
-            <span>📍</span>
-            <span id="locationText">আপনার লোকেশন সেট করুন</span>
-            <button onclick="openModal('locationModal')">লোকেশন পরিবর্তন</button>
-        </div>
-    </div>
+<button onclick="searchProducts()">🔍</button>
+
+</div>
+
+<div class="header-actions">
+
+<button
+class="icon-btn"
+onclick="openModal('walletModal')">
+💳
+</button>
+
+<button
+class="icon-btn"
+onclick="openModal('accountModal')">
+👤
+</button>
+
+</div>
+
+</div>
+
+
+<div class="location-bar">
+
+<div class="location-inner">
+
+<span>📍</span>
+
+<span id="locationText">
+আপনার লোকেশন সেট করুন
+</span>
+
+<button onclick="openModal('locationModal')">
+লোকেশন পরিবর্তন
+</button>
+
+</div>
+
+</div>
+
 </header>
 
 
 <!-- MAIN -->
+
 <main class="container">
 
-    <!-- HERO -->
-    <section class="hero">
 
-        <div class="hero-content">
-            <h1>আপনার বাজার, এখন হাতের মুঠোয় 🛍️</h1>
-
-            <p>
-                ঢাকা বাজারে সহজে আপনার প্রয়োজনীয় পণ্য খুঁজুন,
-                কার্টে যোগ করুন এবং ভবিষ্যতে নিরাপদ অনলাইন পেমেন্টের
-                মাধ্যমে অর্ডার করুন।
-            </p>
-
-            <button onclick="scrollToProducts()">
-                এখনই বাজার করুন →
-            </button>
-        </div>
+<section class="hero">
 
-    </section>
-
-
-    <!-- CATEGORIES -->
-    <div class="section-title">
-        <h2>ক্যাটাগরি</h2>
-        <button onclick="showAllCategories()">সব দেখুন</button>
-    </div>
-
-    <section class="categories">
-
-        <div class="category" onclick="filterCategory('grocery')">
-            <div class="category-icon">🥬</div>
-            <p>মুদিখানা</p>
-        </div>
-
-        <div class="category" onclick="filterCategory('food')">
-            <div class="category-icon">🍔</div>
-            <p>খাবার</p>
-        </div>
-
-        <div class="category" onclick="filterCategory('fashion')">
-            <div class="category-icon">👕</div>
-            <p>ফ্যাশন</p>
-        </div>
-
-        <div class="category" onclick="filterCategory('electronics')">
-            <div class="category-icon">📱</div>
-            <p>ইলেকট্রনিক্স</p>
-        </div>
-
-        <div class="category" onclick="filterCategory('home')">
-            <div class="category-icon">🏠</div>
-            <p>হোম</p>
-        </div>
-
-        <div class="category" onclick="filterCategory('beauty')">
-            <div class="category-icon">🧴</div>
-            <p>বিউটি</p>
-        </div>
-
-    </section>
-
-
-    <!-- PRODUCTS -->
-    <div class="section-title" id="productSection">
-        <h2>জনপ্রিয় পণ্য</h2>
-        <button onclick="showAllProducts()">সব পণ্য</button>
-    </div>
-
-    <section class="products" id="products">
-
-        <div class="product" data-category="grocery" data-name="চাল">
-            <div class="product-img">🍚</div>
-
-            <div class="product-info">
-                <div class="product-name">মিনিকেট চাল</div>
-                <div class="product-desc">৫ কেজি প্যাক</div>
-
-                <span class="price">৳৪৫০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.8</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('মিনিকেট চাল',450)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="grocery" data-name="তেল">
-            <div class="product-img">🫗</div>
-
-            <div class="product-info">
-                <div class="product-name">সয়াবিন তেল</div>
-                <div class="product-desc">২ লিটার</div>
-
-                <span class="price">৳৩৮০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.7</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('সয়াবিন তেল',380)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="food" data-name="বার্গার">
-            <div class="product-img">🍔</div>
-
-            <div class="product-info">
-                <div class="product-name">চিকেন বার্গার</div>
-                <div class="product-desc">ফ্রেশ ও সুস্বাদু</div>
-
-                <span class="price">৳১৮০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.9</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('চিকেন বার্গার',180)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="electronics" data-name="হেডফোন">
-            <div class="product-img">🎧</div>
-
-            <div class="product-info">
-                <div class="product-name">ওয়্যারলেস হেডফোন</div>
-                <div class="product-desc">Bluetooth</div>
-
-                <span class="price">৳৯৯০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.6</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('ওয়্যারলেস হেডফোন',990)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="fashion" data-name="টি-শার্ট">
-            <div class="product-img">👕</div>
-
-            <div class="product-info">
-                <div class="product-name">কটন টি-শার্ট</div>
-                <div class="product-desc">Premium Cotton</div>
-
-                <span class="price">৳৫৫০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.8</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('কটন টি-শার্ট',550)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="home" data-name="বালিশ">
-            <div class="product-img">🛏️</div>
-
-            <div class="product-info">
-                <div class="product-name">সফট বালিশ</div>
-                <div class="product-desc">আরামদায়ক</div>
-
-                <span class="price">৳৩৫০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.5</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('সফট বালিশ',350)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="beauty" data-name="শ্যাম্পু">
-            <div class="product-img">🧴</div>
-
-            <div class="product-info">
-                <div class="product-name">হারবাল শ্যাম্পু</div>
-                <div class="product-desc">৪০০ ml</div>
-
-                <span class="price">৳২৯০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.7</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('হারবাল শ্যাম্পু',290)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="product" data-category="electronics" data-name="চার্জার">
-            <div class="product-img">🔌</div>
-
-            <div class="product-info">
-                <div class="product-name">ফাস্ট চার্জার</div>
-                <div class="product-desc">20W USB-C</div>
-
-                <span class="price">৳৬৫০</span>
-
-                <div class="product-bottom">
-                    <span>⭐ 4.8</span>
-                    <button
-                        class="add-btn"
-                        onclick="addToCart('ফাস্ট চার্জার',650)"
-                    >
-                        + যোগ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-
-    <!-- WALLET -->
-    <section class="wallet">
-
-        <div class="section-title" style="margin-top:0;">
-            <h2>আমার Wallet</h2>
-            <button onclick="openModal('walletModal')">বিস্তারিত</button>
-        </div>
-
-        <div class="wallet-card">
-
-            <div class="wallet-label">
-                বর্তমান ব্যালেন্স
-            </div>
-
-            <div class="wallet-balance" id="walletBalance">
-                ৳ 0.00
-            </div>
-
-            <div class="wallet-actions">
-                <button onclick="openModal('walletModal')">
-                    💰 Wallet
-                </button>
-
-                <button onclick="demoTransaction()">
-                    🔄 Transaction
-                </button>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- FEATURES -->
-    <section class="features">
-
-        <div class="feature">
-            <div class="feature-icon">🚚</div>
-            <h3>দ্রুত ডেলিভারি</h3>
-            <p>
-                আপনার নির্বাচিত লোকেশনে পণ্য পৌঁছে দেওয়ার জন্য
-                ভবিষ্যতে ডেলিভারি সিস্টেম যুক্ত করা যাবে।
-            </p>
-        </div>
-
-        <div class="feature">
-            <div class="feature-icon">🔐</div>
-            <h3>নিরাপদ পেমেন্ট</h3>
-            <p>
-                অনুমোদিত payment gateway/API ব্যবহার করে
-                নিরাপদ পেমেন্ট ব্যবস্থা যুক্ত করা হবে।
-            </p>
-        </div>
-
-        <div class="feature">
-            <div class="feature-icon">💸</div>
-            <h3>Wallet সুবিধা</h3>
-            <p>
-                Backend যুক্ত হলে Wallet balance ও transaction
-                server থেকে নিরাপদভাবে পরিচালনা করা যাবে।
-            </p>
-        </div>
-
-    </section>
+<div>
+
+<h1>
+আপনার বাজার, এখন হাতের মুঠোয় 🛍️
+</h1>
+
+<p>
+ঢাকা বাজারে পণ্য খুঁজুন, কার্টে যোগ করুন,
+Checkout করুন এবং অর্ডার Confirmation পান।
+</p>
+
+<button onclick="scrollToProducts()">
+এখনই বাজার করুন →
+</button>
+
+</div>
+
+</section>
+
+
+<!-- CATEGORY -->
+
+<div class="section-title">
+
+<h2>ক্যাটাগরি</h2>
+
+<button onclick="showAllProducts()">
+সব পণ্য
+</button>
+
+</div>
+
+
+<section class="categories">
+
+<div class="category" onclick="filterCategory('grocery')">
+<div class="category-icon">🥬</div>
+<p>মুদিখানা</p>
+</div>
+
+<div class="category" onclick="filterCategory('food')">
+<div class="category-icon">🍔</div>
+<p>খাবার</p>
+</div>
+
+<div class="category" onclick="filterCategory('fashion')">
+<div class="category-icon">👕</div>
+<p>ফ্যাশন</p>
+</div>
+
+<div class="category" onclick="filterCategory('electronics')">
+<div class="category-icon">📱</div>
+<p>ইলেকট্রনিক্স</p>
+</div>
+
+<div class="category" onclick="filterCategory('home')">
+<div class="category-icon">🏠</div>
+<p>হোম</p>
+</div>
+
+<div class="category" onclick="filterCategory('beauty')">
+<div class="category-icon">🧴</div>
+<p>বিউটি</p>
+</div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<div class="section-title" id="productSection">
+
+<h2>জনপ্রিয় পণ্য</h2>
+
+<button onclick="openModal('sellerModal')">
+➕ পণ্য বিক্রি করুন
+</button>
+
+</div>
+
+
+<section class="products" id="products"></section>
+
+
+<!-- WALLET -->
+
+<section class="wallet">
+
+<div class="section-title" style="margin-top:0">
+
+<h2>💳 আমার Wallet</h2>
+
+<button onclick="openModal('walletModal')">
+বিস্তারিত
+</button>
+
+</div>
+
+
+<div class="wallet-card">
+
+<div class="wallet-label">
+বর্তমান ব্যালেন্স
+</div>
+
+<div
+class="wallet-balance"
+id="walletBalance">
+৳ 0.00
+</div>
+
+<div class="wallet-actions">
+
+<button onclick="openModal('walletModal')">
+💰 Wallet
+</button>
+
+<button onclick="openOrders()">
+📦 Orders
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+<div class="feature">
+
+<div class="feature-icon">🚚</div>
+
+<h3>দ্রুত ডেলিভারি</h3>
+
+<p>
+আপনার নির্ধারিত ঠিকানায় পণ্য পৌঁছে দেওয়ার
+জন্য Order system প্রস্তুত।
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">🔐</div>
+
+<h3>নিরাপদ পেমেন্ট</h3>
+
+<p>
+বাস্তব পেমেন্ট চালু করার জন্য অনুমোদিত
+Payment Gateway যুক্ত করতে হবে।
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">🏪</div>
+
+<h3>Seller Product</h3>
+
+<p>
+Seller সরাসরি Product Add করে
+বাজারে পণ্য প্রদর্শন করতে পারবে।
+</p>
+
+</div>
+
+</section>
 
 </main>
 
 
 <!-- FLOATING CART -->
+
 <div class="cart-floating">
-    <button class="cart-button" onclick="openCart()">
-        🛒
-        <span class="cart-count" id="cartCount">0</span>
-    </button>
+
+<button
+class="cart-button"
+onclick="openCart()">
+
+🛒
+
+<span
+class="cart-count"
+id="cartCount">
+0
+</span>
+
+</button>
+
 </div>
 
 
 <!-- BOTTOM NAV -->
+
 <nav class="bottom-nav">
 
-    <div class="nav-inner">
+<div class="nav-inner">
 
-        <button class="nav-item active" onclick="goHome(this)">
-            <span>🏠</span>
-            হোম
-        </button>
+<button
+class="nav-item active"
+onclick="goHome(this)">
+<span>🏠</span>
+হোম
+</button>
 
-        <button class="nav-item" onclick="scrollToProducts();setActive(this)">
-            <span>🛍️</span>
-            বাজার
-        </button>
+<button
+class="nav-item"
+onclick="scrollToProducts();setActive(this)">
+<span>🛍️</span>
+বাজার
+</button>
 
-        <button class="nav-item" onclick="openCart();setActive(this)">
-            <span>🛒</span>
-            কার্ট
-        </button>
+<button
+class="nav-item"
+onclick="openCart();setActive(this)">
+<span>🛒</span>
+কার্ট
+</button>
 
-        <button class="nav-item" onclick="openModal('walletModal');setActive(this)">
-            <span>💳</span>
-            Wallet
-        </button>
+<button
+class="nav-item"
+onclick="openModal('walletModal');setActive(this)">
+<span>💳</span>
+Wallet
+</button>
 
-        <button class="nav-item" onclick="openModal('loginModal');setActive(this)">
-            <span>👤</span>
-            Account
-        </button>
+<button
+class="nav-item"
+onclick="openModal('accountModal');setActive(this)">
+<span>👤</span>
+Account
+</button>
 
-    </div>
+</div>
 
 </nav>
 
 
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
+<!-- ACCOUNT MODAL -->
 
-    <div class="modal-box">
+<div class="modal" id="accountModal">
 
-        <div class="modal-header">
-            <h3>অ্যাকাউন্ট</h3>
-            <button class="close" onclick="closeModal('loginModal')">×</button>
-        </div>
+<div class="modal-box">
 
-        <div class="form-group">
-            <label>মোবাইল নম্বর</label>
+<div class="modal-header">
 
-            <input
-                type="tel"
-                id="phone"
-                placeholder="01XXXXXXXXX"
-                maxlength="11"
-            >
-        </div>
+<h3>👤 আমার Account</h3>
 
-        <div class="form-group">
-            <label>নাম</label>
+<button
+class="close"
+onclick="closeModal('accountModal')">
+×
+</button>
 
-            <input
-                type="text"
-                id="userName"
-                placeholder="আপনার নাম"
-            >
-        </div>
+</div>
 
-        <button class="primary-btn" onclick="demoLogin()">
-            লগইন / অ্যাকাউন্ট তৈরি
-        </button>
 
-        <p style="font-size:11px;color:#777;margin-top:12px;text-align:center;">
-            Demo mode — বাস্তব authentication backend পরে যুক্ত করা হবে।
-        </p>
+<div class="form-group">
 
-    </div>
+<label>আপনার নাম</label>
+
+<input
+id="accountName"
+type="text"
+placeholder="আপনার নাম">
+
+</div>
+
+
+<div class="form-group">
+
+<label>মোবাইল নম্বর</label>
+
+<input
+id="accountPhone"
+type="tel"
+maxlength="11"
+placeholder="01XXXXXXXXX">
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="saveAccount()">
+
+Account Save করুন
+
+</button>
+
+
+<div
+style="
+margin-top:15px;
+padding:12px;
+background:#f8faf9;
+border-radius:10px;
+font-size:12px;
+">
+
+<strong>বর্তমান Account:</strong>
+
+<div id="accountInfo">
+Login করা হয়নি
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 
 <!-- LOCATION MODAL -->
+
 <div class="modal" id="locationModal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <div class="modal-header">
-            <h3>লোকেশন সেট করুন</h3>
-            <button class="close" onclick="closeModal('locationModal')">×</button>
-        </div>
+<div class="modal-header">
 
-        <div class="form-group">
-            <label>আপনার এলাকা</label>
+<h3>📍 Delivery Location</h3>
 
-            <select id="areaSelect">
+<button
+class="close"
+onclick="closeModal('locationModal')">
+×
+</button>
 
-                <option value="">
-                    এলাকা নির্বাচন করুন
-                </option>
+</div>
 
-                <option>ঢাকা</option>
-                <option>কেরানীগঞ্জ</option>
-                <option>মিরপুর</option>
-                <option>উত্তরা</option>
-                <option>ধানমন্ডি</option>
-                <option>মোহাম্মদপুর</option>
-                <option>যাত্রাবাড়ী</option>
-                <option>গাজীপুর</option>
-                <option>নারায়ণগঞ্জ</option>
 
-            </select>
+<div class="form-group">
 
-        </div>
+<label>এলাকা</label>
 
-        <button class="primary-btn" onclick="saveLocation()">
-            লোকেশন সেভ করুন
-        </button>
+<select id="areaSelect">
 
-    </div>
+<option value="">
+এলাকা নির্বাচন করুন
+</option>
+
+<option>ঢাকা</option>
+<option>কেরানীগঞ্জ</option>
+<option>মিরপুর</option>
+<option>উত্তরা</option>
+<option>ধানমন্ডি</option>
+<option>মোহাম্মদপুর</option>
+<option>যাত্রাবাড়ী</option>
+<option>গাজীপুর</option>
+<option>নারায়ণগঞ্জ</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>সম্পূর্ণ ঠিকানা</label>
+
+<textarea
+id="fullAddress"
+rows="3"
+placeholder="বাড়ি/রোড/এলাকার ঠিকানা">
+</textarea>
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="saveLocation()">
+
+লোকেশন সেভ করুন
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- SELLER MODAL -->
+
+<div class="modal" id="sellerModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>🏪 নতুন Product Add করুন</h3>
+
+<button
+class="close"
+onclick="closeModal('sellerModal')">
+×
+</button>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Product Name</label>
+
+<input
+id="sellerProductName"
+placeholder="যেমন: বাসমতি চাল">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Description</label>
+
+<input
+id="sellerProductDesc"
+placeholder="যেমন: ৫ কেজি প্যাক">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Price</label>
+
+<input
+id="sellerProductPrice"
+type="number"
+min="1"
+placeholder="যেমন: 500">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Category</label>
+
+<select id="sellerProductCategory">
+
+<option value="grocery">মুদিখানা</option>
+<option value="food">খাবার</option>
+<option value="fashion">ফ্যাশন</option>
+<option value="electronics">ইলেকট্রনিক্স</option>
+<option value="home">হোম</option>
+<option value="beauty">বিউটি</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Product Icon</label>
+
+<select id="sellerProductIcon">
+
+<option>📦</option>
+<option>🍚</option>
+<option>🥬</option>
+<option>🍔</option>
+<option>👕</option>
+<option>📱</option>
+<option>🎧</option>
+<option>🏠</option>
+<option>🧴</option>
+<option>🔌</option>
+
+</select>
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="addSellerProduct()">
+
++ Product Add করুন
+
+</button>
+
+</div>
 
 </div>
 
 
 <!-- WALLET MODAL -->
+
 <div class="modal" id="walletModal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <div class="modal-header">
-            <h3>💳 Wallet</h3>
-            <button class="close" onclick="closeModal('walletModal')">×</button>
-        </div>
+<div class="modal-header">
 
-        <div style="
-            background:#f0fdf4;
-            padding:20px;
-            border-radius:15px;
-            text-align:center;
-            margin-bottom:18px;
-        ">
+<h3>💳 Wallet</h3>
 
-            <div style="font-size:12px;color:#666;">
-                বর্তমান Wallet Balance
-            </div>
+<button
+class="close"
+onclick="closeModal('walletModal')">
+×
+</button>
 
-            <div
-                id="modalBalance"
-                style="
-                    font-size:30px;
-                    font-weight:800;
-                    color:#087f4c;
-                    margin-top:5px;
-                "
-            >
-                ৳ 0.00
-            </div>
+</div>
 
-        </div>
 
-        <div class="form-group">
+<div
+style="
+background:#f0fdf4;
+padding:20px;
+border-radius:15px;
+text-align:center;
+margin-bottom:18px;
+">
 
-            <label>Demo Wallet Amount</label>
+<div style="font-size:12px;color:#666">
+Wallet Balance
+</div>
 
-            <input
-                type="number"
-                id="walletAmount"
-                placeholder="যেমন: 500"
-                min="1"
-            >
+<div
+id="modalBalance"
+style="
+font-size:30px;
+font-weight:800;
+color:#087f4c;
+margin-top:5px;
+">
 
-        </div>
+৳ 0.00
 
-        <button class="primary-btn" onclick="demoAddMoney()">
-            Demo Balance যোগ করুন
-        </button>
+</div>
 
-        <p style="
-            margin-top:12px;
-            font-size:11px;
-            color:#777;
-            line-height:1.5;
-        ">
-            ⚠️ এটি শুধুমাত্র Demo। বাস্তব Wallet-এ টাকা যোগ করতে
-            নিরাপদ backend এবং অনুমোদিত payment gateway/API
-            প্রয়োজন হবে।
-        </p>
+</div>
 
-    </div>
+
+<div class="form-group">
+
+<label>Demo Wallet Amount</label>
+
+<input
+id="walletAmount"
+type="number"
+min="1"
+placeholder="500">
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="demoAddMoney()">
+
+Demo Balance যোগ করুন
+
+</button>
+
+
+<p
+style="
+font-size:11px;
+color:#777;
+margin-top:12px;
+line-height:1.5;
+">
+
+⚠️ এটি Demo Wallet। বাস্তব টাকা যোগ করার
+জন্য অনুমোদিত Payment Gateway এবং Backend
+প্রয়োজন হবে।
+
+</p>
+
+</div>
 
 </div>
 
 
 <!-- CART MODAL -->
+
 <div class="modal" id="cartModal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <div class="modal-header">
-            <h3>🛒 আমার কার্ট</h3>
-            <button class="close" onclick="closeModal('cartModal')">×</button>
-        </div>
+<div class="modal-header">
 
-        <div class="cart-list" id="cartList">
-            <div class="cart-empty">
-                আপনার কার্ট এখনো খালি।
-            </div>
-        </div>
+<h3>🛒 আমার Cart</h3>
 
-        <div class="total">
+<button
+class="close"
+onclick="closeModal('cartModal')">
+×
+</button>
 
-            <span>মোট</span>
+</div>
 
-            <span id="cartTotal">
-                ৳ 0
-            </span>
 
-        </div>
+<div id="cartList"></div>
 
-        <button class="primary-btn" onclick="checkout()">
-            Checkout
-        </button>
 
-    </div>
+<div class="total">
+
+<span>মোট</span>
+
+<span id="cartTotal">
+৳ 0
+</span>
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="startCheckout()">
+
+Checkout →
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- CHECKOUT MODAL -->
+
+<div class="modal" id="checkoutModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>🧾 Checkout</h3>
+
+<button
+class="close"
+onclick="closeModal('checkoutModal')">
+×
+</button>
+
+</div>
+
+
+<div id="checkoutSummary"></div>
+
+
+<h4 style="margin:15px 0 10px">
+Delivery Information
+</h4>
+
+
+<div class="form-group">
+
+<label>নাম</label>
+
+<input
+id="checkoutName"
+type="text"
+placeholder="আপনার নাম">
+
+</div>
+
+
+<div class="form-group">
+
+<label>মোবাইল নম্বর</label>
+
+<input
+id="checkoutPhone"
+type="tel"
+maxlength="11"
+placeholder="01XXXXXXXXX">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Delivery Address</label>
+
+<textarea
+id="checkoutAddress"
+rows="3"
+placeholder="সম্পূর্ণ ঠিকানা">
+</textarea>
+
+</div>
+
+
+<h4 style="margin:15px 0 10px">
+Payment Method
+</h4>
+
+
+<label class="payment-option">
+
+<input
+type="radio"
+name="payment"
+value="COD"
+checked>
+
+🚚 Cash on Delivery
+
+</label>
+
+
+<label class="payment-option">
+
+<input
+type="radio"
+name="payment"
+value="WALLET">
+
+💳 Dhaka Bazar Wallet
+
+</label>
+
+
+<label class="payment-option">
+
+<input
+type="radio"
+name="payment"
+value="BKASH">
+
+📱 bKash
+
+</label>
+
+
+<p
+style="
+font-size:11px;
+color:#777;
+margin:10px 0 15px;
+">
+
+bKash optionটি এখন Demo। বাস্তব bKash
+লেনদেনের জন্য অনুমোদিত API/Payment Gateway
+সংযুক্ত করতে হবে।
+
+</p>
+
+
+<button
+class="primary-btn"
+onclick="placeOrder()">
+
+অর্ডার Confirm করুন ✓
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ORDER SUCCESS -->
+
+<div class="modal" id="successModal">
+
+<div class="modal-box">
+
+<div class="order-success">
+
+<div class="success-icon">
+✅
+</div>
+
+<h2>
+অর্ডার সফল হয়েছে!
+</h2>
+
+<p
+style="
+margin-top:8px;
+color:#666;
+">
+
+আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে।
+
+</p>
+
+
+<div
+class="order-id"
+id="successOrderId">
+
+Order ID
+
+</div>
+
+
+<div
+id="successDetails"
+style="
+text-align:left;
+font-size:13px;
+line-height:1.7;
+">
+
+</div>
+
+
+<button
+class="primary-btn"
+style="margin-top:15px"
+onclick="closeModal('successModal')">
+
+ঠিক আছে
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ORDERS MODAL -->
+
+<div class="modal" id="ordersModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>📦 আমার Orders</h3>
+
+<button
+class="close"
+onclick="closeModal('ordersModal')">
+×
+</button>
+
+</div>
+
+
+<div id="ordersList"></div>
+
+</div>
 
 </div>
 
 
 <!-- TOAST -->
-<div class="toast" id="toast">
-    সফল হয়েছে!
+
+<div
+class="toast"
+id="toast">
+
+সফল হয়েছে!
+
 </div>
 
 
 <script>
 
-/* ==============================
-   GLOBAL DATA
-============================== */
+/* ======================================
+   DATA
+====================================== */
 
-let cart = [];
+let products =
+JSON.parse(
+localStorage.getItem("dhakaProducts")
+) || [
 
-let walletBalance = 0;
+{
+id:"P001",
+name:"মিনিকেট চাল",
+desc:"৫ কেজি প্যাক",
+price:450,
+category:"grocery",
+icon:"🍚",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P002",
+name:"সয়াবিন তেল",
+desc:"২ লিটার",
+price:380,
+category:"grocery",
+icon:"🫗",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P003",
+name:"চিকেন বার্গার",
+desc:"ফ্রেশ ও সুস্বাদু",
+price:180,
+category:"food",
+icon:"🍔",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P004",
+name:"ওয়্যারলেস হেডফোন",
+desc:"Bluetooth",
+price:990,
+category:"electronics",
+icon:"🎧",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P005",
+name:"কটন টি-শার্ট",
+desc:"Premium Cotton",
+price:550,
+category:"fashion",
+icon:"👕",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P006",
+name:"সফট বালিশ",
+desc:"আরামদায়ক",
+price:350,
+category:"home",
+icon:"🛏️",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P007",
+name:"হারবাল শ্যাম্পু",
+desc:"৪০০ ml",
+price:290,
+category:"beauty",
+icon:"🧴",
+seller:"Dhaka Bazar"
+},
+
+{
+id:"P008",
+name:"ফাস্ট চার্জার",
+desc:"20W USB-C",
+price:650,
+category:"electronics",
+icon:"🔌",
+seller:"Dhaka Bazar"
+}
+
+];
+
+
+let cart =
+JSON.parse(
+localStorage.getItem("dhakaCart")
+) || [];
+
+
+let orders =
+JSON.parse(
+localStorage.getItem("dhakaOrders")
+) || [];
+
+
+let walletBalance =
+Number(
+localStorage.getItem("dhakaWallet")
+) || 0;
+
 
 let currentLocation =
-    localStorage.getItem("dhakaBazarLocation") || "";
+localStorage.getItem(
+"dhakaLocation"
+) || "";
 
 
-/* ==============================
+let currentAddress =
+localStorage.getItem(
+"dhakaAddress"
+) || "";
+
+
+let currentUser =
+JSON.parse(
+localStorage.getItem("dhakaUser")
+) || null;
+
+
+/* ======================================
    INITIAL LOAD
-============================== */
+====================================== */
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener(
+"DOMContentLoaded",
+function(){
 
-    updateLocation();
+renderProducts();
 
-    updateWallet();
+updateCart();
 
-    updateCart();
+updateWallet();
 
-});
+updateLocation();
+
+updateAccount();
+
+}
+);
 
 
-/* ==============================
+/* ======================================
+   STORAGE
+====================================== */
+
+function saveAll(){
+
+localStorage.setItem(
+"dhakaProducts",
+JSON.stringify(products)
+);
+
+localStorage.setItem(
+"dhakaCart",
+JSON.stringify(cart)
+);
+
+localStorage.setItem(
+"dhakaOrders",
+JSON.stringify(orders)
+);
+
+localStorage.setItem(
+"dhakaWallet",
+walletBalance
+);
+
+}
+
+
+/* ======================================
    MODAL
-============================== */
+====================================== */
 
 function openModal(id){
 
-    document.getElementById(id)
-        .classList.add("show");
+document
+.getElementById(id)
+.classList.add("show");
 
 }
+
 
 function closeModal(id){
 
-    document.getElementById(id)
-        .classList.remove("show");
+document
+.getElementById(id)
+.classList.remove("show");
 
 }
 
 
-/* Close modal when clicking outside */
-
-document.querySelectorAll(".modal")
+document
+.querySelectorAll(".modal")
 .forEach(function(modal){
 
-    modal.addEventListener("click",function(e){
+modal.addEventListener(
+"click",
+function(e){
 
-        if(e.target === modal){
+if(e.target === modal){
 
-            modal.classList.remove("show");
+modal.classList.remove("show");
 
-        }
+}
 
-    });
+});
 
 });
 
 
-/* ==============================
+/* ======================================
+   PRODUCT RENDER
+====================================== */
+
+function renderProducts(list = products){
+
+const container =
+document.getElementById("products");
+
+container.innerHTML = "";
+
+if(list.length === 0){
+
+container.innerHTML =
+`
+<div class="empty"
+style="grid-column:1/-1">
+
+কোনো Product পাওয়া যায়নি।
+
+</div>
+`;
+
+return;
+
+}
+
+
+list.forEach(function(product){
+
+const card =
+document.createElement("div");
+
+card.className = "product";
+
+card.innerHTML = `
+
+<div class="product-img">
+${product.icon}
+</div>
+
+<div class="product-info">
+
+<div class="product-name">
+${escapeHTML(product.name)}
+</div>
+
+<div class="product-desc">
+${escapeHTML(product.desc)}
+</div>
+
+<div class="price">
+৳${Number(product.price).toLocaleString("bn-BD")}
+</div>
+
+<div class="product-bottom">
+
+<span>⭐ 4.8</span>
+
+<button
+class="add-btn"
+onclick="addToCart('${product.id}')">
+
++ যোগ
+
+</button>
+
+</div>
+
+${
+product.seller !== "Dhaka Bazar"
+?
+`
+<button
+class="seller-delete"
+onclick="deleteProduct('${product.id}')">
+
+🗑️ Product Delete
+
+</button>
+`
+:""
+}
+
+</div>
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+
+/* ======================================
+   ESCAPE HTML
+====================================== */
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* ======================================
+   SELLER ADD PRODUCT
+====================================== */
+
+function addSellerProduct(){
+
+const name =
+document
+.getElementById("sellerProductName")
+.value.trim();
+
+const desc =
+document
+.getElementById("sellerProductDesc")
+.value.trim();
+
+const price =
+Number(
+document
+.getElementById("sellerProductPrice")
+.value
+);
+
+const category =
+document
+.getElementById("sellerProductCategory")
+.value;
+
+const icon =
+document
+.getElementById("sellerProductIcon")
+.value;
+
+
+if(!name){
+
+showToast("Product Name দিন");
+
+return;
+
+}
+
+
+if(!desc){
+
+showToast("Product Description দিন");
+
+return;
+
+}
+
+
+if(!price || price <= 0){
+
+showToast("সঠিক Price দিন");
+
+return;
+
+}
+
+
+const product = {
+
+id:
+"P" +
+Date.now(),
+
+name:name,
+
+desc:desc,
+
+price:price,
+
+category:category,
+
+icon:icon,
+
+seller:
+currentUser
+?
+currentUser.name
+:
+"Local Seller"
+
+};
+
+
+products.unshift(product);
+
+saveAll();
+
+renderProducts();
+
+closeModal("sellerModal");
+
+
+document
+.getElementById("sellerProductName")
+.value="";
+
+document
+.getElementById("sellerProductDesc")
+.value="";
+
+document
+.getElementById("sellerProductPrice")
+.value="";
+
+
+showToast(
+"Product সফলভাবে Add হয়েছে ✓"
+);
+
+}
+
+
+/* ======================================
+   DELETE PRODUCT
+====================================== */
+
+function deleteProduct(id){
+
+const product =
+products.find(
+p => p.id === id
+);
+
+if(!product){
+
+return;
+
+}
+
+
+if(!confirm(
+"এই Product Delete করতে চান?"
+)){
+
+return;
+
+}
+
+
+products =
+products.filter(
+p => p.id !== id
+);
+
+saveAll();
+
+renderProducts();
+
+showToast(
+"Product Delete হয়েছে"
+);
+
+}
+
+
+/* ======================================
+   CART
+====================================== */
+
+function addToCart(id){
+
+const product =
+products.find(
+p => p.id === id
+);
+
+if(!product){
+
+return;
+
+}
+
+
+const existing =
+cart.find(
+item => item.id === id
+);
+
+
+if(existing){
+
+existing.qty++;
+
+}else{
+
+cart.push({
+
+id:id,
+
+name:product.name,
+
+price:product.price,
+
+qty:1
+
+});
+
+}
+
+
+saveAll();
+
+updateCart();
+
+showToast(
+product.name +
+" কার্টে যোগ হয়েছে ✓"
+);
+
+}
+
+
+/* ======================================
+   UPDATE CART
+====================================== */
+
+function updateCart(){
+
+const count =
+cart.reduce(
+(sum,item) =>
+sum + item.qty,
+0
+);
+
+
+document
+.getElementById("cartCount")
+.innerText = count;
+
+
+const list =
+document
+.getElementById("cartList");
+
+
+if(!list){
+
+return;
+
+}
+
+
+if(cart.length === 0){
+
+list.innerHTML =
+`
+<div class="empty">
+🛒 আপনার Cart খালি।
+</div>
+`;
+
+document
+.getElementById("cartTotal")
+.innerText =
+"৳ 0";
+
+return;
+
+}
+
+
+let total = 0;
+
+list.innerHTML = "";
+
+
+cart.forEach(function(item,index){
+
+const itemTotal =
+item.price * item.qty;
+
+total += itemTotal;
+
+
+const div =
+document.createElement("div");
+
+div.className =
+"cart-item";
+
+div.innerHTML = `
+
+<div>
+
+<strong>
+${escapeHTML(item.name)}
+</strong>
+
+<div
+style="
+font-size:12px;
+color:#777;
+margin-top:5px">
+
+৳${item.price} × ${item.qty}
+
+</div>
+
+<div class="qty-box">
+
+<button
+onclick="changeQty(${index},-1)">
+−
+</button>
+
+<span>
+${item.qty}
+</span>
+
+<button
+onclick="changeQty(${index},1)">
++
+</button>
+
+</div>
+
+</div>
+
+
+<div
+style="text-align:right">
+
+<strong
+style="color:var(--primary)">
+
+৳${itemTotal}
+
+</strong>
+
+<br>
+
+<button
+style="
+border:0;
+background:none;
+color:#e53935;
+font-size:11px;
+margin-top:7px"
+onclick="removeCart(${index})">
+
+Remove
+
+</button>
+
+</div>
+
+`;
+
+list.appendChild(div);
+
+});
+
+
+document
+.getElementById("cartTotal")
+.innerText =
+"৳ " +
+total.toLocaleString("bn-BD");
+
+}
+
+
+/* ======================================
+   CHANGE QTY
+====================================== */
+
+function changeQty(index,change){
+
+if(!cart[index]){
+
+return;
+
+}
+
+cart[index].qty += change;
+
+
+if(cart[index].qty <= 0){
+
+cart.splice(index,1);
+
+}
+
+
+saveAll();
+
+updateCart();
+
+}
+
+
+/* ======================================
+   REMOVE CART
+====================================== */
+
+function removeCart(index){
+
+cart.splice(index,1);
+
+saveAll();
+
+updateCart();
+
+showToast(
+"Cart থেকে Product সরানো হয়েছে"
+);
+
+}
+
+
+/* ======================================
+   OPEN CART
+====================================== */
+
+function openCart(){
+
+updateCart();
+
+openModal("cartModal");
+
+}
+
+
+/* ======================================
    LOCATION
-============================== */
+====================================== */
 
 function saveLocation(){
 
-    const area =
-        document.getElementById("areaSelect").value;
+const area =
+document
+.getElementById("areaSelect")
+.value;
 
-    if(!area){
+const address =
+document
+.getElementById("fullAddress")
+.value.trim();
 
-        showToast("দয়া করে এলাকা নির্বাচন করুন");
 
-        return;
+if(!area){
 
-    }
+showToast(
+"এলাকা নির্বাচন করুন"
+);
 
-    currentLocation = area;
+return;
 
-    localStorage.setItem(
-        "dhakaBazarLocation",
-        area
-    );
+}
 
-    updateLocation();
 
-    closeModal("locationModal");
+if(!address){
 
-    showToast("লোকেশন সেভ হয়েছে ✓");
+showToast(
+"সম্পূর্ণ Address দিন"
+);
+
+return;
+
+}
+
+
+currentLocation = area;
+
+currentAddress = address;
+
+
+localStorage.setItem(
+"dhakaLocation",
+area
+);
+
+localStorage.setItem(
+"dhakaAddress",
+address
+);
+
+
+updateLocation();
+
+closeModal("locationModal");
+
+showToast(
+"Delivery Location Save হয়েছে ✓"
+);
 
 }
 
 
 function updateLocation(){
 
-    const locationText =
-        document.getElementById("locationText");
+const text =
+document
+.getElementById("locationText");
 
-    if(currentLocation){
 
-        locationText.innerText =
-            "ডেলিভারি লোকেশন: " + currentLocation;
+if(currentLocation){
 
-    }else{
+text.innerText =
+"📍 " +
+currentLocation +
+" — " +
+currentAddress;
 
-        locationText.innerText =
-            "আপনার লোকেশন সেট করুন";
+}else{
 
-    }
+text.innerText =
+"আপনার লোকেশন সেট করুন";
+
+}
 
 }
 
 
-/* ==============================
-   LOGIN DEMO
-============================== */
+/* ======================================
+   ACCOUNT
+====================================== */
 
-function demoLogin(){
+function saveAccount(){
 
-    const phone =
-        document.getElementById("phone").value.trim();
+const name =
+document
+.getElementById("accountName")
+.value.trim();
 
-    const name =
-        document.getElementById("userName").value.trim();
+const phone =
+document
+.getElementById("accountPhone")
+.value.trim();
 
-    if(phone.length < 10){
 
-        showToast("সঠিক মোবাইল নম্বর দিন");
+if(name.length < 2){
 
-        return;
+showToast(
+"সঠিক নাম দিন"
+);
 
-    }
-
-    if(!name){
-
-        showToast("আপনার নাম লিখুন");
-
-        return;
-
-    }
-
-    localStorage.setItem(
-        "dhakaBazarUser",
-        JSON.stringify({
-            name:name,
-            phone:phone
-        })
-    );
-
-    closeModal("loginModal");
-
-    showToast(
-        "স্বাগতম, " + name + " ✓"
-    );
+return;
 
 }
 
 
-/* ==============================
+if(phone.length < 10){
+
+showToast(
+"সঠিক মোবাইল নম্বর দিন"
+);
+
+return;
+
+}
+
+
+currentUser = {
+
+name:name,
+
+phone:phone
+
+};
+
+
+localStorage.setItem(
+"dhakaUser",
+JSON.stringify(currentUser)
+);
+
+
+updateAccount();
+
+closeModal("accountModal");
+
+showToast(
+"Account Save হয়েছে ✓"
+);
+
+}
+
+
+function updateAccount(){
+
+const info =
+document
+.getElementById("accountInfo");
+
+
+if(!info){
+
+return;
+
+}
+
+
+if(currentUser){
+
+info.innerHTML =
+`
+<strong>
+${escapeHTML(currentUser.name)}
+</strong>
+<br>
+📱 ${escapeHTML(currentUser.phone)}
+`;
+
+document
+.getElementById("accountName")
+.value =
+currentUser.name;
+
+document
+.getElementById("accountPhone")
+.value =
+currentUser.phone;
+
+}else{
+
+info.innerText =
+"Login করা হয়নি";
+
+}
+
+}
+
+
+/* ======================================
    WALLET
-============================== */
+====================================== */
 
 function updateWallet(){
 
-    const formatted =
-        "৳ " +
-        walletBalance.toLocaleString(
-            "en-BD",
-            {
-                minimumFractionDigits:2
-            }
-        );
+const formatted =
+"৳ " +
+walletBalance.toLocaleString(
+"bn-BD",
+{
+minimumFractionDigits:2
+}
+);
 
-    document.getElementById(
-        "walletBalance"
-    ).innerText = formatted;
 
-    document.getElementById(
-        "modalBalance"
-    ).innerText = formatted;
+document
+.getElementById("walletBalance")
+.innerText =
+formatted;
+
+
+document
+.getElementById("modalBalance")
+.innerText =
+formatted;
 
 }
 
 
 function demoAddMoney(){
 
-    const amount =
-        Number(
-            document.getElementById(
-                "walletAmount"
-            ).value
-        );
+const amount =
+Number(
+document
+.getElementById("walletAmount")
+.value
+);
 
-    if(!amount || amount <= 0){
 
-        showToast("সঠিক Amount দিন");
+if(!amount || amount <= 0){
 
-        return;
+showToast(
+"সঠিক Amount দিন"
+);
 
-    }
-
-    walletBalance += amount;
-
-    updateWallet();
-
-    document.getElementById(
-        "walletAmount"
-    ).value = "";
-
-    showToast(
-        "Demo balance যোগ হয়েছে ✓"
-    );
+return;
 
 }
 
 
-function demoTransaction(){
+walletBalance += amount;
 
-    showToast(
-        "Transaction system backend-এ যুক্ত হবে"
-    );
+saveAll();
 
-}
+updateWallet();
 
 
-/* ==============================
-   CART
-============================== */
+document
+.getElementById("walletAmount")
+.value = "";
 
-function addToCart(name,price){
 
-    const existing =
-        cart.find(
-            item => item.name === name
-        );
-
-    if(existing){
-
-        existing.qty++;
-
-    }else{
-
-        cart.push({
-            name:name,
-            price:price,
-            qty:1
-        });
-
-    }
-
-    updateCart();
-
-    showToast(
-        name + " কার্টে যোগ হয়েছে ✓"
-    );
+showToast(
+"Demo Balance যোগ হয়েছে ✓"
+);
 
 }
 
 
-function updateCart(){
-
-    const count =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.qty,
-            0
-        );
-
-    document.getElementById(
-        "cartCount"
-    ).innerText = count;
-
-    const cartList =
-        document.getElementById(
-            "cartList"
-        );
-
-    if(cart.length === 0){
-
-        cartList.innerHTML = `
-            <div class="cart-empty">
-                আপনার কার্ট এখনো খালি।
-            </div>
-        `;
-
-        document.getElementById(
-            "cartTotal"
-        ).innerText = "৳ 0";
-
-        return;
-
-    }
-
-    let total = 0;
-
-    cartList.innerHTML = "";
-
-    cart.forEach(function(item,index){
-
-        const itemTotal =
-            item.price * item.qty;
-
-        total += itemTotal;
-
-        const div =
-            document.createElement("div");
-
-        div.className = "cart-item";
-
-        div.innerHTML = `
-
-            <div>
-
-                <div class="cart-item-name">
-                    ${item.name}
-                </div>
-
-                <div style="
-                    font-size:12px;
-                    color:#777;
-                    margin-top:4px;
-                ">
-                    ${item.qty} × ৳${item.price}
-                </div>
-
-            </div>
-
-            <div style="text-align:right">
-
-                <div class="cart-item-price">
-                    ৳${itemTotal}
-                </div>
-
-                <button
-                    onclick="removeFromCart(${index})"
-                    style="
-                        border:0;
-                        background:none;
-                        color:#e53935;
-                        cursor:pointer;
-                        font-size:11px;
-                    "
-                >
-                    Remove
-                </button>
-
-            </div>
-        `;
-
-        cartList.appendChild(div);
-
-    });
-
-    document.getElementById(
-        "cartTotal"
-    ).innerText =
-        "৳ " + total.toLocaleString("en-BD");
-
-}
-
-
-function removeFromCart(index){
-
-    cart.splice(index,1);
-
-    updateCart();
-
-    showToast(
-        "পণ্য কার্ট থেকে সরানো হয়েছে"
-    );
-
-}
-
-
-function openCart(){
-
-    updateCart();
-
-    openModal("cartModal");
-
-}
-
-
-/* ==============================
-   CHECKOUT
-============================== */
-
-function checkout(){
-
-    if(cart.length === 0){
-
-        showToast(
-            "প্রথমে কার্টে পণ্য যোগ করুন"
-        );
-
-        return;
-
-    }
-
-    if(!currentLocation){
-
-        closeModal("cartModal");
-
-        openModal("locationModal");
-
-        showToast(
-            "আগে ডেলিভারি লোকেশন সেট করুন"
-        );
-
-        return;
-
-    }
-
-    showToast(
-        "Checkout প্রস্তুত। Backend ও payment gateway পরে যুক্ত হবে।"
-    );
-
-}
-
-
-/* ==============================
+/* ======================================
    SEARCH
-============================== */
+====================================== */
 
 function searchProducts(){
 
-    const query =
-        document.getElementById(
-            "searchInput"
-        ).value
-        .toLowerCase()
-        .trim();
+const query =
+document
+.getElementById("searchInput")
+.value
+.toLowerCase()
+.trim();
 
-    const products =
-        document.querySelectorAll(
-            ".product"
-        );
 
-    products.forEach(function(product){
+const filtered =
+products.filter(
+product =>
 
-        const name =
-            product.dataset.name
-            .toLowerCase();
+product.name
+.toLowerCase()
+.includes(query)
 
-        if(
-            !query ||
-            name.includes(query)
-        ){
+||
+product.desc
+.toLowerCase()
+.includes(query)
 
-            product.style.display = "";
+);
 
-        }else{
 
-            product.style.display = "none";
-
-        }
-
-    });
+renderProducts(filtered);
 
 }
 
 
-/* ==============================
-   CATEGORY FILTER
-============================== */
+/* ======================================
+   CATEGORY
+====================================== */
 
 function filterCategory(category){
 
-    const products =
-        document.querySelectorAll(
-            ".product"
-        );
+const filtered =
+products.filter(
+product =>
+product.category === category
+);
 
-    products.forEach(function(product){
 
-        if(
-            product.dataset.category
-            === category
-        ){
+renderProducts(filtered);
 
-            product.style.display = "";
-
-        }else{
-
-            product.style.display = "none";
-
-        }
-
-    });
-
-    document.getElementById(
-        "productSection"
-    ).scrollIntoView({
-        behavior:"smooth"
-    });
+scrollToProducts();
 
 }
 
 
 function showAllProducts(){
 
-    document.querySelectorAll(
-        ".product"
-    ).forEach(function(product){
-
-        product.style.display = "";
-
-    });
+renderProducts(products);
 
 }
 
 
-function showAllCategories(){
+/* ======================================
+   CHECKOUT
+====================================== */
 
-    showAllProducts();
+function startCheckout(){
 
-    showToast(
-        "সব ক্যাটাগরি দেখানো হচ্ছে"
-    );
+if(cart.length === 0){
+
+showToast(
+"আগে Cart-এ Product যোগ করুন"
+);
+
+return;
 
 }
 
 
-/* ==============================
+if(!currentLocation){
+
+closeModal("cartModal");
+
+openModal("locationModal");
+
+showToast(
+"আগে Delivery Location দিন"
+);
+
+return;
+
+}
+
+
+if(!currentUser){
+
+closeModal("cartModal");
+
+openModal("accountModal");
+
+showToast(
+"আগে Account তৈরি করুন"
+);
+
+return;
+
+}
+
+
+prepareCheckout();
+
+closeModal("cartModal");
+
+openModal("checkoutModal");
+
+}
+
+
+/* ======================================
+   PREPARE CHECKOUT
+====================================== */
+
+function prepareCheckout(){
+
+const summary =
+document
+.getElementById("checkoutSummary");
+
+
+let total = 0;
+
+let html =
+"<div style='background:#f8faf9;padding:12px;border-radius:10px'>";
+
+
+cart.forEach(function(item){
+
+const itemTotal =
+item.price * item.qty;
+
+total += itemTotal;
+
+
+html += `
+<div
+style="
+display:flex;
+justify-content:space-between;
+margin-bottom:8px;
+font-size:13px">
+
+<span>
+${escapeHTML(item.name)}
+× ${item.qty}
+</span>
+
+<strong>
+৳${itemTotal}
+</strong>
+
+</div>
+`;
+
+});
+
+
+html += `
+
+<hr style="
+border:0;
+border-top:1px solid #ddd;
+margin:10px 0">
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+font-weight:800">
+
+<span>
+মোট
+</span>
+
+<span
+style="color:var(--primary)">
+
+৳${total.toLocaleString("bn-BD")}
+
+</span>
+
+</div>
+
+</div>
+`;
+
+
+summary.innerHTML = html;
+
+
+document
+.getElementById("checkoutName")
+.value =
+currentUser
+?
+currentUser.name
+:"";
+
+
+document
+.getElementById("checkoutPhone")
+.value =
+currentUser
+?
+currentUser.phone
+:"";
+
+
+document
+.getElementById("checkoutAddress")
+.value =
+currentAddress
+?
+currentLocation +
+" — " +
+currentAddress
+:"";
+
+}
+
+
+/* ======================================
+   PLACE ORDER
+====================================== */
+
+function placeOrder(){
+
+const name =
+document
+.getElementById("checkoutName")
+.value.trim();
+
+const phone =
+document
+.getElementById("checkoutPhone")
+.value.trim();
+
+const address =
+document
+.getElementById("checkoutAddress")
+.value.trim();
+
+
+const payment =
+document
+.querySelector(
+'input[name="payment"]:checked'
+).value;
+
+
+if(!name){
+
+showToast(
+"নাম দিন"
+);
+
+return;
+
+}
+
+
+if(phone.length < 10){
+
+showToast(
+"সঠিক মোবাইল নম্বর দিন"
+);
+
+return;
+
+}
+
+
+if(!address){
+
+showToast(
+"Delivery Address দিন"
+);
+
+return;
+
+}
+
+
+let total = 0;
+
+
+cart.forEach(function(item){
+
+total +=
+item.price *
+item.qty;
+
+});
+
+
+/* WALLET PAYMENT */
+
+if(payment === "WALLET"){
+
+if(walletBalance < total){
+
+showToast(
+"Wallet Balance যথেষ্ট নয়"
+);
+
+return;
+
+}
+
+walletBalance -= total;
+
+}
+
+
+/* ORDER ID */
+
+const orderId =
+"DB-" +
+Date.now();
+
+
+const order = {
+
+id:orderId,
+
+customerName:name,
+
+phone:phone,
+
+address:address,
+
+paymentMethod:payment,
+
+total:total,
+
+items:JSON.parse(
+JSON.stringify(cart)
+),
+
+status:
+"ORDER_CONFIRMED",
+
+createdAt:
+new Date().toLocaleString(
+"bn-BD"
+)
+
+};
+
+
+orders.unshift(order);
+
+
+/* CLEAR CART */
+
+cart = [];
+
+
+saveAll();
+
+updateCart();
+
+updateWallet();
+
+
+closeModal("checkoutModal");
+
+showOrderSuccess(order);
+
+}
+
+
+/* ======================================
+   ORDER SUCCESS
+====================================== */
+
+function showOrderSuccess(order){
+
+document
+.getElementById("successOrderId")
+.innerText =
+"Order ID: " +
+order.id;
+
+
+document
+.getElementById("successDetails")
+.innerHTML = `
+
+<strong>
+Customer:
+</strong>
+${escapeHTML(order.customerName)}
+
+<br>
+
+<strong>
+Phone:
+</strong>
+${escapeHTML(order.phone)}
+
+<br>
+
+<strong>
+Address:
+</strong>
+${escapeHTML(order.address)}
+
+<br>
+
+<strong>
+Payment:
+</strong>
+${getPaymentName(order.paymentMethod)}
+
+<br>
+
+<strong>
+Total:
+</strong>
+৳${order.total.toLocaleString("bn-BD")}
+
+<br>
+
+<strong>
+Status:
+</strong>
+<span style="color:var(--primary)">
+অর্ডার Confirmed ✓
+</span>
+
+`;
+
+
+openModal("successModal");
+
+}
+
+
+/* ======================================
+   PAYMENT NAME
+====================================== */
+
+function getPaymentName(payment){
+
+if(payment === "COD"){
+
+return "Cash on Delivery";
+
+}
+
+if(payment === "WALLET"){
+
+return "Dhaka Bazar Wallet";
+
+}
+
+if(payment === "BKASH"){
+
+return "bKash — Demo";
+
+}
+
+return payment;
+
+}
+
+
+/* ======================================
+   ORDERS
+====================================== */
+
+function openOrders(){
+
+const list =
+document
+.getElementById("ordersList");
+
+
+if(orders.length === 0){
+
+list.innerHTML =
+`
+<div class="empty">
+📦 এখনো কোনো Order নেই।
+</div>
+`;
+
+}else{
+
+list.innerHTML = "";
+
+
+orders.forEach(function(order){
+
+const div =
+document.createElement("div");
+
+div.className =
+"order-card";
+
+
+div.innerHTML = `
+
+<strong>
+${order.id}
+</strong>
+
+<div
+style="
+font-size:12px;
+color:#777;
+margin-top:5px">
+
+${order.createdAt}
+
+</div>
+
+<hr
+style="
+border:0;
+border-top:1px solid #eee;
+margin:10px 0">
+
+<div>
+মোট:
+<strong>
+৳${order.total.toLocaleString("bn-BD")}
+</strong>
+</div>
+
+<div>
+Payment:
+${getPaymentName(order.paymentMethod)}
+</div>
+
+<div>
+Status:
+<span style="color:var(--primary)">
+${order.status}
+</span>
+</div>
+
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+
+openModal("ordersModal");
+
+}
+
+
+/* ======================================
    NAVIGATION
-============================== */
+====================================== */
 
 function scrollToProducts(){
 
-    document.getElementById(
-        "productSection"
-    ).scrollIntoView({
-        behavior:"smooth"
-    });
+document
+.getElementById("productSection")
+.scrollIntoView({
+behavior:"smooth"
+});
 
 }
 
 
 function goHome(button){
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
-    setActive(button);
+setActive(button);
 
 }
 
 
 function setActive(button){
 
-    document.querySelectorAll(
-        ".nav-item"
-    ).forEach(function(item){
+document
+.querySelectorAll(".nav-item")
+.forEach(function(item){
 
-        item.classList.remove("active");
+item.classList.remove("active");
 
-    });
+});
 
-    button.classList.add("active");
+
+button.classList.add("active");
 
 }
 
 
-/* ==============================
+/* ======================================
    TOAST
-============================== */
+====================================== */
 
 let toastTimer;
 
+
 function showToast(message){
 
-    const toast =
-        document.getElementById(
-            "toast"
-        );
+const toast =
+document
+.getElementById("toast");
 
-    toast.innerText = message;
 
-    toast.classList.add("show");
+toast.innerText =
+message;
 
-    clearTimeout(toastTimer);
 
-    toastTimer =
-        setTimeout(function(){
+toast.classList.add("show");
 
-            toast.classList.remove("show");
 
-        },2500);
+clearTimeout(toastTimer);
+
+
+toastTimer =
+setTimeout(function(){
+
+toast.classList.remove("show");
+
+},2500);
 
 }
 
