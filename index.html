@@ -3,229 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সহজ বাজার - Multivendor Grocery</title>
+    <title>Dhaka Bazar - ঢাকা বাজার</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f8; color: #333; padding-bottom: 60px; }
-        header { background-color: #0c831f; color: white; padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; padding-bottom: 70px; }
         
-        /* Form Sections */
-        .add-product-section, .cart-section, .ai-section { background: white; border-radius: 8px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        h2 { font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #f4f6f8; padding-bottom: 8px; color: #0c831f; }
+        /* Top Navigation Header */
+        header { background-color: #006847; color: white; padding: 12px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .app-title { font-size: 20px; font-weight: bold; }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .btn-add-product { background-color: #d97706; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .cart-badge { background-color: rgba(255, 255, 255, 0.2); padding: 6px 12px; border-radius: 6px; font-size: 14px; display: flex; align-items: center; gap: 5px; }
+        .location-bar { background-color: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 6px; font-size: 13px; margin-top: 10px; color: #e2e8f0; }
+
+        .container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
         
-        /* Product Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 10px; }
-        .product-card { background: white; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eee; }
-        .product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
-        .product-card h3 { font-size: 16px; margin: 5px 0; }
-        .product-card p { color: #0c831f; font-weight: bold; margin-bottom: 10px; font-size: 18px; }
+        /* Product Cards Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+        .product-card { background: white; border-radius: 8px; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; }
+        .product-card img, .product-card .emoji-img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; }
+        .product-card .emoji-img { display: flex; align-items: center; justify-content: center; font-size: 55px; background: #f8fafc; }
+        .product-card h3 { font-size: 15px; margin: 4px 0; color: #1e293b; }
+        .product-card .price { color: #006847; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
         
-        .btn { background: #0c831f; color: white; border: none; padding: 10px 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; }
-        .btn:hover { background: #096317; }
-        .btn-add { background: #ff9800; }
-        .btn-add:hover { background: #e68a00; }
+        .btn-cart { background: #006847; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; }
+        .btn-cart:hover { background: #005036; }
+
+        /* Modal Overlay & Popup Dialog Box */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: white; width: 90%; max-width: 420px; border-radius: 12px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .modal-header h2 { font-size: 18px; color: #0f172a; font-weight: bold; }
+        .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; font-weight: bold; }
         
-        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
-        ul { list-style: none; margin-bottom: 15px; }
-        li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #334155; }
+        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
+        .form-group input:focus { border-color: #006847; }
         
-        /* AI Assistant */
-        .chat-box { height: 120px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid #eee; margin-bottom: 10px; }
-        .chat-msg { margin-bottom: 8px; font-size: 14px; }
-        .user-msg { color: #0556f3; text-align: right; }
-        .ai-msg { color: #0c831f; text-align: left; }
+        .btn-submit { background-color: #006847; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-submit:hover { background-color: #005036; }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; }
+        .nav-item { text-align: center; color: #64748b; text-decoration: none; font-size: 12px; cursor: pointer; }
+        .nav-item.active { color: #006847; font-weight: bold; }
+        .nav-item div { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
+    <!-- Header Section -->
     <header>
-        <h1>সহজ বাজার (Quick Grocery)</h1>
-        <p>নিজের পণ্য যুক্ত করুন এবং ১০ মিনিটে কেনাকাটা করুন</p>
+        <div class="header-top">
+            <div class="app-title">ঢাকা বাজার</div>
+            <div class="header-actions">
+                <button class="btn-add-product" onclick="openModal()">+ পণ্য যোগ করুন</button>
+                <div class="cart-badge">🛒 <span id="cart-count">0</span></div>
+            </div>
+        </div>
+        <div class="location-bar">
+            📍 লোকেশন এখনো সেট করা হয়নি
+        </div>
     </header>
 
+    <!-- Main Container -->
     <div class="container">
-        
-        <!-- ১. ইউজারদের নিজস্ব পণ্য যুক্ত করার ফর্ম -->
-        <div class="add-product-section">
-            <h2>নিজের পণ্য যুক্ত করুন (Add Your Own Product)</h2>
-            <input type="text" id="new-prod-name" placeholder="পণ্যের নাম (যেমন: ফ্রেশ আপেল)">
-            <input type="number" id="new-prod-price" placeholder="মূল্য (টাকায়)">
-            <input type="text" id="new-prod-img" placeholder="পণ্যের আসল ছবির লিঙ্ক (Image URL)">
-            <button class="btn btn-add" onclick="addNewProduct()">+ অ্যাপে পণ্য পোস্ট করুন</button>
-        </div>
-
-        <!-- ২. পণ্য ক্যাটালগ (যেখানে সব ছবি দেখাবে) -->
-        <h2 style="margin-top: 25px;">পণ্যসমূহ</h2>
         <div class="product-grid" id="product-container">
-            <!-- পণ্য এখানে অটো লোড হবে -->
+            <!-- Products will be generated dynamically here -->
         </div>
+    </div>
 
-        <!-- ৩. কাস্টমার কার্ট এবং অর্ডার ফর্ম -->
-        <div class="cart-section">
-            <h2>আপনার অর্ডার (Cart)</h2>
-            <ul id="cart-items">
-                <li style="color: #888;">কার্ট খালি রয়েছে</li>
-            </ul>
-            <p style="text-align: right; font-weight: bold; margin-bottom: 15px; font-size: 18px;">মোট: ৳ <span id="total-price">০</span></p>
-            
-            <h3>ডেলিভারি তথ্য দিন</h3>
-            <input type="text" id="cust-name" placeholder="আপনার নাম">
-            <input type="text" id="cust-phone" placeholder="মোবাইল নম্বর">
-            <textarea id="cust-address" placeholder="সম্পূর্ণ ডেলিভারি ঠিকানা"></textarea>
-            <button class="btn" onclick="placeOrder()">অর্ডার কনফার্ম করুন (Cash on Delivery)</button>
-        </div>
-
-        <!-- ৪. AI চ্যাটবট -->
-        <div class="ai-section">
-            <h2>AI কাস্টমার হেল্পডেস্ক</h2>
-            <div class="chat-box" id="chat-box">
-                <div class="chat-msg ai-msg"><strong>AI:</strong> হ্যালো! ডেলিভারি বা নিজস্ব পণ্য যুক্ত করা নিয়ে কোনো প্রশ্ন আছে?</div>
+    <!-- Seller Panel Modal (Pop-up Window) -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>বিক্রেতা প্যানেল (নতুন পণ্য)</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
-            <input type="text" id="user-query" placeholder="প্রশ্ন লিখুন (যেমন: পণ্য কীভাবে যুক্ত করব?)...">
-            <button class="btn" style="background: #333;" onclick="askAI()">জিজ্ঞাসা করুন</button>
-        </div>
+            
+            <div class="form-group">
+                <label>পণ্যের নাম</label>
+                <input type="text" id="prod-name" placeholder="যেমন: দেশি রুই মাছ">
+            </div>
 
+            <div class="form-group">
+                <label>মূল্য (টাকা)</label>
+                <input type="number" id="prod-price" placeholder="যেমন: 350">
+            </div>
+
+            <div class="form-group">
+                <label>একক (যেমন: কেজি/লিটার/পিস)</label>
+                <input type="text" id="prod-unit" placeholder="যেমন: কেজি">
+            </div>
+
+            <div class="form-group">
+                <label>ইমোজি বা ছবির লিঙ্ক (Image URL)</label>
+                <input type="text" id="prod-img" placeholder="যেমন: 🐟 বা https://example.com/image.jpg">
+            </div>
+
+            <button class="btn-submit" onclick="saveProduct()">পণ্য পোস্ট করুন</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div>🏠</div>
+            হোম
+        </div>
+        <div class="nav-item" onclick="alert('আপনার কার্ট খালি!')">
+            <div>🛒</div>
+            কার্ট
+        </div>
+        <div class="nav-item" onclick="alert('লগআউট করা হয়েছে')">
+            <div>👤</div>
+            লগআউট
+        </div>
     </div>
 
     <script>
-        // ডিফোল্ট পণ্যের তালিকা (অরিজিনাল ছবিসহ)
+        // Initial Products List
         let products = [
-            { id: 1, name: "মিনিকেট চাল (১ কেজি)", price: 75, image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop" },
-            { id: 2, name: "সয়াবিন তেল (১ লিটার)", price: 190, image: "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=400&auto=format&fit=crop" },
-            { id: 3, name: "দেশি আলু (১ কেজি)", price: 45, image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&auto=format&fit=crop" }
+            { id: 1, name: "দেশি রুই মাছ", price: 350, unit: "কেজি", image: "🐟" },
+            { id: 2, name: "তাজা টমেটো", price: 60, unit: "কেজি", image: "🍅" },
+            { id: 3, name: "ব্রয়লার মুরগি", price: 180, unit: "কেজি", image: "🍗" }
         ];
 
-        let cart = [];
-        let total = 0;
+        let cartCount = 0;
 
-        // স্ক্রিনে পণ্য লোড করার ফাংশন
         function renderProducts() {
             const container = document.getElementById('product-container');
             container.innerHTML = '';
-            
-            products.forEach((product, index) => {
+
+            products.forEach(p => {
+                let imgHTML = p.image.startsWith('http') 
+                    ? `<img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/150'">`
+                    : `<div class="emoji-img">${p.image || '📦'}</div>`;
+
                 container.innerHTML += `
                     <div class="product-card">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
-                        <h3>${product.name}</h3>
-                        <p>৳ ${product.price}</p>
-                        <button class="btn" onclick="addToCart('${product.name}', ${product.price})">কার্টে যোগ করুন</button>
+                        ${imgHTML}
+                        <h3>${p.name}</h3>
+                        <div class="price">৳ ${p.price} / ${p.unit}</div>
+                        <button class="btn-cart" onclick="addToCart()">+ কার্টে যোগ করুন</button>
                     </div>
                 `;
             });
         }
 
-        // ইউজার কর্তৃক নতুন পণ্য যোগ করার ফাংশন
-        function addNewProduct() {
-            const nameInput = document.getElementById('new-prod-name');
-            const priceInput = document.getElementById('new-prod-price');
-            const imgInput = document.getElementById('new-prod-img');
+        function openModal() {
+            document.getElementById('productModal').style.display = 'flex';
+        }
 
-            const name = nameInput.value.trim();
-            const price = parseFloat(priceInput.value);
-            let image = imgInput.value.trim();
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
 
-            if (!name || isNaN(price)) {
-                alert("দয়া করে পণ্যের নাম এবং সঠিক দাম দিন!");
+        function saveProduct() {
+            const name = document.getElementById('prod-name').value.trim();
+            const price = document.getElementById('prod-price').value.trim();
+            const unit = document.getElementById('prod-unit').value.trim() || 'কেজি';
+            const img = document.getElementById('prod-img').value.trim();
+
+            if (!name || !price) {
+                alert("দয়া করে পণ্যের নাম এবং মূল্য সঠিক ভাবে প্রদান করুন!");
                 return;
             }
 
-            // ছবি না দিলে ডিফল্ট একটি ছবি থাকবে
-            if (!image) {
-                image = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&auto=format&fit=crop";
-            }
-
-            // নতুন পণ্য অ্যারোতে যোগ করা
             products.unshift({
                 id: Date.now(),
                 name: name,
                 price: price,
-                image: image
+                unit: unit,
+                image: img
             });
 
-            // স্ক্রিন আপডেট করা
             renderProducts();
+            closeModal();
 
-            // ইনপুট বক্স খালি করা
-            nameInput.value = '';
-            priceInput.value = '';
-            imgInput.value = '';
-
-            alert("আপনার পণ্যটি সফলভাবে যুক্ত করা হয়েছে!");
+            // Clear Input Form
+            document.getElementById('prod-name').value = '';
+            document.getElementById('prod-price').value = '';
+            document.getElementById('prod-unit').value = '';
+            document.getElementById('prod-img').value = '';
         }
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            total += price;
-            updateCartUI();
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
         }
 
-        function updateCartUI() {
-            const list = document.getElementById('cart-items');
-            const totalEl = document.getElementById('total-price');
-            
-            if (cart.length === 0) {
-                list.innerHTML = `<li style="color: #888;">কার্ট খালি রয়েছে</li>`;
-            } else {
-                list.innerHTML = '';
-                cart.forEach((item) => {
-                    list.innerHTML += `<li><span>${item.name}</span> <span>৳ ${item.price}</span></li>`;
-                });
-            }
-            totalEl.innerText = total;
-        }
-
-        function placeOrder() {
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
-
-            if (cart.length === 0) {
-                alert('দয়া করে প্রথমে পণ্য সিলেক্ট করুন!');
-                return;
-            }
-            if (!name || !phone || !address) {
-                alert('দয়া করে আপনার নাম, ফোন নম্বর ও ঠিকানা প্রদান করুন।');
-                return;
-            }
-
-            alert(`ধন্যবাদ ${name}! আপনার ৳${total} টাকার অর্ডারটি সফলভাবে জমা নেওয়া হয়েছে।`);
-            
-            cart = [];
-            total = 0;
-            updateCartUI();
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-phone').value = '';
-            document.getElementById('cust-address').value = '';
-        }
-
-        function askAI() {
-            const input = document.getElementById('user-query');
-            const chatBox = document.getElementById('chat-box');
-            const query = input.value.trim();
-
-            if (!query) return;
-
-            chatBox.innerHTML += `<div class="chat-msg user-msg"><strong>আপনি:</strong> ${query}</div>`;
-
-            let reply = "আমাদের কাস্টমার কেয়ার আপনার প্রশ্নটি প্রক্রিয়া করছে।";
-            if (query.includes("পণ্য") || query.includes("যোগ")) {
-                reply = "আপনি পেজের উপরের 'নিজের পণ্য যুক্ত করুন' ফর্ম থেকে যেকোনো পণ্যের নাম, দাম ও ছবির লিঙ্ক দিয়ে পণ্য যোগ করতে পারবেন।";
-            } else if (query.includes("ডেলিভারি") || query.includes("চার্জ")) {
-                reply = "আমাদের কোন ডেলিভারি চার্জ নেই।";
-            } else if (query.includes("টাকা") || query.includes("পেমেন্ট")) {
-                reply = "পণ্য পাওয়ার পর ক্যাশে (Cash on Delivery) টাকা দেওয়া যাবে।";
-            }
-
-            setTimeout(() => {
-                chatBox.innerHTML += `<div class="chat-msg ai-msg"><strong>AI:</strong> ${reply}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 400);
-
-            input.value = '';
-        }
-
+        // Render products on screen initialization
         window.onload = renderProducts;
     </script>
 </body>
