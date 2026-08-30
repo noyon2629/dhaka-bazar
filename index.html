@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সহজ বাজার - Quick Grocery</title>
+    <title>সহজ বাজার - Multivendor Grocery</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f6f8; color: #333; padding-bottom: 60px; }
         header { background-color: #0c831f; color: white; padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
-        .product-card { background: white; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; }
-        .product-card h3 { font-size: 16px; margin: 10px 0 5px; }
-        .product-card p { color: #0c831f; font-weight: bold; margin-bottom: 10px; }
-        .btn { background: #0c831f; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
-        .btn:hover { background: #096317; }
         
-        /* Cart Section */
-        .cart-section, .ai-section { background: white; border-radius: 8px; padding: 20px; margin-top: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* Form Sections */
+        .add-product-section, .cart-section, .ai-section { background: white; border-radius: 8px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         h2 { font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #f4f6f8; padding-bottom: 8px; color: #0c831f; }
+        
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 10px; }
+        .product-card { background: white; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eee; }
+        .product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
+        .product-card h3 { font-size: 16px; margin: 5px 0; }
+        .product-card p { color: #0c831f; font-weight: bold; margin-bottom: 10px; font-size: 18px; }
+        
+        .btn { background: #0c831f; color: white; border: none; padding: 10px 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; }
+        .btn:hover { background: #096317; }
+        .btn-add { background: #ff9800; }
+        .btn-add:hover { background: #e68a00; }
+        
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
         ul { list-style: none; margin-bottom: 15px; }
         li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
         
         /* AI Assistant */
         .chat-box { height: 120px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid #eee; margin-bottom: 10px; }
@@ -34,63 +40,120 @@
 <body>
 
     <header>
-        <h1>সহজ বাজার (Grocery App)</h1>
-        <p>১০ মিনিটে আপনার ঘরে নিত্যপ্রয়োজনীয় পণ্য</p>
+        <h1>সহজ বাজার (Quick Grocery)</h1>
+        <p>নিজের পণ্য যুক্ত করুন এবং ১০ মিনিটে কেনাকাটা করুন</p>
     </header>
 
     <div class="container">
-        <!-- Products -->
-        <h2>পণ্যসমূহ</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200" alt="চাল">
-                <h3>মিনিকেট চাল (১ কেজি)</h3>
-                <p>৳ ৭৫</p>
-                <button class="btn" onclick="addToCart('মিনিকেট চাল (১ কেজি)', 75)">কার্টে যোগ করুন</button>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=200" alt="সয়াবিন তেল">
-                <h3>সয়াবিন তেল (১ লিটার)</h3>
-                <p>৳ ১৯০</p>
-                <button class="btn" onclick="addToCart('সয়াবিন তেল (১ লিটার)', 190)">কার্টে যোগ করুন</button>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200" alt="আলু">
-                <h3>দেশি আলু (১ কেজি)</h3>
-                <p>৳ ৪৫</p>
-                <button class="btn" onclick="addToCart('দেশি আলু (১ কেজি)', 45)">কার্টে যোগ করুন</button>
-            </div>
+        
+        <!-- ১. ইউজারদের নিজস্ব পণ্য যুক্ত করার ফর্ম -->
+        <div class="add-product-section">
+            <h2>নিজের পণ্য যুক্ত করুন (Add Your Own Product)</h2>
+            <input type="text" id="new-prod-name" placeholder="পণ্যের নাম (যেমন: ফ্রেশ আপেল)">
+            <input type="number" id="new-prod-price" placeholder="মূল্য (টাকায়)">
+            <input type="text" id="new-prod-img" placeholder="পণ্যের আসল ছবির লিঙ্ক (Image URL)">
+            <button class="btn btn-add" onclick="addNewProduct()">+ অ্যাপে পণ্য পোস্ট করুন</button>
         </div>
 
-        <!-- Cart & Checkout -->
+        <!-- ২. পণ্য ক্যাটালগ (যেখানে সব ছবি দেখাবে) -->
+        <h2 style="margin-top: 25px;">পণ্যসমূহ</h2>
+        <div class="product-grid" id="product-container">
+            <!-- পণ্য এখানে অটো লোড হবে -->
+        </div>
+
+        <!-- ৩. কাস্টমার কার্ট এবং অর্ডার ফর্ম -->
         <div class="cart-section">
             <h2>আপনার অর্ডার (Cart)</h2>
             <ul id="cart-items">
                 <li style="color: #888;">কার্ট খালি রয়েছে</li>
             </ul>
-            <p style="text-align: right; font-weight: bold; margin-bottom: 15px;">মোট: ৳ <span id="total-price">০</span></p>
+            <p style="text-align: right; font-weight: bold; margin-bottom: 15px; font-size: 18px;">মোট: ৳ <span id="total-price">০</span></p>
             
-            <h3>ডেলিভারি ঠিকানা দিন</h3>
+            <h3>ডেলিভারি তথ্য দিন</h3>
             <input type="text" id="cust-name" placeholder="আপনার নাম">
             <input type="text" id="cust-phone" placeholder="মোবাইল নম্বর">
-            <textarea id="cust-address" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+            <textarea id="cust-address" placeholder="সম্পূর্ণ ডেলিভারি ঠিকানা"></textarea>
             <button class="btn" onclick="placeOrder()">অর্ডার কনফার্ম করুন (Cash on Delivery)</button>
         </div>
 
-        <!-- AI Assistant -->
+        <!-- ৪. AI চ্যাটবট -->
         <div class="ai-section">
             <h2>AI কাস্টমার হেল্পডেস্ক</h2>
             <div class="chat-box" id="chat-box">
-                <div class="chat-msg ai-msg"><strong>AI:</strong> হ্যালো! ডেলিভারি বা প্রোডাক্ট সম্পর্কিত যেকোনো প্রশ্ন জিজ্ঞাসা করুন।</div>
+                <div class="chat-msg ai-msg"><strong>AI:</strong> হ্যালো! ডেলিভারি বা নিজস্ব পণ্য যুক্ত করা নিয়ে কোনো প্রশ্ন আছে?</div>
             </div>
-            <input type="text" id="user-query" placeholder="প্রশ্ন লিখুন (যেমন: ডেলিভারি চার্জ কত?)...">
+            <input type="text" id="user-query" placeholder="প্রশ্ন লিখুন (যেমন: পণ্য কীভাবে যুক্ত করব?)...">
             <button class="btn" style="background: #333;" onclick="askAI()">জিজ্ঞাসা করুন</button>
         </div>
+
     </div>
 
     <script>
+        // ডিফোল্ট পণ্যের তালিকা (অরিজিনাল ছবিসহ)
+        let products = [
+            { id: 1, name: "মিনিকেট চাল (১ কেজি)", price: 75, image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop" },
+            { id: 2, name: "সয়াবিন তেল (১ লিটার)", price: 190, image: "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=400&auto=format&fit=crop" },
+            { id: 3, name: "দেশি আলু (১ কেজি)", price: 45, image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&auto=format&fit=crop" }
+        ];
+
         let cart = [];
         let total = 0;
+
+        // স্ক্রিনে পণ্য লোড করার ফাংশন
+        function renderProducts() {
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
+            
+            products.forEach((product, index) => {
+                container.innerHTML += `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                        <h3>${product.name}</h3>
+                        <p>৳ ${product.price}</p>
+                        <button class="btn" onclick="addToCart('${product.name}', ${product.price})">কার্টে যোগ করুন</button>
+                    </div>
+                `;
+            });
+        }
+
+        // ইউজার কর্তৃক নতুন পণ্য যোগ করার ফাংশন
+        function addNewProduct() {
+            const nameInput = document.getElementById('new-prod-name');
+            const priceInput = document.getElementById('new-prod-price');
+            const imgInput = document.getElementById('new-prod-img');
+
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value);
+            let image = imgInput.value.trim();
+
+            if (!name || isNaN(price)) {
+                alert("দয়া করে পণ্যের নাম এবং সঠিক দাম দিন!");
+                return;
+            }
+
+            // ছবি না দিলে ডিফল্ট একটি ছবি থাকবে
+            if (!image) {
+                image = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&auto=format&fit=crop";
+            }
+
+            // নতুন পণ্য অ্যারোতে যোগ করা
+            products.unshift({
+                id: Date.now(),
+                name: name,
+                price: price,
+                image: image
+            });
+
+            // স্ক্রিন আপডেট করা
+            renderProducts();
+
+            // ইনপুট বক্স খালি করা
+            nameInput.value = '';
+            priceInput.value = '';
+            imgInput.value = '';
+
+            alert("আপনার পণ্যটি সফলভাবে যুক্ত করা হয়েছে!");
+        }
 
         function addToCart(name, price) {
             cart.push({ name, price });
@@ -123,13 +186,12 @@
                 return;
             }
             if (!name || !phone || !address) {
-                alert('দয়া করে আপনার নাম, ফোন নম্বর ও ঠিকানা পূরণ করুন।');
+                alert('দয়া করে আপনার নাম, ফোন নম্বর ও ঠিকানা প্রদান করুন।');
                 return;
             }
 
-            alert(`ধন্যবাদ ${name}! আপনার ৳${total} টাকার অর্ডারটি সফলভাবে নেওয়া হয়েছে। খুব শীঘ্রই আপনার ঠিকানায় পৌঁছানো হবে।`);
+            alert(`ধন্যবাদ ${name}! আপনার ৳${total} টাকার অর্ডারটি সফলভাবে জমা নেওয়া হয়েছে।`);
             
-            // Reset Cart
             cart = [];
             total = 0;
             updateCartUI();
@@ -145,20 +207,17 @@
 
             if (!query) return;
 
-            // Show User Message
             chatBox.innerHTML += `<div class="chat-msg user-msg"><strong>আপনি:</strong> ${query}</div>`;
 
-            // Simple Auto AI Logic
-            let reply = "দুঃখিত, আমি বিষয়টি বুঝতে পারছি না। তবে আমাদের ডেলিভারি সার্ভিস সচল রয়েছে।";
-            if (query.includes("ডেলিভারি") || query.includes("চার্জ")) {
-                reply = "আমাদের ডেলিভারি চার্জ সম্পূর্ণ ফ্রি!";
-            } else if (query.includes("সময়") || query.includes("কখন")) {
-                reply = "অর্ডার করার ১০ থেকে ৩০ মিনিটের মধ্যে ডেলিভারি করা হয়।";
+            let reply = "আমাদের কাস্টমার কেয়ার আপনার প্রশ্নটি প্রক্রিয়া করছে।";
+            if (query.includes("পণ্য") || query.includes("যোগ")) {
+                reply = "আপনি পেজের উপরের 'নিজের পণ্য যুক্ত করুন' ফর্ম থেকে যেকোনো পণ্যের নাম, দাম ও ছবির লিঙ্ক দিয়ে পণ্য যোগ করতে পারবেন।";
+            } else if (query.includes("ডেলিভারি") || query.includes("চার্জ")) {
+                reply = "আমাদের কোন ডেলিভারি চার্জ নেই।";
             } else if (query.includes("টাকা") || query.includes("পেমেন্ট")) {
-                reply = "আমরা ক্যাশ অন ডেলিভারি (Cash on Delivery) গ্রহণ করি। পণ্য পেয়ে টাকা দিন।";
+                reply = "পণ্য পাওয়ার পর ক্যাশে (Cash on Delivery) টাকা দেওয়া যাবে।";
             }
 
-            // Show AI Reply
             setTimeout(() => {
                 chatBox.innerHTML += `<div class="chat-msg ai-msg"><strong>AI:</strong> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -166,6 +225,8 @@
 
             input.value = '';
         }
+
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
