@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ঢাকা বাজার</title>
 
+<!-- Firebase SDK Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -175,8 +179,23 @@ input:focus,select:focus{
 }
 
 .brand{
-  font-size:23px;
+  font-size:21px;
   font-weight:bold;
+}
+
+.top-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.seller-btn {
+  background: #ff9800;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .cart-btn{
@@ -184,8 +203,8 @@ input:focus,select:focus{
   color:#007a59;
   border:0;
   border-radius:10px;
-  padding:9px 13px;
-  font-size:17px;
+  padding:8px 12px;
+  font-size:16px;
   font-weight:bold;
   cursor:pointer;
 }
@@ -280,7 +299,7 @@ input:focus,select:focus{
   cursor:pointer;
 }
 
-/* CART MODAL (নতুন যুক্ত করা হয়েছে) */
+/* MODAL STYLES */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -364,7 +383,6 @@ input:focus,select:focus{
   </div>
 </section>
 
-
 <!-- LOCATION SCREEN -->
 <section id="locationScreen" class="screen">
   <div class="location-box">
@@ -378,15 +396,15 @@ input:focus,select:focus{
   </div>
 </section>
 
-
 <!-- HOME SCREEN -->
 <section id="homeScreen" class="screen">
   <header class="topbar">
     <div class="topbar-row">
       <div class="brand">🛒 ঢাকা বাজার</div>
-      <button class="cart-btn" onclick="showCart()">
-        🛒 <span id="cartCount">0</span>
-      </button>
+      <div class="top-btns">
+        <button class="seller-btn" onclick="openSellerModal()">➕ পণ্য যোগ করুন</button>
+        <button class="cart-btn" onclick="showCart()">🛒 <span id="cartCount">0</span></button>
+      </div>
     </div>
     <div class="location-pill">
       📍 <span id="homeLocation">লোকেশন সেট করা হয়নি</span>
@@ -395,37 +413,10 @@ input:focus,select:focus{
 
   <main class="container">
     <input class="search" type="search" placeholder="🔍 পণ্য খুঁজুন..." oninput="searchProducts(this.value)">
-
-    <h2 class="section-title">জনপ্রিয় পণ্য</h2>
+    <h2 class="section-title">পণ্যসমূহ</h2>
 
     <div id="products" class="products">
-      <div class="product">
-        <div class="product-img">🥔</div>
-        <h3>আলু</h3>
-        <p class="price">৳ 40 / কেজি</p>
-        <button class="add" onclick="addCart('আলু', 40)">+ কার্টে যোগ করুন</button>
-      </div>
-
-      <div class="product">
-        <div class="product-img">🧅</div>
-        <h3>পেঁয়াজ</h3>
-        <p class="price">৳ 80 / কেজি</p>
-        <button class="add" onclick="addCart('পেঁয়াজ', 80)">+ কার্টে যোগ করুন</button>
-      </div>
-
-      <div class="product">
-        <div class="product-img">🍅</div>
-        <h3>টমেটো</h3>
-        <p class="price">৳ 60 / কেজি</p>
-        <button class="add" onclick="addCart('টমেটো', 60)">+ কার্টে যোগ করুন</button>
-      </div>
-
-      <div class="product">
-        <div class="product-img">🍚</div>
-        <h3>চাল</h3>
-        <p class="price">৳ 75 / কেজি</p>
-        <button class="add" onclick="addCart('চাল', 75)">+ কার্টে যোগ করুন</button>
-      </div>
+      <p style="grid-column: 1/-1; text-align: center; color: #777;">পণ্য লোড হচ্ছে...</p>
     </div>
   </main>
 
@@ -436,8 +427,7 @@ input:focus,select:focus{
   </nav>
 </section>
 
-
-<!-- CART POPUP MODAL -->
+<!-- CART MODAL -->
 <div id="cartModal" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
@@ -446,13 +436,57 @@ input:focus,select:focus{
     </div>
     <div id="cartList"></div>
     <div id="cartTotal" class="cart-total"></div>
-    <button class="btn" onclick="checkout()">অর্ডার সম্পন্ন করুন</button>
+    <button class="btn" onclick="checkout()">অর্ডার নিশ্চিত করুন</button>
   </div>
 </div>
 
+<!-- SELLER ADD PRODUCT MODAL -->
+<div id="sellerModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>বিক্রেতা প্যানেল (নতুন পণ্য)</h3>
+      <button class="modal-close" onclick="closeSellerModal()">✖</button>
+    </div>
+    <label for="pName">পণ্যের নাম</label>
+    <input id="pName" type="text" placeholder="যেমন: দেশি রুই মাছ">
+    
+    <label for="pPrice">মূল্য (টাকা)</label>
+    <input id="pPrice" type="number" placeholder="যেমন: 350">
+    
+    <label for="pUnit">একক (যেমন: কেজি/লিটার/পিস)</label>
+    <input id="pUnit" type="text" placeholder="যেমন: কেজি">
+
+    <label for="pIcon">ইমোজি/আইকন</label>
+    <input id="pIcon" type="text" placeholder="যেমন: 🐟 বা 🥕">
+
+    <button class="btn" onclick="saveProduct()">পণ্য পোস্ট করুন</button>
+  </div>
+</div>
 
 <script>
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyDemoKeyDhakaBazarAppConfig2026",
+  authDomain: "dhaka-bazar-app.firebaseapp.com",
+  projectId: "dhaka-bazar-app",
+  storageBucket: "dhaka-bazar-app.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:demo123456"
+};
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
 let cart = [];
+let localProducts = [
+  { name: "আলু", price: 40, unit: "কেজি", icon: "🥔" },
+  { name: "পেঁয়াজ", price: 80, unit: "কেজি", icon: "🧅" },
+  { name: "টমেটো", price: 60, unit: "কেজি", icon: "🍅" },
+  { name: "চাল", price: 75, unit: "কেজি", icon: "🍚" }
+];
 
 function login(){
   const name = document.getElementById("name").value.trim();
@@ -475,13 +509,11 @@ function login(){
 
   localStorage.setItem("dhakaName", name);
   localStorage.setItem("dhakaPhone", phone);
-
   showScreen("locationScreen");
 }
 
 function getLocation(){
   const result = document.getElementById("locationResult");
-
   if(!navigator.geolocation){
     result.textContent = "এই ফোনে লোকেশন সুবিধা পাওয়া যাচ্ছে না।";
     result.style.display = "block";
@@ -499,13 +531,10 @@ function getLocation(){
 
       localStorage.setItem("dhakaLocation", locationText);
       result.textContent = "✅ লোকেশন সফলভাবে সেট হয়েছে";
-
-      setTimeout(function(){
-        openHome();
-      }, 800);
+      setTimeout(function(){ openHome(); }, 800);
     },
     function(){
-      result.textContent = "❌ লোকেশন পাওয়া যায়নি। ফোনের Location চালু করে আবার চেষ্টা করুন।";
+      result.textContent = "❌ লোকেশন পাওয়া যায়নি। ফোনের Location চালু করে চেষ্টা করুন।";
     }
   );
 }
@@ -519,6 +548,7 @@ function openHome(){
   const location = localStorage.getItem("dhakaLocation") || "লোকেশন সেট করা হয়নি";
   document.getElementById("homeLocation").textContent = location;
   showScreen("homeScreen");
+  loadProducts();
 }
 
 function showScreen(id){
@@ -526,13 +556,79 @@ function showScreen(id){
     screen.classList.remove("active");
     screen.style.display = "";
   });
-
   const screen = document.getElementById(id);
   screen.classList.add("active");
-
   if(id === "homeScreen"){
     screen.style.display = "flex";
   }
+}
+
+// Load Products from Firebase + Local
+function loadProducts(){
+  const productsContainer = document.getElementById("products");
+  
+  db.collection("products").onSnapshot((snapshot) => {
+    let firebaseProducts = [];
+    snapshot.forEach(doc => {
+      firebaseProducts.push(doc.data());
+    });
+    
+    let allProducts = [...localProducts, ...firebaseProducts];
+    renderProducts(allProducts);
+  }, (error) => {
+    renderProducts(localProducts);
+  });
+}
+
+function renderProducts(items){
+  const productsContainer = document.getElementById("products");
+  let html = "";
+  items.forEach(item => {
+    html += `
+      <div class="product">
+        <div class="product-img">${item.icon || '🛍️'}</div>
+        <h3>${item.name}</h3>
+        <p class="price">৳ ${item.price} / ${item.unit || 'কেজি'}</p>
+        <button class="add" onclick="addCart('${item.name}', ${item.price})">+ কার্টে যোগ করুন</button>
+      </div>
+    `;
+  });
+  productsContainer.innerHTML = html;
+}
+
+function openSellerModal(){
+  document.getElementById("sellerModal").style.display = "flex";
+}
+
+function closeSellerModal(){
+  document.getElementById("sellerModal").style.display = "none";
+}
+
+function saveProduct(){
+  const name = document.getElementById("pName").value.trim();
+  const price = parseFloat(document.getElementById("pPrice").value);
+  const unit = document.getElementById("pUnit").value.trim() || "কেজি";
+  const icon = document.getElementById("pIcon").value.trim() || "📦";
+
+  if(!name || isNaN(price)){
+    alert("দয়া করে সঠিক নাম এবং দাম দিন!");
+    return;
+  }
+
+  const newProduct = { name, price, unit, icon, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+  // Save to Firebase Database
+  db.collection("products").add(newProduct).then(() => {
+    alert("নতুন পণ্য সফলভাবে পোস্ট হয়েছে! ✅");
+    closeSellerModal();
+    document.getElementById("pName").value = "";
+    document.getElementById("pPrice").value = "";
+  }).catch(() => {
+    localProducts.push(newProduct);
+    renderProducts(localProducts);
+    alert("পণ্য যোগ হয়েছে! ✅");
+    closeSellerModal();
+  });
 }
 
 function addCart(name, price){
@@ -551,7 +647,6 @@ function showCart(){
   } else {
     let total = 0;
     let html = "";
-    
     cart.forEach(function(item, index){
       html += `<div class="cart-item">
                 <span>${index + 1}. ${item.name}</span>
@@ -559,11 +654,9 @@ function showCart(){
               </div>`;
       total += item.price;
     });
-
     list.innerHTML = html;
     totalEl.textContent = "মোট: ৳ " + total;
   }
-
   modal.style.display = "flex";
 }
 
@@ -576,15 +669,24 @@ function checkout(){
     alert("আপনার কার্টে কোনো পণ্য নেই!");
     return;
   }
-  alert("ধন্যবাদ! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।");
-  cart = [];
-  document.getElementById("cartCount").textContent = "0";
-  closeCart();
+
+  const orderData = {
+    customerName: localStorage.getItem("dhakaName"),
+    customerPhone: localStorage.getItem("dhakaPhone"),
+    location: localStorage.getItem("dhakaLocation"),
+    items: cart,
+    orderTime: new Date().toLocaleString()
+  };
+
+  db.collection("orders").add(orderData).finally(() => {
+    alert("ধন্যবাদ! আপনার অর্ডারটি বিক্রেতার কাছে সফলভাবে পৌঁছে গেছে।");
+    cart = [];
+    document.getElementById("cartCount").textContent = "0";
+    closeCart();
+  });
 }
 
-function goHome(){
-  openHome();
-}
+function goHome(){ openHome(); }
 
 function logout(){
   localStorage.removeItem("dhakaName");
@@ -612,14 +714,9 @@ function searchProducts(value){
 window.onload = function(){
   const savedName = localStorage.getItem("dhakaName");
   const savedPhone = localStorage.getItem("dhakaPhone");
-  const savedLocation = localStorage.getItem("dhakaLocation");
 
   if(savedName && savedPhone){
-    if(savedLocation){
-      openHome();
-    } else {
-      showScreen("locationScreen");
-    }
+    openHome();
   } else {
     showScreen("loginScreen");
   }
