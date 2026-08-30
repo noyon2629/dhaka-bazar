@@ -1,7 +1,7 @@
 {
   "name": "dhaka-bazar-backend",
-  "version": "1.0.0",
-  "description": "Dhaka Bazar backend API",
+  "version": "2.0.0",
+  "description": "Dhaka Bazar COD Backend API",
   "main": "backend.js",
   "scripts": {
     "start": "node backend.js"
