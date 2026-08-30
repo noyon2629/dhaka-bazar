@@ -15,6 +15,7 @@
         .header-actions { display: flex; gap: 10px; align-items: center; }
         .btn-add-product { background-color: #d97706; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
         .cart-badge { background-color: rgba(255, 255, 255, 0.2); padding: 6px 12px; border-radius: 6px; font-size: 14px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .location-bar { background-color: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 6px; font-size: 13px; margin-top: 10px; color: #e2e8f0; }
 
         .container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
         
@@ -26,8 +27,14 @@
         .product-card h3 { font-size: 15px; margin: 4px 0; color: #1e293b; }
         .product-card .price { color: #006847; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
         
+        /* Add to Cart Button */
         .btn-cart { background: #006847; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; }
         .btn-cart:hover { background: #005036; }
+
+        /* Quantity Controller (+ / - Buttons) */
+        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #006847; border-radius: 6px; padding: 4px; color: white; font-weight: bold; }
+        .qty-btn { background: white; color: #006847; border: none; width: 28px; height: 28px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .qty-btn:active { background: #e2e8f0; }
 
         /* Checkout & Cart Section */
         .checkout-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-top: 20px; border: 1px solid #e2e8f0; }
@@ -41,7 +48,6 @@
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
         .form-group input:focus, .form-group select:focus { border-color: #006847; }
         
-        /* Mobile Banking Info Box */
         .payment-info-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
         .payment-info-box p { font-size: 13px; color: #166534; margin-bottom: 6px; }
         
@@ -73,17 +79,19 @@
                 <div class="cart-badge" onclick="scrollToCheckout()">🛒 <span id="cart-count">0</span></div>
             </div>
         </div>
+        <div class="location-bar">
+            📍 লোকেশন এখনো সেট করা হয়নি
+        </div>
     </header>
 
     <!-- Main Content -->
     <div class="container">
-        <!-- Product Grid -->
         <h2 style="margin-bottom: 12px; font-size: 18px; color: #006847;">পণ্যসমূহ</h2>
         <div class="product-grid" id="product-container">
             <!-- Dynamic Products -->
         </div>
 
-        <!-- Checkout & Payment Section -->
+        <!-- Checkout & Cart Section -->
         <div class="checkout-section" id="checkout-area">
             <h2>আপনার কার্ট ও পেমেন্ট (Checkout)</h2>
             <ul class="cart-list" id="cart-items">
@@ -108,7 +116,6 @@
                 <textarea id="cust-address" rows="2" placeholder="বাসা নম্বর, রোড নম্বর, এলাকা..."></textarea>
             </div>
 
-            <!-- Payment Method Selector -->
             <div class="form-group">
                 <label>পেমেন্ট মাধ্যম সিলেক্ট করুন</label>
                 <select id="payment-method" onchange="togglePaymentDetails()">
@@ -119,7 +126,6 @@
                 </select>
             </div>
 
-            <!-- Mobile Banking Instruction Box -->
             <div class="payment-info-box" id="payment-info">
                 <p id="payment-instruction">আমাদের বিকাশ সেন্ড মানি নম্বর: <b>01700000000</b></p>
                 <div class="form-group" style="margin-bottom: 0;">
@@ -166,7 +172,7 @@
 
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="window.scrollTo(0, 0)">
+        <div class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
             <div>🏠</div>
             হোম
         </div>
@@ -181,15 +187,15 @@
     </div>
 
     <script>
-        // Initial Products
+        // Products Array
         let products = [
             { id: 1, name: "দেশি রুই মাছ", price: 350, unit: "কেজি", image: "🐟" },
             { id: 2, name: "তাজা টমেটো", price: 60, unit: "কেজি", image: "🍅" },
             { id: 3, name: "ব্রয়লার মুরগি", price: 180, unit: "কেজি", image: "🍗" }
         ];
 
-        let cart = [];
-        let total = 0;
+        // Cart Object: { productId: quantity }
+        let cart = {};
 
         function renderProducts() {
             const container = document.getElementById('product-container');
@@ -200,21 +206,45 @@
                     ? `<img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/150'">`
                     : `<div class="emoji-img">${p.image || '📦'}</div>`;
 
+                let qty = cart[p.id] || 0;
+                let actionBtnHTML = '';
+
+                if (qty > 0) {
+                    actionBtnHTML = `
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty(${p.id}, -1)">-</button>
+                            <span>${qty}</span>
+                            <button class="qty-btn" onclick="updateQty(${p.id}, 1)">+</button>
+                        </div>
+                    `;
+                } else {
+                    actionBtnHTML = `<button class="btn-cart" onclick="updateQty(${p.id}, 1)">+ কার্টে যোগ করুন</button>`;
+                }
+
                 container.innerHTML += `
                     <div class="product-card">
                         ${imgHTML}
                         <h3>${p.name}</h3>
                         <div class="price">৳ ${p.price} / ${p.unit}</div>
-                        <button class="btn-cart" onclick="addToCart('${p.name}', ${p.price})">+ কার্টে যোগ করুন</button>
+                        ${actionBtnHTML}
                     </div>
                 `;
             });
+
+            updateCartUI();
         }
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            total += price;
-            updateCartUI();
+        // Add or Reduce Quantity Functionality
+        function updateQty(productId, change) {
+            if (!cart[productId]) cart[productId] = 0;
+            
+            cart[productId] += change;
+
+            if (cart[productId] <= 0) {
+                delete cart[productId];
+            }
+
+            renderProducts();
         }
 
         function updateCartUI() {
@@ -222,25 +252,35 @@
             const totalEl = document.getElementById('total-price');
             const cartCountEl = document.getElementById('cart-count');
 
-            cartCountEl.innerText = cart.length;
-            totalEl.innerText = total;
+            let totalItems = 0;
+            let totalPrice = 0;
+            list.innerHTML = '';
 
-            if (cart.length === 0) {
-                list.innerHTML = `<li style="color: #94a3b8;">আপনার কার্ট খালি রয়েছে</li>`;
-            } else {
-                list.innerHTML = '';
-                cart.forEach((item, index) => {
+            for (let id in cart) {
+                let qty = cart[id];
+                let product = products.find(p => p.id == id);
+                if (product) {
+                    let itemTotal = product.price * qty;
+                    totalItems += qty;
+                    totalPrice += itemTotal;
+
                     list.innerHTML += `
                         <li>
-                            <span>${item.name}</span>
-                            <span>৳ ${item.price}</span>
+                            <span>${product.name} (x${qty})</span>
+                            <span>৳ ${itemTotal}</span>
                         </li>
                     `;
-                });
+                }
+            }
+
+            cartCountEl.innerText = totalItems;
+            totalEl.innerText = totalPrice;
+
+            if (totalItems === 0) {
+                list.innerHTML = `<li style="color: #94a3b8;">আপনার কার্ট খালি রয়েছে</li>`;
             }
         }
 
-        // Toggle Payment Instruction & Input Box
         function togglePaymentDetails() {
             const method = document.getElementById('payment-method').value;
             const infoBox = document.getElementById('payment-info');
@@ -266,8 +306,9 @@
             const address = document.getElementById('cust-address').value.trim();
             const paymentMethod = document.getElementById('payment-method').value;
             const trxId = document.getElementById('trx-id').value.trim();
+            const totalPrice = document.getElementById('total-price').innerText;
 
-            if (cart.length === 0) {
+            if (Object.keys(cart).length === 0) {
                 alert('দয়া করে প্রথমে কার্টে পণ্য যোগ করুন!');
                 return;
             }
@@ -283,12 +324,11 @@
 
             let payText = paymentMethod === 'cod' ? 'ক্যাশ অন ডেলিভারি' : `${paymentMethod.toUpperCase()} (TrxID: ${trxId})`;
 
-            alert(`ধন্যবাদ ${name}!\n\nআপনার ৳${total} টাকার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।\nপেমেন্ট পদ্ধতি: ${payText}\nডেলিভারি ঠিকানা: ${address}`);
+            alert(`ধন্যবাদ ${name}!\n\nআপনার ৳${totalPrice} টাকার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।\nপেমেন্ট পদ্ধতি: ${payText}\nডেলিভারি ঠিকানা: ${address}`);
 
-            // Reset Form
-            cart = [];
-            total = 0;
-            updateCartUI();
+            // Reset Cart
+            cart = {};
+            renderProducts();
             document.getElementById('cust-name').value = '';
             document.getElementById('cust-phone').value = '';
             document.getElementById('cust-address').value = '';
