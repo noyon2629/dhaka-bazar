@@ -1,310 +1,2403 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaka Bazar - ঢাকা বাজার</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: #f4f6f8; color: #333; padding-bottom: 70px; }
-        
-        header { background-color: #006847; color: white; padding: 12px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .app-title { font-size: 20px; font-weight: bold; }
-        .header-actions { display: flex; gap: 10px; align-items: center; }
-        .btn-add-product { background-color: #d97706; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .cart-badge { background-color: rgba(255, 255, 255, 0.2); padding: 6px 12px; border-radius: 6px; font-size: 14px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-        
-        .location-bar { background-color: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 6px; font-size: 13px; margin-top: 10px; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .btn-loc { background: #ffffff; color: #006847; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .product-card { background: white; border-radius: 8px; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; }
-        .product-card img, .product-card .emoji-img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; }
-        .product-card .emoji-img { display: flex; align-items: center; justify-content: center; font-size: 55px; background: #f8fafc; }
-        .product-card h3 { font-size: 15px; margin: 4px 0; color: #1e293b; }
-        .product-card .price { color: #006847; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
-        
-        .btn-cart { background: #006847; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; }
-        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #006847; border-radius: 6px; padding: 4px; color: white; font-weight: bold; }
-        .qty-btn { background: white; color: #006847; border: none; width: 28px; height: 28px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+<title>Dhaka Bazar - ঢাকা বাজার</title>
 
-        .checkout-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-top: 20px; border: 1px solid #e2e8f0; }
-        .checkout-section h2 { font-size: 18px; color: #006847; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
-        
-        ul.cart-list { list-style: none; margin-bottom: 15px; }
-        ul.cart-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; }
+<style>
 
-        .form-group { margin-bottom: 14px; text-align: left; }
-        .form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #334155; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
-        
-        .payment-info-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
-        .payment-info-box p { font-size: 13px; color: #166534; margin-bottom: 6px; }
-        
-        .btn-submit { background-color: #006847; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; }
-        .modal { background: white; width: 90%; max-width: 440px; border-radius: 12px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin: 20px 0; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; font-weight: bold; }
+body{
+    background:#f4f6f8;
+    color:#333;
+    padding-bottom:80px;
+}
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; }
-        .nav-item { text-align: center; color: #64748b; font-size: 12px; cursor: pointer; }
-        .nav-item.active { color: #006847; font-weight: bold; }
-        
-        /* App Admin/Wallet Display */
-        .commission-box { background: #fff7ed; border: 1px solid #ffedd5; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 12px; color: #c2410c; }
-    </style>
+header{
+    background:#006847;
+    color:white;
+    padding:12px 15px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 7px rgba(0,0,0,.15);
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.app-title{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.header-actions{
+    display:flex;
+    gap:7px;
+    align-items:center;
+}
+
+.btn-add-product{
+    background:#d97706;
+    color:white;
+    border:none;
+    padding:8px 10px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.cart-badge,
+.wallet-badge{
+    background:rgba(255,255,255,.18);
+    color:white;
+    padding:7px 9px;
+    border-radius:7px;
+    font-size:12px;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.wallet-badge{
+    background:#15803d;
+}
+
+.location-bar{
+    background:rgba(0,0,0,.15);
+    padding:8px 10px;
+    border-radius:7px;
+    font-size:12px;
+    margin-top:10px;
+    color:#e2e8f0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.btn-loc{
+    background:white;
+    color:#006847;
+    border:none;
+    padding:5px 8px;
+    border-radius:5px;
+    font-size:11px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.container{
+    max-width:850px;
+    margin:15px auto;
+    padding:0 15px;
+}
+
+.section-title{
+    margin-bottom:12px;
+    font-size:19px;
+    color:#006847;
+}
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px;
+    margin-bottom:25px;
+}
+
+.product-card{
+    background:white;
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.06);
+    border:1px solid #e2e8f0;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.product-card img,
+.emoji-img{
+    width:100%;
+    height:115px;
+    object-fit:cover;
+    border-radius:7px;
+    margin-bottom:8px;
+}
+
+.emoji-img{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:55px;
+    background:#f8fafc;
+}
+
+.product-card h3{
+    font-size:15px;
+    margin:4px 0;
+    color:#1e293b;
+}
+
+.price{
+    color:#006847;
+    font-weight:bold;
+    margin-bottom:9px;
+    font-size:16px;
+}
+
+.btn-cart{
+    background:#006847;
+    color:white;
+    border:none;
+    padding:9px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    width:100%;
+}
+
+.qty-controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#006847;
+    border-radius:7px;
+    padding:4px;
+    color:white;
+    font-weight:bold;
+}
+
+.qty-btn{
+    background:white;
+    color:#006847;
+    border:none;
+    width:30px;
+    height:30px;
+    border-radius:5px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.checkout-section,
+.tracking-section{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    margin-top:20px;
+    border:1px solid #e2e8f0;
+}
+
+.checkout-section h2,
+.tracking-section h2{
+    font-size:18px;
+    color:#006847;
+    margin-bottom:13px;
+    border-bottom:2px solid #f1f5f9;
+    padding-bottom:9px;
+}
+
+ul.cart-list{
+    list-style:none;
+    margin-bottom:15px;
+}
+
+ul.cart-list li{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 0;
+    border-bottom:1px dashed #e2e8f0;
+    font-size:14px;
+}
+
+.form-group{
+    margin-bottom:14px;
+    text-align:left;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+    color:#334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    background:white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#006847;
+}
+
+.payment-info-box{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+    display:none;
+}
+
+.payment-info-box p{
+    font-size:13px;
+    color:#166534;
+    margin-bottom:7px;
+}
+
+.wallet-payment-box{
+    display:none;
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:14px;
+}
+
+.btn-submit{
+    background:#006847;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    width:100%;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn-submit:active,
+.btn-cart:active,
+.qty-btn:active{
+    transform:scale(.98);
+}
+
+.modal-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.62);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+    overflow-y:auto;
+    padding:20px 0;
+}
+
+.modal{
+    background:white;
+    width:92%;
+    max-width:460px;
+    border-radius:13px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.modal-header h2{
+    font-size:19px;
+    color:#006847;
+}
+
+.close-btn{
+    background:none;
+    border:none;
+    font-size:25px;
+    cursor:pointer;
+    color:#64748b;
+}
+
+.commission-box{
+    background:#fff7ed;
+    border:1px solid #ffedd5;
+    padding:11px;
+    border-radius:8px;
+    font-size:12px;
+    margin-bottom:14px;
+    color:#c2410c;
+}
+
+.wallet-card{
+    background:linear-gradient(135deg,#006847,#008f63);
+    color:white;
+    padding:20px;
+    border-radius:13px;
+    margin-bottom:16px;
+}
+
+.wallet-label{
+    font-size:13px;
+    opacity:.9;
+}
+
+.wallet-amount{
+    font-size:31px;
+    font-weight:bold;
+    margin:7px 0 15px;
+}
+
+.wallet-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.wallet-actions button{
+    border:none;
+    padding:11px 6px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.wallet-note{
+    background:#f8fafc;
+    padding:11px;
+    border-radius:8px;
+    font-size:12px;
+    color:#475569;
+    margin-top:12px;
+}
+
+.order-success{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    color:#166534;
+    padding:12px;
+    border-radius:9px;
+    margin-bottom:14px;
+}
+
+.tracking-status{
+    background:#f8fafc;
+    border-radius:10px;
+    padding:15px;
+}
+
+.status-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px 0;
+}
+
+.status-dot{
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#cbd5e1;
+    flex-shrink:0;
+}
+
+.status-dot.done{
+    background:#16a34a;
+}
+
+.status-dot.active{
+    background:#f59e0b;
+    box-shadow:0 0 0 5px #fef3c7;
+}
+
+.status-line{
+    width:2px;
+    height:20px;
+    background:#cbd5e1;
+    margin-left:7px;
+}
+
+.eta-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    padding:13px;
+    border-radius:9px;
+    margin-top:13px;
+    color:#1e40af;
+}
+
+.live-box{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    padding:13px;
+    border-radius:9px;
+    margin-top:13px;
+    color:#166534;
+}
+
+.commission-summary{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:12px;
+    border-radius:9px;
+    margin-top:12px;
+    font-size:13px;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    border-top:1px solid #e2e8f0;
+    display:flex;
+    justify-content:space-around;
+    padding:8px 0;
+    z-index:100;
+}
+
+.nav-item{
+    text-align:center;
+    color:#64748b;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.nav-item.active{
+    color:#006847;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#94a3b8;
+}
+
+@media(max-width:520px){
+
+    .app-title{
+        font-size:18px;
+    }
+
+    .btn-add-product{
+        display:none;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .product-card{
+        padding:9px;
+    }
+
+    .product-card img,
+    .emoji-img{
+        height:100px;
+    }
+
+    .wallet-badge,
+    .cart-badge{
+        padding:7px;
+    }
+}
+
+</style>
 </head>
+
 <body>
 
-    <header>
-        <div class="header-top">
-            <div class="app-title">ঢাকা বাজার</div>
-            <div class="header-actions">
-                <button class="btn-add-product" onclick="openModal('productModal')">+ পণ্য যোগ করুন</button>
-                <div class="cart-badge" onclick="scrollToCheckout()">🛒 <span id="cart-count">0</span></div>
-            </div>
+<header>
+
+    <div class="header-top">
+
+        <div class="app-title">
+            🛒 ঢাকা বাজার
         </div>
-        <div class="location-bar">
-            <span id="location-text">📍 লোকেশন সেট করা হয়নি</span>
-            <button class="btn-loc" onclick="getLocation()">ট্র্যাক করুন</button>
+
+        <div class="header-actions">
+
+            <button class="btn-add-product"
+                    onclick="openModal('productModal')">
+                + পণ্য
+            </button>
+
+            <div class="wallet-badge"
+                 onclick="openWallet()">
+                💰 ৳ <span id="wallet-balance">0.00</span>
+            </div>
+
+            <div class="cart-badge"
+                 onclick="scrollToCheckout()">
+                🛒 <span id="cart-count">0</span>
+            </div>
+
         </div>
-    </header>
 
-    <div class="container">
-        <h2 style="margin-bottom: 12px; font-size: 18px; color: #006847;">খাবারের তালিকা</h2>
-        <div class="product-grid" id="product-container"></div>
+    </div>
 
-        <div class="checkout-section" id="checkout-area">
-            <h2>আপনার কার্ট ও পেমেন্ট (Checkout)</h2>
-            <ul class="cart-list" id="cart-items">
-                <li style="color: #94a3b8;">আপনার কার্ট খালি রয়েছে</li>
-            </ul>
-            <div style="text-align: right; font-weight: bold; font-size: 16px; margin-bottom: 15px; color: #006847;">
-                মোট মূল্য: ৳ <span id="total-price">0</span>
+    <div class="location-bar">
+
+        <span id="location-text">
+            📍 লোকেশন সেট করা হয়নি
+        </span>
+
+        <button class="btn-loc"
+                onclick="getLocation()">
+            ট্র্যাক করুন
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <h2 class="section-title">
+        🍱 খাবারের তালিকা
+    </h2>
+
+    <div class="product-grid"
+         id="product-container">
+    </div>
+
+
+    <!-- CHECKOUT -->
+
+    <div class="checkout-section"
+         id="checkout-area">
+
+        <h2>
+            🛒 আপনার কার্ট ও পেমেন্ট
+        </h2>
+
+        <ul class="cart-list"
+            id="cart-items">
+
+            <li class="empty">
+                আপনার কার্ট খালি রয়েছে
+            </li>
+
+        </ul>
+
+        <div style="text-align:right;
+                    font-weight:bold;
+                    font-size:17px;
+                    margin-bottom:16px;
+                    color:#006847;">
+
+            মোট মূল্য: ৳
+            <span id="total-price">0</span>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                আপনার নাম
+            </label>
+
+            <input type="text"
+                   id="cust-name"
+                   placeholder="যেমন: আব্দুর রহমান">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                মোবাইল নম্বর
+            </label>
+
+            <input type="tel"
+                   id="cust-phone"
+                   placeholder="০১৭xxxxxxxx">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                ডেলিভারি ঠিকানা
+            </label>
+
+            <textarea id="cust-address"
+                      rows="2"
+                      placeholder="বাসা নম্বর, রোড, এলাকা..."></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                পেমেন্ট মাধ্যম
+            </label>
+
+            <select id="payment-method"
+                    onchange="togglePaymentDetails()">
+
+                <option value="cod">
+                    💵 Cash on Delivery
+                </option>
+
+                <option value="wallet">
+                    💰 আমার Wallet
+                </option>
+
+                <option value="bkash">
+                    📱 bKash
+                </option>
+
+                <option value="nagad">
+                    📱 Nagad
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- WALLET PAYMENT -->
+
+        <div class="wallet-payment-box"
+             id="wallet-payment-box">
+
+            <p>
+                💰 Wallet Balance:
+                <b>৳ <span id="checkout-wallet-balance">0.00</span></b>
+            </p>
+
+            <p style="font-size:12px;margin-top:5px;">
+                Wallet-এর টাকা দিয়ে অর্ডার করলে মোট বিল
+                Wallet থেকে কেটে নেওয়া হবে।
+            </p>
+
+        </div>
+
+
+        <!-- BKASH/NAGAD -->
+
+        <div class="payment-info-box"
+             id="payment-info">
+
+            <p id="payment-instruction">
+                পেমেন্ট নম্বর:
+                <b>01954799646</b>
+            </p>
+
+            <div class="form-group"
+                 style="margin-bottom:0;">
+
+                <label style="font-size:12px;">
+                    Transaction ID
+                </label>
+
+                <input type="text"
+                       id="trx-id"
+                       placeholder="যেমন: 8N7A6D5E">
+
             </div>
 
-            <div class="form-group">
-                <label>আপনার নাম</label>
-                <input type="text" id="cust-name" placeholder="যেমন: আব্দুর রহমান">
-            </div>
-            <div class="form-group">
-                <label>মোবাইল নম্বর</label>
-                <input type="text" id="cust-phone" placeholder="০১৭xxxxxxxx">
-            </div>
-            <div class="form-group">
-                <label>ডেলিভারি ঠিকানা (GPS অটো লোড)</label>
-                <textarea id="cust-address" rows="2" placeholder="বাসা নম্বর, রোড নম্বর, এলাকা..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>পেমেন্ট মাধ্যম সিলেক্ট করুন</label>
-                <select id="payment-method" onchange="togglePaymentDetails()">
-                    <option value="cod">ক্যাশ অন ডেলিভারি (Cash on Delivery)</option>
-                    <option value="bkash">বিকাশ (bKash)</option>
-                    <option value="nagad">নগদ (Nagad)</option>
-                </select>
-            </div>
-            <div class="payment-info-box" id="payment-info">
-                <p id="payment-instruction">আমাদের নম্বর: <b>01954799646</b></p>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label style="font-size: 12px;">Transaction ID</label>
-                    <input type="text" id="trx-id" placeholder="যেমন: 8N7A6D5E">
+        </div>
+
+
+        <button class="btn-submit"
+                onclick="placeOrder()">
+
+            ✅ অর্ডার কনফার্ম করুন
+
+        </button>
+
+    </div>
+
+
+    <!-- TRACKING -->
+
+    <div class="tracking-section"
+         id="tracking-section"
+         style="display:none;">
+
+        <h2>
+            📦 অর্ডার ট্র্যাকিং
+        </h2>
+
+        <div class="order-success">
+
+            <b>
+                অর্ডার #<span id="tracking-order-id">---</span>
+            </b>
+
+            <br>
+
+            <span style="font-size:13px;">
+                আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে।
+            </span>
+
+        </div>
+
+
+        <div class="tracking-status">
+
+            <div class="status-row">
+
+                <span class="status-dot done"
+                      id="dot1"></span>
+
+                <div>
+                    <b>অর্ডার গ্রহণ করা হয়েছে</b>
                 </div>
+
             </div>
 
-            <button class="btn-submit" onclick="placeOrder()">অর্ডার কনফার্ম করুন</button>
+            <div class="status-line"></div>
+
+
+            <div class="status-row">
+
+                <span class="status-dot"
+                      id="dot2"></span>
+
+                <div>
+                    খাবার প্রস্তুত হচ্ছে
+                </div>
+
+            </div>
+
+            <div class="status-line"></div>
+
+
+            <div class="status-row">
+
+                <span class="status-dot"
+                      id="dot3"></span>
+
+                <div>
+                    🚴 রাইডার পথে আছে
+                </div>
+
+            </div>
+
+            <div class="status-line"></div>
+
+
+            <div class="status-row">
+
+                <span class="status-dot"
+                      id="dot4"></span>
+
+                <div>
+                    📍 আপনার এলাকার কাছে
+                </div>
+
+            </div>
+
+            <div class="status-line"></div>
+
+
+            <div class="status-row">
+
+                <span class="status-dot"
+                      id="dot5"></span>
+
+                <div>
+                    ✅ ডেলিভারি সম্পন্ন
+                </div>
+
+            </div>
+
         </div>
-    </div>
 
-    <!-- Seller Product Upload Modal -->
-    <div class="modal-overlay" id="productModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>বিক্রেতা প্যানেল (নতুন পণ্য)</h2>
-                <button class="close-btn" onclick="closeModal('productModal')">&times;</button>
-            </div>
-            
-            <div class="commission-box">
-                <b>কমিশন পলিসি:</b> এই অ্যাপে পণ্য বিক্রি হলে ৫% অটো-কমিশন এডমিন (bKash: 01954799646) নম্বরে সেন্ড মানি হিসেবে যুক্ত হবে এবং অবশিষ্ট ৯৫% টাকা আপনার ব্যাংক/MFS ওয়ালেটে যোগ হবে।
-            </div>
 
-            <div class="form-group">
-                <label>পণ্যের নাম</label>
-                <input type="text" id="prod-name" placeholder="যেমন: কাচ্চি বিরিয়ানি">
-            </div>
-            <div class="form-group">
-                <label>মূল্য (টাকা)</label>
-                <input type="number" id="prod-price" placeholder="যেমন: 250">
-            </div>
-            <div class="form-group">
-                <label>একক (কেজি/প্লেট/পিস)</label>
-                <input type="text" id="prod-unit" placeholder="যেমন: হাফ প্লেট">
-            </div>
-            <div class="form-group">
-                <label>সেলার ব্যাংক/bKash একাউন্ট নম্বর (টাকা পাওয়ার জন্য)</label>
-                <input type="text" id="seller-bank-acc" placeholder="যেমন: bKash 01800000000 বা ডাচ-বাংলা ব্যাংক">
-            </div>
-            <div class="form-group">
-                <label>গ্যালারি থেকে ছবি আপলোড করুন</label>
-                <input type="file" id="prod-img-file" accept="image/*">
-            </div>
+        <div class="eta-box">
 
-            <button class="btn-submit" onclick="saveProduct()">পণ্য পোস্ট করুন</button>
+            ⏱️ আনুমানিক ডেলিভারি সময়:
+
+            <b id="order-eta">
+                30-45 মিনিট
+            </b>
+
         </div>
-    </div>
 
-    <!-- Profile & Wallet Modal -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>প্রোফাইল সেটিংস & ওয়ালেট</h2>
-                <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+
+        <div class="live-box">
+
+            📍 <b>রাইডারের অবস্থান</b>
+
+            <div id="driver-location"
+                 style="margin-top:7px;">
+
+                অর্ডার প্রস্তুত হওয়ার অপেক্ষায়...
+
             </div>
-            <div class="form-group">
-                <label>এডমিন প্রফিট ওয়ালেট (৫% কমিশন সেন্ড মানি)</label>
-                <input type="text" disabled value="bKash: 01954799646">
-            </div>
-            <div class="form-group">
-                <label>আপনার নাম</label>
-                <input type="text" id="edit-name" value="মোঃ আরিফ হোসেন">
-            </div>
-            <button class="btn-submit" onclick="alert('তথ্য সেভ হয়েছে!')">সেভ করুন</button>
-            
-            <div style="margin-top: 15px; background: #eff6ff; padding: 10px; border-radius: 8px; font-size: 13px;">
-                <b>হেল্পলাইন:</b> 16216 | <b>WhatsApp:</b> 01954799646
-            </div>
+
         </div>
+
+
+        <button class="btn-submit"
+                style="margin-top:14px;"
+                onclick="startLiveTracking()">
+
+            📍 Live Tracking চালু করুন
+
+        </button>
+
+
+        <div class="commission-summary">
+
+            <b>💰 অর্ডারের হিসাব</b>
+
+            <br><br>
+
+            মোট অর্ডার:
+            ৳ <span id="tracking-total">0</span>
+
+            <br>
+
+            Platform Commission 5%:
+            ৳ <span id="tracking-commission">0</span>
+
+            <br>
+
+            Seller Amount 95%:
+            ৳ <span id="tracking-seller">0</span>
+
+        </div>
+
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"><div>🏠</div>হোম</div>
-        <div class="nav-item" onclick="scrollToCheckout()"><div>🛒</div>কার্ট</div>
-        <div class="nav-item" onclick="openModal('profileModal')"><div>👤</div>প্রোফাইল</div>
+</div>
+
+
+<!-- WALLET MODAL -->
+
+<div class="modal-overlay"
+     id="walletModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>
+                💰 আমার Wallet
+            </h2>
+
+            <button class="close-btn"
+                    onclick="closeModal('walletModal')">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="wallet-card">
+
+            <div class="wallet-label">
+                বর্তমান Wallet Balance
+            </div>
+
+            <div class="wallet-amount">
+
+                ৳ <span id="wallet-modal-balance">
+                    0.00
+                </span>
+
+            </div>
+
+            <div class="wallet-actions">
+
+                <button onclick="showDepositForm()">
+                    ➕ টাকা যোগ
+                </button>
+
+                <button onclick="showWalletHistory()">
+                    📜 History
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div id="deposit-area"
+             style="display:none;">
+
+            <div class="form-group">
+
+                <label>
+                    কত টাকা যোগ করবেন?
+                </label>
+
+                <input type="number"
+                       id="wallet-deposit-amount"
+                       min="1"
+                       placeholder="যেমন: 500">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    পেমেন্ট মাধ্যম
+                </label>
+
+                <select id="wallet-deposit-method">
+
+                    <option value="bkash">
+                        bKash
+                    </option>
+
+                    <option value="nagad">
+                        Nagad
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button class="btn-submit"
+                    onclick="requestWalletDeposit()">
+
+                💳 টাকা যোগ করার অনুরোধ
+
+            </button>
+
+        </div>
+
+
+        <div class="wallet-note">
+
+            ⚠️ <b>Demo Wallet:</b>
+
+            বর্তমানে এটি পরীক্ষামূলক Wallet।
+            আসল টাকা জমা/উত্তোলন চালু করার জন্য
+            নিরাপদ Backend ও Payment Gateway সংযোগ করতে হবে।
+
+        </div>
+
     </div>
 
-    <script>
-        let products = [
-            { id: 1, name: "কাচ্চি বিরিয়ানি", price: 250, unit: "প্লেট", image: "🍱", sellerAcc: "bKash: 01700000001" },
-            { id: 2, name: "দেশি রুই মাছ", price: 350, unit: "কেজি", image: "🐟", sellerAcc: "Bank: DBBL-123456" }
-        ];
+</div>
 
-        let cart = {};
 
-        function renderProducts() {
-            const container = document.getElementById('product-container');
-            container.innerHTML = '';
-            products.forEach(p => {
-                let imgHTML = p.image.startsWith('data:image') 
-                    ? `<img src="${p.image}">` 
-                    : `<div class="emoji-img">${p.image}</div>`;
+<!-- SELLER PRODUCT MODAL -->
 
-                let qty = cart[p.id] || 0;
-                let btn = qty > 0 
-                    ? `<div class="qty-controls">
-                        <button class="qty-btn" onclick="updateQty(${p.id}, -1)">-</button>
-                        <span>${qty}</span>
-                        <button class="qty-btn" onclick="updateQty(${p.id}, 1)">+</button>
-                       </div>`
-                    : `<button class="btn-cart" onclick="updateQty(${p.id}, 1)">+ কার্টে যোগ করুন</button>`;
+<div class="modal-overlay"
+     id="productModal">
 
-                container.innerHTML += `
-                    <div class="product-card">
-                        ${imgHTML}
-                        <h3>${p.name}</h3>
-                        <div class="price">৳ ${p.price} / ${p.unit}</div>
-                        ${btn}
-                    </div>
-                `;
-            });
-            updateCartUI();
-        }
+    <div class="modal">
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                document.getElementById('location-text').innerText = "📍 ট্র্যাকিং হচ্ছে...";
-                navigator.geolocation.getCurrentPosition(pos => {
-                    let text = `Lat: ${pos.coords.latitude.toFixed(4)}, Long: ${pos.coords.longitude.toFixed(4)}`;
-                    document.getElementById('location-text').innerText = "📍 " + text;
-                    document.getElementById('cust-address').value = "GPS Location: " + text;
-                });
-            }
-        }
+        <div class="modal-header">
 
-        function updateQty(id, change) {
-            cart[id] = (cart[id] || 0) + change;
-            if (cart[id] <= 0) delete cart[id];
-            renderProducts();
-        }
+            <h2>
+                🏪 নতুন পণ্য যোগ করুন
+            </h2>
 
-        function updateCartUI() {
-            let total = 0, count = 0;
-            const list = document.getElementById('cart-items');
-            list.innerHTML = '';
-            for (let id in cart) {
-                let p = products.find(prod => prod.id == id);
-                if (p) {
-                    let sub = p.price * cart[id];
-                    total += sub;
-                    count += cart[id];
-                    list.innerHTML += `<li><span>${p.name} (x${cart[id]})</span><span>৳ ${sub}</span></li>`;
+            <button class="close-btn"
+                    onclick="closeModal('productModal')">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="commission-box">
+
+            <b>Platform Commission:</b>
+
+            প্রতিটি বিক্রয়ের ৫% Platform Commission
+            হিসেবে হিসাব হবে এবং ৯৫% Seller Amount
+            হিসেবে দেখানো হবে।
+
+            <br><br>
+
+            <b>Admin Payment:</b>
+            bKash/Nagad: 01954799646
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                পণ্যের নাম
+            </label>
+
+            <input type="text"
+                   id="prod-name"
+                   placeholder="যেমন: কাচ্চি বিরিয়ানি">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                মূল্য
+            </label>
+
+            <input type="number"
+                   id="prod-price"
+                   min="1"
+                   placeholder="যেমন: 250">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                একক
+            </label>
+
+            <input type="text"
+                   id="prod-unit"
+                   placeholder="প্লেট / কেজি / পিস">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Seller Account
+            </label>
+
+            <input type="text"
+                   id="seller-bank-acc"
+                   placeholder="bKash / Nagad / Bank">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                পণ্যের ছবি
+            </label>
+
+            <input type="file"
+                   id="prod-img-file"
+                   accept="image/*">
+
+        </div>
+
+
+        <button class="btn-submit"
+                onclick="saveProduct()">
+
+            📤 পণ্য পোস্ট করুন
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="modal-overlay"
+     id="profileModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>
+                👤 প্রোফাইল
+            </h2>
+
+            <button class="close-btn"
+                    onclick="closeModal('profileModal')">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                আপনার নাম
+            </label>
+
+            <input type="text"
+                   id="edit-name"
+                   value="মোঃ আরিফ হোসেন">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Admin Commission Account
+            </label>
+
+            <input type="text"
+                   disabled
+                   value="bKash/Nagad: 01954799646">
+
+        </div>
+
+
+        <button class="btn-submit"
+                onclick="saveProfile()">
+
+            💾 তথ্য সেভ করুন
+
+        </button>
+
+
+        <div style="margin-top:15px;
+                    background:#eff6ff;
+                    padding:12px;
+                    border-radius:8px;
+                    font-size:13px;">
+
+            <b>হেল্পলাইন:</b> 16216
+
+            <br>
+
+            <b>WhatsApp:</b> 01954799646
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+    <div class="nav-item active"
+         onclick="goHome()">
+
+        <div>🏠</div>
+        হোম
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="scrollToCheckout()">
+
+        <div>🛒</div>
+        কার্ট
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="openWallet()">
+
+        <div>💰</div>
+        Wallet
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="openModal('profileModal')">
+
+        <div>👤</div>
+        প্রোফাইল
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   PRODUCT DATABASE - DEMO
+===================================== */
+
+let products = [
+
+    {
+        id:1,
+        name:"কাচ্চি বিরিয়ানি",
+        price:250,
+        unit:"প্লেট",
+        image:"🍱",
+        sellerAcc:"bKash: 01700000001"
+    },
+
+    {
+        id:2,
+        name:"দেশি রুই মাছ",
+        price:350,
+        unit:"কেজি",
+        image:"🐟",
+        sellerAcc:"Bank: DBBL"
+    },
+
+    {
+        id:3,
+        name:"চিকেন বিরিয়ানি",
+        price:180,
+        unit:"প্লেট",
+        image:"🍗",
+        sellerAcc:"Nagad: 01800000002"
+    },
+
+    {
+        id:4,
+        name:"ফ্রেশ ফল",
+        price:200,
+        unit:"কেজি",
+        image:"🍎",
+        sellerAcc:"bKash: 01900000003"
+    }
+
+];
+
+
+let cart = {};
+
+let walletBalance = 0;
+
+let walletTransactions = [];
+
+let currentOrder = null;
+
+let trackingTimer = null;
+
+
+/* =====================================
+   PRODUCT RENDER
+===================================== */
+
+function renderProducts(){
+
+    const container =
+        document.getElementById("product-container");
+
+    container.innerHTML = "";
+
+    products.forEach(function(p){
+
+        let imgHTML =
+            p.image.startsWith("data:image")
+            ?
+            `<img src="${p.image}" alt="${p.name}">`
+            :
+            `<div class="emoji-img">${p.image}</div>`;
+
+        let qty = cart[p.id] || 0;
+
+        let buttonHTML =
+            qty > 0
+
+            ?
+
+            `<div class="qty-controls">
+
+                <button class="qty-btn"
+                        onclick="updateQty(${p.id},-1)">
+                    −
+                </button>
+
+                <span>${qty}</span>
+
+                <button class="qty-btn"
+                        onclick="updateQty(${p.id},1)">
+                    +
+                </button>
+
+            </div>`
+
+            :
+
+            `<button class="btn-cart"
+                    onclick="updateQty(${p.id},1)">
+
+                + কার্টে যোগ করুন
+
+            </button>`;
+
+
+        container.innerHTML += `
+
+            <div class="product-card">
+
+                ${imgHTML}
+
+                <h3>${p.name}</h3>
+
+                <div class="price">
+                    ৳ ${p.price} / ${p.unit}
+                </div>
+
+                ${buttonHTML}
+
+            </div>
+
+        `;
+
+    });
+
+    updateCartUI();
+
+}
+
+
+/* =====================================
+   CART
+===================================== */
+
+function updateQty(id,change){
+
+    cart[id] =
+        (cart[id] || 0) + change;
+
+    if(cart[id] <= 0){
+
+        delete cart[id];
+
+    }
+
+    renderProducts();
+
+}
+
+
+function updateCartUI(){
+
+    let total = 0;
+
+    let count = 0;
+
+    const list =
+        document.getElementById("cart-items");
+
+    list.innerHTML = "";
+
+
+    for(let id in cart){
+
+        let product =
+            products.find(
+                function(p){
+                    return p.id == id;
                 }
+            );
+
+
+        if(product){
+
+            let qty = cart[id];
+
+            let subtotal =
+                product.price * qty;
+
+            total += subtotal;
+
+            count += qty;
+
+
+            list.innerHTML += `
+
+                <li>
+
+                    <span>
+                        ${product.name}
+                        × ${qty}
+                    </span>
+
+                    <b>
+                        ৳ ${subtotal}
+                    </b>
+
+                </li>
+
+            `;
+
+        }
+
+    }
+
+
+    if(count === 0){
+
+        list.innerHTML = `
+
+            <li class="empty">
+                আপনার কার্ট খালি রয়েছে
+            </li>
+
+        `;
+
+    }
+
+
+    document.getElementById("cart-count")
+        .innerText = count;
+
+    document.getElementById("total-price")
+        .innerText = total;
+
+}
+
+
+/* =====================================
+   LOCATION
+===================================== */
+
+function getLocation(){
+
+    if(!navigator.geolocation){
+
+        alert(
+            "আপনার ব্রাউজারে GPS Support নেই।"
+        );
+
+        return;
+    }
+
+
+    document.getElementById("location-text")
+        .innerText =
+        "📍 GPS Location খোঁজা হচ্ছে...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            let lat =
+                position.coords.latitude.toFixed(5);
+
+            let lng =
+                position.coords.longitude.toFixed(5);
+
+
+            document.getElementById("location-text")
+                .innerText =
+                "📍 " + lat + ", " + lng;
+
+
+            document.getElementById("cust-address")
+                .value =
+                "GPS Location: " +
+                lat + ", " + lng;
+
+        },
+
+        function(){
+
+            document.getElementById("location-text")
+                .innerText =
+                "📍 Location পাওয়া যায়নি";
+
+            alert(
+                "Location Permission Allow করুন।"
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =====================================
+   PAYMENT METHOD
+===================================== */
+
+function togglePaymentDetails(){
+
+    let method =
+        document.getElementById("payment-method")
+        .value;
+
+
+    let paymentBox =
+        document.getElementById("payment-info");
+
+    let walletBox =
+        document.getElementById("wallet-payment-box");
+
+
+    paymentBox.style.display = "none";
+
+    walletBox.style.display = "none";
+
+
+    if(method === "wallet"){
+
+        walletBox.style.display = "block";
+
+        document.getElementById(
+            "checkout-wallet-balance"
+        ).innerText =
+            walletBalance.toFixed(2);
+
+    }
+
+
+    if(method === "bkash"){
+
+        paymentBox.style.display = "block";
+
+        document.getElementById(
+            "payment-instruction"
+        ).innerHTML =
+            "bKash Payment Number: <b>01954799646</b>";
+
+    }
+
+
+    if(method === "nagad"){
+
+        paymentBox.style.display = "block";
+
+        document.getElementById(
+            "payment-instruction"
+        ).innerHTML =
+            "Nagad Payment Number: <b>01954799646</b>";
+
+    }
+
+}
+
+
+/* =====================================
+   PLACE ORDER
+===================================== */
+
+function placeOrder(){
+
+    let total =
+        parseFloat(
+            document.getElementById(
+                "total-price"
+            ).innerText
+        );
+
+
+    if(!total){
+
+        alert(
+            "আপনার কার্ট খালি!"
+        );
+
+        return;
+
+    }
+
+
+    let name =
+        document.getElementById(
+            "cust-name"
+        ).value.trim();
+
+
+    let phone =
+        document.getElementById(
+            "cust-phone"
+        ).value.trim();
+
+
+    let address =
+        document.getElementById(
+            "cust-address"
+        ).value.trim();
+
+
+    if(!name || !phone || !address){
+
+        alert(
+            "নাম, মোবাইল নম্বর ও ঠিকানা পূরণ করুন।"
+        );
+
+        return;
+
+    }
+
+
+    let method =
+        document.getElementById(
+            "payment-method"
+        ).value;
+
+
+    /* Wallet Payment */
+
+    if(method === "wallet"){
+
+        if(walletBalance < total){
+
+            alert(
+                "Wallet-এ পর্যাপ্ত টাকা নেই।\n\n" +
+                "বর্তমান ব্যালেন্স: ৳" +
+                walletBalance.toFixed(2)
+            );
+
+            openWallet();
+
+            return;
+
+        }
+
+
+        walletBalance -= total;
+
+
+        walletTransactions.push({
+
+            type:"purchase",
+
+            amount:-total,
+
+            method:"Wallet",
+
+            date:new Date()
+                .toLocaleString("bn-BD")
+
+        });
+
+    }
+
+
+    /* 5% COMMISSION */
+
+    let commission =
+        total * 0.05;
+
+
+    let sellerAmount =
+        total - commission;
+
+
+    /* ORDER ID */
+
+    let orderId =
+        "DB" +
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
+
+
+    currentOrder = {
+
+        id:orderId,
+
+        name:name,
+
+        phone:phone,
+
+        address:address,
+
+        total:total,
+
+        commission:commission,
+
+        sellerAmount:sellerAmount,
+
+        status:"অর্ডার গ্রহণ করা হয়েছে",
+
+        eta:"30-45 মিনিট"
+
+    };
+
+
+    /* TRACKING UI */
+
+    document.getElementById(
+        "tracking-order-id"
+    ).innerText =
+        orderId;
+
+
+    document.getElementById(
+        "tracking-total"
+    ).innerText =
+        total.toFixed(2);
+
+
+    document.getElementById(
+        "tracking-commission"
+    ).innerText =
+        commission.toFixed(2);
+
+
+    document.getElementById(
+        "tracking-seller"
+    ).innerText =
+        sellerAmount.toFixed(2);
+
+
+    document.getElementById(
+        "order-eta"
+    ).innerText =
+        "30-45 মিনিট";
+
+
+    document.getElementById(
+        "tracking-section"
+    ).style.display =
+        "block";
+
+
+    resetTracking();
+
+
+    cart = {};
+
+    renderProducts();
+
+    updateWalletUI();
+
+
+    alert(
+
+        "✅ অর্ডার কনফার্ম হয়েছে!\n\n" +
+
+        "Order ID: " + orderId + "\n" +
+
+        "মোট বিল: ৳" +
+        total.toFixed(2) + "\n\n" +
+
+        "Platform Commission 5%: ৳" +
+        commission.toFixed(2) + "\n" +
+
+        "Seller Amount 95%: ৳" +
+        sellerAmount.toFixed(2)
+
+    );
+
+
+    document.getElementById(
+        "tracking-section"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================
+   TRACKING RESET
+===================================== */
+
+function resetTracking(){
+
+    for(let i=1;i<=5;i++){
+
+        let dot =
+            document.getElementById(
+                "dot"+i
+            );
+
+        dot.classList.remove("done");
+        dot.classList.remove("active");
+
+    }
+
+
+    document.getElementById(
+        "dot1"
+    ).classList.add("done");
+
+
+    document.getElementById(
+        "driver-location"
+    ).innerText =
+        "অর্ডার প্রস্তুত হওয়ার অপেক্ষায়...";
+
+}
+
+
+/* =====================================
+   DEMO LIVE TRACKING
+===================================== */
+
+function startLiveTracking(){
+
+    if(!currentOrder){
+
+        alert(
+            "কোনো Active Order নেই।"
+        );
+
+        return;
+
+    }
+
+
+    if(trackingTimer){
+
+        clearInterval(trackingTimer);
+
+    }
+
+
+    let step = 1;
+
+
+    let locations = [
+
+        "🏪 রেস্টুরেন্টে অর্ডার প্রস্তুত হচ্ছে",
+
+        "🍱 খাবার প্যাক করা হচ্ছে",
+
+        "🚴 রাইডার অর্ডার নিয়ে রওনা হয়েছে",
+
+        "📍 রাইডার আপনার এলাকার দিকে আসছে",
+
+        "🏠 রাইডার আপনার ঠিকানার কাছে",
+
+        "✅ অর্ডার ডেলিভারি সম্পন্ন"
+
+    ];
+
+
+    let eta = [
+
+        "30-45 মিনিট",
+
+        "25-35 মিনিট",
+
+        "15-25 মিনিট",
+
+        "10-15 মিনিট",
+
+        "5-10 মিনিট",
+
+        "Delivered"
+
+    ];
+
+
+    trackingTimer =
+        setInterval(function(){
+
+            if(step > 5){
+
+                clearInterval(
+                    trackingTimer
+                );
+
+                return;
+
             }
-            document.getElementById('cart-count').innerText = count;
-            document.getElementById('total-price').innerText = total;
-            if (!count) list.innerHTML = '<li style="color: #94a3b8;">আপনার কার্ট খালি রয়েছে</li>';
-        }
 
-        function placeOrder() {
-            let total = parseFloat(document.getElementById('total-price').innerText);
-            if (!total) return alert('কার্ট খালি!');
-            
-            // 5% Commission Logic
-            let adminCommission = total * 0.05; // 5% Admin Profit
-            let sellerEarnings = total - adminCommission; // 95% Seller Profit
 
-            alert(`অর্ডার কনফার্ম হয়েছে!\n\nমোট বিল: ৳${total}\n- আপনার ৫% কমিশন (৳${adminCommission}) সেন্ড মানি হিসেবে যাবে bKash: 01954799646 নম্বরে।\n- অবশিষ্ট ৯৫% (৳${sellerEarnings}) সেলারের ওয়ালেটে পাঠানো হয়েছে।`);
-            
-            cart = {};
-            renderProducts();
-        }
+            for(let i=1;i<=5;i++){
 
-        function saveProduct() {
-            let name = document.getElementById('prod-name').value;
-            let price = parseFloat(document.getElementById('prod-price').value);
-            let unit = document.getElementById('prod-unit').value || 'কেজি';
-            let sellerAcc = document.getElementById('seller-bank-acc').value;
-            let fileInput = document.getElementById('prod-img-file');
+                let dot =
+                    document.getElementById(
+                        "dot"+i
+                    );
 
-            if (!name || isNaN(price) || !sellerAcc) return alert('সব তথ্য পূরণ করুন!');
+                dot.classList.remove("active");
 
-            if (fileInput.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    products.unshift({ id: Date.now(), name, price, unit, image: e.target.result, sellerAcc });
-                    renderProducts();
-                    closeModal('productModal');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                products.unshift({ id: Date.now(), name, price, unit, image: '🍱', sellerAcc });
+                if(i < step){
+
+                    dot.classList.add("done");
+
+                }
+
+            }
+
+
+            if(step <= 5){
+
+                document.getElementById(
+                    "dot"+step
+                ).classList.add("active");
+
+            }
+
+
+            document.getElementById(
+                "driver-location"
+            ).innerText =
+                locations[step];
+
+
+            document.getElementById(
+                "order-eta"
+            ).innerText =
+                eta[step];
+
+
+            step++;
+
+
+        },3000);
+
+}
+
+
+/* =====================================
+   WALLET UI
+===================================== */
+
+function updateWalletUI(){
+
+    document.getElementById(
+        "wallet-balance"
+    ).innerText =
+        walletBalance.toFixed(2);
+
+
+    document.getElementById(
+        "wallet-modal-balance"
+    ).innerText =
+        walletBalance.toFixed(2);
+
+
+    document.getElementById(
+        "checkout-wallet-balance"
+    ).innerText =
+        walletBalance.toFixed(2);
+
+}
+
+
+function openWallet(){
+
+    updateWalletUI();
+
+    openModal(
+        "walletModal"
+    );
+
+}
+
+
+function showDepositForm(){
+
+    document.getElementById(
+        "deposit-area"
+    ).style.display =
+        "block";
+
+}
+
+
+function requestWalletDeposit(){
+
+    let amount =
+        parseFloat(
+            document.getElementById(
+                "wallet-deposit-amount"
+            ).value
+        );
+
+
+    let method =
+        document.getElementById(
+            "wallet-deposit-method"
+        ).value;
+
+
+    if(!amount || amount <= 0){
+
+        alert(
+            "সঠিক টাকার পরিমাণ লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    /*
+      DEMO ONLY
+
+      এখানে বাস্তব Payment Gateway
+      verification প্রয়োজন।
+    */
+
+
+    walletBalance += amount;
+
+
+    walletTransactions.push({
+
+        type:"deposit",
+
+        amount:amount,
+
+        method:method,
+
+        date:new Date()
+            .toLocaleString("bn-BD")
+
+    });
+
+
+    updateWalletUI();
+
+
+    document.getElementById(
+        "wallet-deposit-amount"
+    ).value = "";
+
+
+    alert(
+
+        "Demo হিসেবে ৳" +
+        amount.toFixed(2) +
+        " Wallet-এ যোগ হয়েছে।\n\n" +
+
+        "Payment Method: " +
+        method.toUpperCase() +
+        "\n\n" +
+
+        "আসল অ্যাপে Payment Gateway দিয়ে " +
+        "পেমেন্ট Verify করতে হবে।"
+
+    );
+
+}
+
+
+/* =====================================
+   WALLET HISTORY
+===================================== */
+
+function showWalletHistory(){
+
+    if(walletTransactions.length === 0){
+
+        alert(
+            "এখনও কোনো Wallet Transaction নেই।"
+        );
+
+        return;
+
+    }
+
+
+    let text =
+        "💰 WALLET HISTORY\n\n";
+
+
+    walletTransactions
+        .slice()
+        .reverse()
+        .forEach(function(t,index){
+
+            let sign =
+                t.amount >= 0
+                ? "+"
+                : "-";
+
+
+            text +=
+
+                (index+1) +
+                ". " +
+
+                sign +
+                "৳" +
+                Math.abs(
+                    t.amount
+                ).toFixed(2) +
+
+                " | " +
+                t.type +
+
+                " | " +
+                t.date +
+
+                "\n";
+
+        });
+
+
+    alert(text);
+
+}
+
+
+/* =====================================
+   SELLER PRODUCT
+===================================== */
+
+function saveProduct(){
+
+    let name =
+        document.getElementById(
+            "prod-name"
+        ).value.trim();
+
+
+    let price =
+        parseFloat(
+            document.getElementById(
+                "prod-price"
+            ).value
+        );
+
+
+    let unit =
+        document.getElementById(
+            "prod-unit"
+        ).value.trim()
+        || "পিস";
+
+
+    let sellerAcc =
+        document.getElementById(
+            "seller-bank-acc"
+        ).value.trim();
+
+
+    let fileInput =
+        document.getElementById(
+            "prod-img-file"
+        );
+
+
+    if(!name ||
+       isNaN(price) ||
+       price <= 0 ||
+       !sellerAcc){
+
+        alert(
+            "পণ্যের নাম, মূল্য এবং Seller Account পূরণ করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if(fileInput.files[0]){
+
+        let reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(e){
+
+                products.unshift({
+
+                    id:Date.now(),
+
+                    name:name,
+
+                    price:price,
+
+                    unit:unit,
+
+                    image:e.target.result,
+
+                    sellerAcc:sellerAcc
+
+                });
+
+
                 renderProducts();
-                closeModal('productModal');
-            }
-        }
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function scrollToCheckout() { document.getElementById('checkout-area').scrollIntoView({ behavior: 'smooth' }); }
-        function togglePaymentDetails() {
-            let m = document.getElementById('payment-method').value;
-            document.getElementById('payment-info').style.display = m === 'cod' ? 'none' : 'block';
-        }
+                closeModal(
+                    "productModal"
+                );
 
-        window.onload = renderProducts;
-    </script>
+
+                document.getElementById(
+                    "prod-name"
+                ).value = "";
+
+                document.getElementById(
+                    "prod-price"
+                ).value = "";
+
+                document.getElementById(
+                    "prod-unit"
+                ).value = "";
+
+                document.getElementById(
+                    "seller-bank-acc"
+                ).value = "";
+
+            };
+
+
+        reader.readAsDataURL(
+            fileInput.files[0]
+        );
+
+    }
+
+    else{
+
+        products.unshift({
+
+            id:Date.now(),
+
+            name:name,
+
+            price:price,
+
+            unit:unit,
+
+            image:"🍱",
+
+            sellerAcc:sellerAcc
+
+        });
+
+
+        renderProducts();
+
+        closeModal(
+            "productModal"
+        );
+
+    }
+
+}
+
+
+/* =====================================
+   PROFILE
+===================================== */
+
+function saveProfile(){
+
+    let name =
+        document.getElementById(
+            "edit-name"
+        ).value.trim();
+
+
+    if(!name){
+
+        alert(
+            "নাম লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "✅ প্রোফাইল তথ্য সেভ হয়েছে।"
+    );
+
+}
+
+
+/* =====================================
+   MODAL
+===================================== */
+
+function openModal(id){
+
+    document.getElementById(
+        id
+    ).style.display =
+        "flex";
+
+}
+
+
+function closeModal(id){
+
+    document.getElementById(
+        id
+    ).style.display =
+        "none";
+
+}
+
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+function scrollToCheckout(){
+
+    document.getElementById(
+        "checkout-area"
+    ).scrollIntoView({
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+function goHome(){
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* =====================================
+   START APP
+===================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        renderProducts();
+
+        updateWalletUI();
+
+    }
+);
+
+</script>
+
 </body>
-</html>
+    </html>
