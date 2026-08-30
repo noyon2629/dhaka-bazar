@@ -122,12 +122,11 @@
                     <option value="cod">ক্যাশ অন ডেলিভারি (Cash on Delivery)</option>
                     <option value="bkash">বিকাশ (bKash)</option>
                     <option value="nagad">নগদ (Nagad)</option>
-                    <option value="rocket">রকেট (Rocket)</option>
                 </select>
             </div>
 
             <div class="payment-info-box" id="payment-info">
-                <p id="payment-instruction">আমাদের বিকাশ সেন্ড মানি নম্বর: <b>01700000000</b></p>
+                <p id="payment-instruction">আমাদের বিকাশ সেন্ড মানি নম্বর: <b>01954799646</b></p>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label style="font-size: 12px;">Transaction ID (টাকা পাঠানোর পর প্রাপ্ত আইডি)</label>
                     <input type="text" id="trx-id" placeholder="যেমন: 8N7A6D5E">
@@ -281,6 +280,7 @@
             }
         }
 
+        // Toggle Payment Details & Numbers
         function togglePaymentDetails() {
             const method = document.getElementById('payment-method').value;
             const infoBox = document.getElementById('payment-info');
@@ -291,11 +291,9 @@
             } else {
                 infoBox.style.display = 'block';
                 if (method === 'bkash') {
-                    instruction.innerHTML = 'আমাদের <b>বিকাশ</b> (Personal/Merchant) নম্বর: <b>01700000000</b> (Send Money করুন)';
+                    instruction.innerHTML = 'আমাদের <b>বিকাশ</b> সেন্ড মানি নম্বর: <b>01954799646</b>';
                 } else if (method === 'nagad') {
-                    instruction.innerHTML = 'আমাদের <b>নগদ</b> (Personal) নম্বর: <b>01800000000</b> (Send Money করুন)';
-                } else if (method === 'rocket') {
-                    instruction.innerHTML = 'আমাদের <b>রকেট</b> (Personal) নম্বর: <b>01900000000-7</b> (Send Money করুন)';
+                    instruction.innerHTML = 'আমাদের <b>নগদ</b> সেন্ড মানি নম্বর: <b>01874757828</b>';
                 }
             }
         }
