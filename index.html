@@ -153,10 +153,10 @@ input:focus,select:focus{
 }
 
 /* HOME */
-
 #homeScreen{
   display:none;
   flex-direction:column;
+  min-height: 100vh;
 }
 
 .topbar{
@@ -186,6 +186,8 @@ input:focus,select:focus{
   border-radius:10px;
   padding:9px 13px;
   font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .location-pill{
@@ -201,6 +203,7 @@ input:focus,select:focus{
   max-width:700px;
   width:100%;
   margin:auto;
+  flex: 1;
 }
 
 .search{
@@ -256,6 +259,7 @@ input:focus,select:focus{
   border-radius:9px;
   margin-top:9px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .bottom{
@@ -273,6 +277,63 @@ input:focus,select:focus{
   background:none;
   font-size:14px;
   color:#006b4f;
+  cursor:pointer;
+}
+
+/* CART MODAL (নতুন যুক্ত করা হয়েছে) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #777;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.cart-total {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+  color: #007a59;
 }
 
 @media(max-width:380px){
@@ -285,129 +346,87 @@ input:focus,select:focus{
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN SCREEN -->
 <section id="loginScreen" class="screen active">
   <div class="login-box">
-
     <div class="logo">🛒</div>
-
     <h1>ঢাকা বাজার</h1>
     <p class="subtitle">আপনার নিত্যপ্রয়োজনীয় বাজার এখন হাতের মুঠোয়</p>
 
     <label for="name">আপনার নাম</label>
-    <input id="name" type="text" placeholder="যেমন: নওয়ন">
+    <input id="name" type="text" placeholder="যেমন: নয়ন">
 
     <label for="phone">মোবাইল নম্বর</label>
-    <input id="phone" type="tel" inputmode="numeric"
-           placeholder="যেমন: 01XXXXXXXXX"
-           maxlength="11">
+    <input id="phone" type="tel" inputmode="numeric" placeholder="যেমন: 01XXXXXXXXX" maxlength="11">
 
     <button class="btn" onclick="login()">লগইন করুন</button>
-
     <p id="loginError" class="error"></p>
-
   </div>
 </section>
 
 
-<!-- LOCATION -->
+<!-- LOCATION SCREEN -->
 <section id="locationScreen" class="screen">
-
   <div class="location-box">
-
     <div class="location-icon">📍</div>
-
     <h2>আপনার লোকেশন সেট করুন</h2>
+    <p>কাছাকাছি বাজার ও দ্রুত ডেলিভারি দেখানোর জন্য আপনার লোকেশন ব্যবহার করা হবে।</p>
 
-    <p>
-      কাছাকাছি বাজার ও দ্রুত ডেলিভারি দেখানোর জন্য
-      আপনার লোকেশন ব্যবহার করা হবে।
-    </p>
-
-    <button class="btn" onclick="getLocation()">
-      📍 বর্তমান লোকেশন ব্যবহার করুন
-    </button>
-
+    <button class="btn" onclick="getLocation()">📍 বর্তমান লোকেশন ব্যবহার করুন</button>
     <div id="locationResult" class="location-result"></div>
-
-    <button class="btn" onclick="skipLocation()"
-            style="background:#e8f3ef;color:#006b4f;">
-      পরে করব
-    </button>
-
+    <button class="btn" onclick="skipLocation()" style="background:#e8f3ef;color:#006b4f;">পরে করব</button>
   </div>
-
 </section>
 
 
-<!-- HOME -->
+<!-- HOME SCREEN -->
 <section id="homeScreen" class="screen">
-
   <header class="topbar">
-
     <div class="topbar-row">
       <div class="brand">🛒 ঢাকা বাজার</div>
-
       <button class="cart-btn" onclick="showCart()">
         🛒 <span id="cartCount">0</span>
       </button>
     </div>
-
     <div class="location-pill">
       📍 <span id="homeLocation">লোকেশন সেট করা হয়নি</span>
     </div>
-
   </header>
 
   <main class="container">
-
-    <input class="search"
-           type="search"
-           placeholder="🔍 পণ্য খুঁজুন..."
-           oninput="searchProducts(this.value)">
+    <input class="search" type="search" placeholder="🔍 পণ্য খুঁজুন..." oninput="searchProducts(this.value)">
 
     <h2 class="section-title">জনপ্রিয় পণ্য</h2>
 
     <div id="products" class="products">
-
       <div class="product">
         <div class="product-img">🥔</div>
         <h3>আলু</h3>
         <p class="price">৳ 40 / কেজি</p>
-        <button class="add" onclick="addCart('আলু',40)">
-          + কার্টে যোগ করুন
-        </button>
+        <button class="add" onclick="addCart('আলু', 40)">+ কার্টে যোগ করুন</button>
       </div>
 
       <div class="product">
         <div class="product-img">🧅</div>
         <h3>পেঁয়াজ</h3>
         <p class="price">৳ 80 / কেজি</p>
-        <button class="add" onclick="addCart('পেঁয়াজ',80)">
-          + কার্টে যোগ করুন
-        </button>
+        <button class="add" onclick="addCart('পেঁয়াজ', 80)">+ কার্টে যোগ করুন</button>
       </div>
 
       <div class="product">
         <div class="product-img">🍅</div>
         <h3>টমেটো</h3>
         <p class="price">৳ 60 / কেজি</p>
-        <button class="add" onclick="addCart('টমেটো',60)">
-          + কার্টে যোগ করুন
-        </button>
+        <button class="add" onclick="addCart('টমেটো', 60)">+ কার্টে যোগ করুন</button>
       </div>
 
       <div class="product">
         <div class="product-img">🍚</div>
         <h3>চাল</h3>
         <p class="price">৳ 75 / কেজি</p>
-        <button class="add" onclick="addCart('চাল',75)">
-          + কার্টে যোগ করুন
-        </button>
+        <button class="add" onclick="addCart('চাল', 75)">+ কার্টে যোগ করুন</button>
       </div>
-
     </div>
-
   </main>
 
   <nav class="bottom">
@@ -415,16 +434,27 @@ input:focus,select:focus{
     <button onclick="showCart()">🛒<br>কার্ট</button>
     <button onclick="logout()">👤<br>লগআউট</button>
   </nav>
-
 </section>
 
 
-<script>
+<!-- CART POPUP MODAL -->
+<div id="cartModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>আপনার শপিং কার্ট</h3>
+      <button class="modal-close" onclick="closeCart()">✖</button>
+    </div>
+    <div id="cartList"></div>
+    <div id="cartTotal" class="cart-total"></div>
+    <button class="btn" onclick="checkout()">অর্ডার সম্পন্ন করুন</button>
+  </div>
+</div>
 
+
+<script>
 let cart = [];
 
 function login(){
-
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const error = document.getElementById("loginError");
@@ -443,15 +473,13 @@ function login(){
     return;
   }
 
-  localStorage.setItem("dhakaName",name);
-  localStorage.setItem("dhakaPhone",phone);
+  localStorage.setItem("dhakaName", name);
+  localStorage.setItem("dhakaPhone", phone);
 
   showScreen("locationScreen");
 }
 
-
 function getLocation(){
-
   const result = document.getElementById("locationResult");
 
   if(!navigator.geolocation){
@@ -464,65 +492,42 @@ function getLocation(){
   result.style.display = "block";
 
   navigator.geolocation.getCurrentPosition(
-
     function(position){
-
       const lat = position.coords.latitude.toFixed(5);
       const lng = position.coords.longitude.toFixed(5);
-
       const locationText = "বর্তমান লোকেশন: " + lat + ", " + lng;
 
-      localStorage.setItem("dhakaLocation",locationText);
-
+      localStorage.setItem("dhakaLocation", locationText);
       result.textContent = "✅ লোকেশন সফলভাবে সেট হয়েছে";
 
       setTimeout(function(){
         openHome();
-      },800);
+      }, 800);
     },
-
     function(){
-
-      result.textContent =
-        "❌ লোকেশন পাওয়া যায়নি। ফোনের Location চালু করে আবার চেষ্টা করুন।";
+      result.textContent = "❌ লোকেশন পাওয়া যায়নি। ফোনের Location চালু করে আবার চেষ্টা করুন।";
     }
-
   );
 }
 
-
 function skipLocation(){
-
-  localStorage.setItem(
-    "dhakaLocation",
-    "লোকেশন এখনো সেট করা হয়নি"
-  );
-
+  localStorage.setItem("dhakaLocation", "লোকেশন এখনো সেট করা হয়নি");
   openHome();
 }
 
-
 function openHome(){
-
-  const location =
-    localStorage.getItem("dhakaLocation") ||
-    "লোকেশন সেট করা হয়নি";
-
+  const location = localStorage.getItem("dhakaLocation") || "লোকেশন সেট করা হয়নি";
   document.getElementById("homeLocation").textContent = location;
-
   showScreen("homeScreen");
 }
 
-
 function showScreen(id){
-
   document.querySelectorAll(".screen").forEach(function(screen){
     screen.classList.remove("active");
     screen.style.display = "";
   });
 
   const screen = document.getElementById(id);
-
   screen.classList.add("active");
 
   if(id === "homeScreen"){
@@ -530,118 +535,95 @@ function showScreen(id){
   }
 }
 
-
-function addCart(name,price){
-
-  cart.push({
-    name:name,
-    price:price
-  });
-
+function addCart(name, price){
+  cart.push({ name: name, price: price });
   document.getElementById("cartCount").textContent = cart.length;
-
-  alert(name + " কার্টে যোগ হয়েছে ✅");
 }
-
 
 function showCart(){
+  const modal = document.getElementById("cartModal");
+  const list = document.getElementById("cartList");
+  const totalEl = document.getElementById("cartTotal");
 
   if(cart.length === 0){
-    alert("আপনার কার্ট এখন খালি।");
-    return;
+    list.innerHTML = "<p style='text-align:center;color:#777;'>আপনার কার্ট খালি!</p>";
+    totalEl.textContent = "মোট: ৳ 0";
+  } else {
+    let total = 0;
+    let html = "";
+    
+    cart.forEach(function(item, index){
+      html += `<div class="cart-item">
+                <span>${index + 1}. ${item.name}</span>
+                <span>৳ ${item.price}</span>
+              </div>`;
+      total += item.price;
+    });
+
+    list.innerHTML = html;
+    totalEl.textContent = "মোট: ৳ " + total;
   }
 
-  let total = 0;
-  let text = "আপনার কার্ট:\\n\\n";
-
-  cart.forEach(function(item,index){
-
-    text +=
-      (index + 1) +
-      ". " +
-      item.name +
-      " — ৳" +
-      item.price +
-      "\\n";
-
-    total += item.price;
-  });
-
-  text += "\\nমোট: ৳" + total;
-
-  alert(text);
+  modal.style.display = "flex";
 }
 
+function closeCart(){
+  document.getElementById("cartModal").style.display = "none";
+}
+
+function checkout(){
+  if(cart.length === 0){
+    alert("আপনার কার্টে কোনো পণ্য নেই!");
+    return;
+  }
+  alert("ধন্যবাদ! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।");
+  cart = [];
+  document.getElementById("cartCount").textContent = "0";
+  closeCart();
+}
 
 function goHome(){
   openHome();
 }
 
-
 function logout(){
-
   localStorage.removeItem("dhakaName");
   localStorage.removeItem("dhakaPhone");
   localStorage.removeItem("dhakaLocation");
-
   cart = [];
-
   document.getElementById("cartCount").textContent = "0";
-
   showScreen("loginScreen");
 }
 
-
 function searchProducts(value){
-
-  const products =
-    document.querySelectorAll(".product");
-
+  const products = document.querySelectorAll(".product");
   value = value.toLowerCase();
 
   products.forEach(function(product){
-
-    const name =
-      product.querySelector("h3").textContent.toLowerCase();
-
+    const name = product.querySelector("h3").textContent.toLowerCase();
     if(name.includes(value)){
       product.style.display = "";
-    }else{
+    } else {
       product.style.display = "none";
     }
-
   });
 }
 
-
-/* আগে লগইন করা থাকলে সরাসরি Home */
 window.onload = function(){
-
-  const savedName =
-    localStorage.getItem("dhakaName");
-
-  const savedPhone =
-    localStorage.getItem("dhakaPhone");
-
-  const savedLocation =
-    localStorage.getItem("dhakaLocation");
+  const savedName = localStorage.getItem("dhakaName");
+  const savedPhone = localStorage.getItem("dhakaPhone");
+  const savedLocation = localStorage.getItem("dhakaLocation");
 
   if(savedName && savedPhone){
-
     if(savedLocation){
       openHome();
-    }else{
+    } else {
       showScreen("locationScreen");
     }
-
-  }else{
-
+  } else {
     showScreen("loginScreen");
-
   }
-
 };
-
 </script>
 
 </body>
