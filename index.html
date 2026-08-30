@@ -1,727 +1,171 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ঢাকা বাজার</title>
-
-<!-- Firebase SDK Scripts -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body{
-  font-family:Arial,"Noto Sans Bengali",sans-serif;
-  background:#f4f7f6;
-  color:#17352d;
-}
-
-.screen{
-  min-height:100vh;
-  display:none;
-}
-
-.screen.active{
-  display:flex;
-}
-
-#loginScreen{
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-  background:linear-gradient(145deg,#006b4f,#00a878);
-}
-
-.login-box{
-  width:100%;
-  max-width:420px;
-  background:white;
-  border-radius:25px;
-  padding:30px 22px;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
-}
-
-.logo{
-  width:75px;
-  height:75px;
-  margin:0 auto 15px;
-  border-radius:50%;
-  background:#007a59;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:38px;
-}
-
-h1{
-  text-align:center;
-  color:#006b4f;
-  margin-bottom:8px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#777;
-  margin-bottom:25px;
-}
-
-label{
-  display:block;
-  font-weight:bold;
-  margin:15px 0 7px;
-}
-
-input,select{
-  width:100%;
-  padding:14px;
-  border:1px solid #ddd;
-  border-radius:12px;
-  font-size:16px;
-  outline:none;
-}
-
-input:focus,select:focus{
-  border-color:#008c68;
-}
-
-.btn{
-  width:100%;
-  border:0;
-  border-radius:13px;
-  padding:15px;
-  margin-top:20px;
-  background:#008c68;
-  color:white;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.btn:active{
-  transform:scale(.98);
-}
-
-.error{
-  color:#d62828;
-  text-align:center;
-  margin-top:12px;
-  display:none;
-}
-
-#locationScreen{
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-  background:#f4f7f6;
-}
-
-.location-box{
-  width:100%;
-  max-width:420px;
-  background:white;
-  border-radius:24px;
-  padding:30px 22px;
-  text-align:center;
-  box-shadow:0 8px 30px rgba(0,0,0,.08);
-}
-
-.location-icon{
-  font-size:65px;
-  margin-bottom:15px;
-}
-
-.location-box h2{
-  color:#006b4f;
-  margin-bottom:10px;
-}
-
-.location-box p{
-  color:#777;
-  line-height:1.6;
-}
-
-.location-result{
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
-  background:#e9f8f3;
-  color:#006b4f;
-  display:none;
-}
-
-/* HOME */
-#homeScreen{
-  display:none;
-  flex-direction:column;
-  min-height: 100vh;
-}
-
-.topbar{
-  background:#007a59;
-  color:white;
-  padding:18px 16px;
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-
-.topbar-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.brand{
-  font-size:21px;
-  font-weight:bold;
-}
-
-.top-btns {
-  display: flex;
-  gap: 8px;
-}
-
-.seller-btn {
-  background: #ff9800;
-  color: white;
-  border: 0;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.cart-btn{
-  background:white;
-  color:#007a59;
-  border:0;
-  border-radius:10px;
-  padding:8px 12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.location-pill{
-  margin-top:13px;
-  background:rgba(255,255,255,.15);
-  border-radius:10px;
-  padding:10px;
-  font-size:14px;
-}
-
-.container{
-  padding:15px;
-  max-width:700px;
-  width:100%;
-  margin:auto;
-  flex: 1;
-}
-
-.search{
-  background:white;
-  margin-bottom:15px;
-}
-
-.section-title{
-  font-size:20px;
-  margin:18px 0 12px;
-}
-
-.products{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.product{
-  background:white;
-  border-radius:16px;
-  padding:12px;
-  box-shadow:0 3px 12px rgba(0,0,0,.06);
-}
-
-.product-img{
-  height:105px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:65px;
-  background:#f2f7f5;
-  border-radius:12px;
-  margin-bottom:10px;
-}
-
-.product h3{
-  font-size:15px;
-  margin-bottom:5px;
-}
-
-.price{
-  color:#008c68;
-  font-weight:bold;
-}
-
-.add{
-  width:100%;
-  border:0;
-  background:#008c68;
-  color:white;
-  padding:10px;
-  border-radius:9px;
-  margin-top:9px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.bottom{
-  position:sticky;
-  bottom:0;
-  background:white;
-  border-top:1px solid #ddd;
-  padding:10px;
-  display:flex;
-  justify-content:space-around;
-}
-
-.bottom button{
-  border:0;
-  background:none;
-  font-size:14px;
-  color:#006b4f;
-  cursor:pointer;
-}
-
-/* MODAL STYLES */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  padding: 20px;
-}
-
-.modal-content {
-  background: white;
-  width: 100%;
-  max-width: 400px;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #777;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px dashed #ddd;
-}
-
-.cart-total {
-  margin-top: 15px;
-  font-weight: bold;
-  font-size: 18px;
-  text-align: right;
-  color: #007a59;
-}
-
-@media(max-width:380px){
-  .products{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সহজ বাজার - Quick Grocery</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; padding-bottom: 60px; }
+        header { background-color: #0c831f; color: white; padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+        .product-card { background: white; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; }
+        .product-card h3 { font-size: 16px; margin: 10px 0 5px; }
+        .product-card p { color: #0c831f; font-weight: bold; margin-bottom: 10px; }
+        .btn { background: #0c831f; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        .btn:hover { background: #096317; }
+        
+        /* Cart Section */
+        .cart-section, .ai-section { background: white; border-radius: 8px; padding: 20px; margin-top: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        h2 { font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #f4f6f8; padding-bottom: 8px; color: #0c831f; }
+        ul { list-style: none; margin-bottom: 15px; }
+        li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        
+        /* AI Assistant */
+        .chat-box { height: 120px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid #eee; margin-bottom: 10px; }
+        .chat-msg { margin-bottom: 8px; font-size: 14px; }
+        .user-msg { color: #0556f3; text-align: right; }
+        .ai-msg { color: #0c831f; text-align: left; }
+    </style>
 </head>
-
 <body>
 
-<!-- LOGIN SCREEN -->
-<section id="loginScreen" class="screen active">
-  <div class="login-box">
-    <div class="logo">🛒</div>
-    <h1>ঢাকা বাজার</h1>
-    <p class="subtitle">আপনার নিত্যপ্রয়োজনীয় বাজার এখন হাতের মুঠোয়</p>
+    <header>
+        <h1>সহজ বাজার (Grocery App)</h1>
+        <p>১০ মিনিটে আপনার ঘরে নিত্যপ্রয়োজনীয় পণ্য</p>
+    </header>
 
-    <label for="name">আপনার নাম</label>
-    <input id="name" type="text" placeholder="যেমন: নয়ন">
+    <div class="container">
+        <!-- Products -->
+        <h2>পণ্যসমূহ</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200" alt="চাল">
+                <h3>মিনিকেট চাল (১ কেজি)</h3>
+                <p>৳ ৭৫</p>
+                <button class="btn" onclick="addToCart('মিনিকেট চাল (১ কেজি)', 75)">কার্টে যোগ করুন</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=200" alt="সয়াবিন তেল">
+                <h3>সয়াবিন তেল (১ লিটার)</h3>
+                <p>৳ ১৯০</p>
+                <button class="btn" onclick="addToCart('সয়াবিন তেল (১ লিটার)', 190)">কার্টে যোগ করুন</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200" alt="আলু">
+                <h3>দেশি আলু (১ কেজি)</h3>
+                <p>৳ ৪৫</p>
+                <button class="btn" onclick="addToCart('দেশি আলু (১ কেজি)', 45)">কার্টে যোগ করুন</button>
+            </div>
+        </div>
 
-    <label for="phone">মোবাইল নম্বর</label>
-    <input id="phone" type="tel" inputmode="numeric" placeholder="যেমন: 01XXXXXXXXX" maxlength="11">
+        <!-- Cart & Checkout -->
+        <div class="cart-section">
+            <h2>আপনার অর্ডার (Cart)</h2>
+            <ul id="cart-items">
+                <li style="color: #888;">কার্ট খালি রয়েছে</li>
+            </ul>
+            <p style="text-align: right; font-weight: bold; margin-bottom: 15px;">মোট: ৳ <span id="total-price">০</span></p>
+            
+            <h3>ডেলিভারি ঠিকানা দিন</h3>
+            <input type="text" id="cust-name" placeholder="আপনার নাম">
+            <input type="text" id="cust-phone" placeholder="মোবাইল নম্বর">
+            <textarea id="cust-address" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+            <button class="btn" onclick="placeOrder()">অর্ডার কনফার্ম করুন (Cash on Delivery)</button>
+        </div>
 
-    <button class="btn" onclick="login()">লগইন করুন</button>
-    <p id="loginError" class="error"></p>
-  </div>
-</section>
-
-<!-- LOCATION SCREEN -->
-<section id="locationScreen" class="screen">
-  <div class="location-box">
-    <div class="location-icon">📍</div>
-    <h2>আপনার লোকেশন সেট করুন</h2>
-    <p>কাছাকাছি বাজার ও দ্রুত ডেলিভারি দেখানোর জন্য আপনার লোকেশন ব্যবহার করা হবে।</p>
-
-    <button class="btn" onclick="getLocation()">📍 বর্তমান লোকেশন ব্যবহার করুন</button>
-    <div id="locationResult" class="location-result"></div>
-    <button class="btn" onclick="skipLocation()" style="background:#e8f3ef;color:#006b4f;">পরে করব</button>
-  </div>
-</section>
-
-<!-- HOME SCREEN -->
-<section id="homeScreen" class="screen">
-  <header class="topbar">
-    <div class="topbar-row">
-      <div class="brand">🛒 ঢাকা বাজার</div>
-      <div class="top-btns">
-        <button class="seller-btn" onclick="openSellerModal()">➕ পণ্য যোগ করুন</button>
-        <button class="cart-btn" onclick="showCart()">🛒 <span id="cartCount">0</span></button>
-      </div>
+        <!-- AI Assistant -->
+        <div class="ai-section">
+            <h2>AI কাস্টমার হেল্পডেস্ক</h2>
+            <div class="chat-box" id="chat-box">
+                <div class="chat-msg ai-msg"><strong>AI:</strong> হ্যালো! ডেলিভারি বা প্রোডাক্ট সম্পর্কিত যেকোনো প্রশ্ন জিজ্ঞাসা করুন।</div>
+            </div>
+            <input type="text" id="user-query" placeholder="প্রশ্ন লিখুন (যেমন: ডেলিভারি চার্জ কত?)...">
+            <button class="btn" style="background: #333;" onclick="askAI()">জিজ্ঞাসা করুন</button>
+        </div>
     </div>
-    <div class="location-pill">
-      📍 <span id="homeLocation">লোকেশন সেট করা হয়নি</span>
-    </div>
-  </header>
 
-  <main class="container">
-    <input class="search" type="search" placeholder="🔍 পণ্য খুঁজুন..." oninput="searchProducts(this.value)">
-    <h2 class="section-title">পণ্যসমূহ</h2>
+    <script>
+        let cart = [];
+        let total = 0;
 
-    <div id="products" class="products">
-      <p style="grid-column: 1/-1; text-align: center; color: #777;">পণ্য লোড হচ্ছে...</p>
-    </div>
-  </main>
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            updateCartUI();
+        }
 
-  <nav class="bottom">
-    <button onclick="goHome()">🏠<br>হোম</button>
-    <button onclick="showCart()">🛒<br>কার্ট</button>
-    <button onclick="logout()">👤<br>লগআউট</button>
-  </nav>
-</section>
+        function updateCartUI() {
+            const list = document.getElementById('cart-items');
+            const totalEl = document.getElementById('total-price');
+            
+            if (cart.length === 0) {
+                list.innerHTML = `<li style="color: #888;">কার্ট খালি রয়েছে</li>`;
+            } else {
+                list.innerHTML = '';
+                cart.forEach((item) => {
+                    list.innerHTML += `<li><span>${item.name}</span> <span>৳ ${item.price}</span></li>`;
+                });
+            }
+            totalEl.innerText = total;
+        }
 
-<!-- CART MODAL -->
-<div id="cartModal" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>আপনার শপিং কার্ট</h3>
-      <button class="modal-close" onclick="closeCart()">✖</button>
-    </div>
-    <div id="cartList"></div>
-    <div id="cartTotal" class="cart-total"></div>
-    <button class="btn" onclick="checkout()">অর্ডার নিশ্চিত করুন</button>
-  </div>
-</div>
+        function placeOrder() {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
 
-<!-- SELLER ADD PRODUCT MODAL -->
-<div id="sellerModal" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>বিক্রেতা প্যানেল (নতুন পণ্য)</h3>
-      <button class="modal-close" onclick="closeSellerModal()">✖</button>
-    </div>
-    <label for="pName">পণ্যের নাম</label>
-    <input id="pName" type="text" placeholder="যেমন: দেশি রুই মাছ">
-    
-    <label for="pPrice">মূল্য (টাকা)</label>
-    <input id="pPrice" type="number" placeholder="যেমন: 350">
-    
-    <label for="pUnit">একক (যেমন: কেজি/লিটার/পিস)</label>
-    <input id="pUnit" type="text" placeholder="যেমন: কেজি">
+            if (cart.length === 0) {
+                alert('দয়া করে প্রথমে পণ্য সিলেক্ট করুন!');
+                return;
+            }
+            if (!name || !phone || !address) {
+                alert('দয়া করে আপনার নাম, ফোন নম্বর ও ঠিকানা পূরণ করুন।');
+                return;
+            }
 
-    <label for="pIcon">ইমোজি/আইকন</label>
-    <input id="pIcon" type="text" placeholder="যেমন: 🐟 বা 🥕">
+            alert(`ধন্যবাদ ${name}! আপনার ৳${total} টাকার অর্ডারটি সফলভাবে নেওয়া হয়েছে। খুব শীঘ্রই আপনার ঠিকানায় পৌঁছানো হবে।`);
+            
+            // Reset Cart
+            cart = [];
+            total = 0;
+            updateCartUI();
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+        }
 
-    <button class="btn" onclick="saveProduct()">পণ্য পোস্ট করুন</button>
-  </div>
-</div>
+        function askAI() {
+            const input = document.getElementById('user-query');
+            const chatBox = document.getElementById('chat-box');
+            const query = input.value.trim();
 
-<script>
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyDemoKeyDhakaBazarAppConfig2026",
-  authDomain: "dhaka-bazar-app.firebaseapp.com",
-  projectId: "dhaka-bazar-app",
-  storageBucket: "dhaka-bazar-app.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:demo123456"
-};
+            if (!query) return;
 
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
+            // Show User Message
+            chatBox.innerHTML += `<div class="chat-msg user-msg"><strong>আপনি:</strong> ${query}</div>`;
 
-let cart = [];
-let localProducts = [
-  { name: "আলু", price: 40, unit: "কেজি", icon: "🥔" },
-  { name: "পেঁয়াজ", price: 80, unit: "কেজি", icon: "🧅" },
-  { name: "টমেটো", price: 60, unit: "কেজি", icon: "🍅" },
-  { name: "চাল", price: 75, unit: "কেজি", icon: "🍚" }
-];
+            // Simple Auto AI Logic
+            let reply = "দুঃখিত, আমি বিষয়টি বুঝতে পারছি না। তবে আমাদের ডেলিভারি সার্ভিস সচল রয়েছে।";
+            if (query.includes("ডেলিভারি") || query.includes("চার্জ")) {
+                reply = "আমাদের ডেলিভারি চার্জ সম্পূর্ণ ফ্রি!";
+            } else if (query.includes("সময়") || query.includes("কখন")) {
+                reply = "অর্ডার করার ১০ থেকে ৩০ মিনিটের মধ্যে ডেলিভারি করা হয়।";
+            } else if (query.includes("টাকা") || query.includes("পেমেন্ট")) {
+                reply = "আমরা ক্যাশ অন ডেলিভারি (Cash on Delivery) গ্রহণ করি। পণ্য পেয়ে টাকা দিন।";
+            }
 
-function login(){
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const error = document.getElementById("loginError");
+            // Show AI Reply
+            setTimeout(() => {
+                chatBox.innerHTML += `<div class="chat-msg ai-msg"><strong>AI:</strong> ${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 400);
 
-  error.style.display = "none";
-
-  if(name.length < 2){
-    error.textContent = "দয়া করে আপনার নাম লিখুন।";
-    error.style.display = "block";
-    return;
-  }
-
-  if(!/^01[0-9]{9}$/.test(phone)){
-    error.textContent = "সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।";
-    error.style.display = "block";
-    return;
-  }
-
-  localStorage.setItem("dhakaName", name);
-  localStorage.setItem("dhakaPhone", phone);
-  showScreen("locationScreen");
-}
-
-function getLocation(){
-  const result = document.getElementById("locationResult");
-  if(!navigator.geolocation){
-    result.textContent = "এই ফোনে লোকেশন সুবিধা পাওয়া যাচ্ছে না।";
-    result.style.display = "block";
-    return;
-  }
-
-  result.textContent = "📍 লোকেশন নেওয়া হচ্ছে...";
-  result.style.display = "block";
-
-  navigator.geolocation.getCurrentPosition(
-    function(position){
-      const lat = position.coords.latitude.toFixed(5);
-      const lng = position.coords.longitude.toFixed(5);
-      const locationText = "বর্তমান লোকেশন: " + lat + ", " + lng;
-
-      localStorage.setItem("dhakaLocation", locationText);
-      result.textContent = "✅ লোকেশন সফলভাবে সেট হয়েছে";
-      setTimeout(function(){ openHome(); }, 800);
-    },
-    function(){
-      result.textContent = "❌ লোকেশন পাওয়া যায়নি। ফোনের Location চালু করে চেষ্টা করুন।";
-    }
-  );
-}
-
-function skipLocation(){
-  localStorage.setItem("dhakaLocation", "লোকেশন এখনো সেট করা হয়নি");
-  openHome();
-}
-
-function openHome(){
-  const location = localStorage.getItem("dhakaLocation") || "লোকেশন সেট করা হয়নি";
-  document.getElementById("homeLocation").textContent = location;
-  showScreen("homeScreen");
-  loadProducts();
-}
-
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(function(screen){
-    screen.classList.remove("active");
-    screen.style.display = "";
-  });
-  const screen = document.getElementById(id);
-  screen.classList.add("active");
-  if(id === "homeScreen"){
-    screen.style.display = "flex";
-  }
-}
-
-// Load Products from Firebase + Local
-function loadProducts(){
-  const productsContainer = document.getElementById("products");
-  
-  db.collection("products").onSnapshot((snapshot) => {
-    let firebaseProducts = [];
-    snapshot.forEach(doc => {
-      firebaseProducts.push(doc.data());
-    });
-    
-    let allProducts = [...localProducts, ...firebaseProducts];
-    renderProducts(allProducts);
-  }, (error) => {
-    renderProducts(localProducts);
-  });
-}
-
-function renderProducts(items){
-  const productsContainer = document.getElementById("products");
-  let html = "";
-  items.forEach(item => {
-    html += `
-      <div class="product">
-        <div class="product-img">${item.icon || '🛍️'}</div>
-        <h3>${item.name}</h3>
-        <p class="price">৳ ${item.price} / ${item.unit || 'কেজি'}</p>
-        <button class="add" onclick="addCart('${item.name}', ${item.price})">+ কার্টে যোগ করুন</button>
-      </div>
-    `;
-  });
-  productsContainer.innerHTML = html;
-}
-
-function openSellerModal(){
-  document.getElementById("sellerModal").style.display = "flex";
-}
-
-function closeSellerModal(){
-  document.getElementById("sellerModal").style.display = "none";
-}
-
-function saveProduct(){
-  const name = document.getElementById("pName").value.trim();
-  const price = parseFloat(document.getElementById("pPrice").value);
-  const unit = document.getElementById("pUnit").value.trim() || "কেজি";
-  const icon = document.getElementById("pIcon").value.trim() || "📦";
-
-  if(!name || isNaN(price)){
-    alert("দয়া করে সঠিক নাম এবং দাম দিন!");
-    return;
-  }
-
-  const newProduct = { name, price, unit, icon, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
-
-  // Save to Firebase Database
-  db.collection("products").add(newProduct).then(() => {
-    alert("নতুন পণ্য সফলভাবে পোস্ট হয়েছে! ✅");
-    closeSellerModal();
-    document.getElementById("pName").value = "";
-    document.getElementById("pPrice").value = "";
-  }).catch(() => {
-    localProducts.push(newProduct);
-    renderProducts(localProducts);
-    alert("পণ্য যোগ হয়েছে! ✅");
-    closeSellerModal();
-  });
-}
-
-function addCart(name, price){
-  cart.push({ name: name, price: price });
-  document.getElementById("cartCount").textContent = cart.length;
-}
-
-function showCart(){
-  const modal = document.getElementById("cartModal");
-  const list = document.getElementById("cartList");
-  const totalEl = document.getElementById("cartTotal");
-
-  if(cart.length === 0){
-    list.innerHTML = "<p style='text-align:center;color:#777;'>আপনার কার্ট খালি!</p>";
-    totalEl.textContent = "মোট: ৳ 0";
-  } else {
-    let total = 0;
-    let html = "";
-    cart.forEach(function(item, index){
-      html += `<div class="cart-item">
-                <span>${index + 1}. ${item.name}</span>
-                <span>৳ ${item.price}</span>
-              </div>`;
-      total += item.price;
-    });
-    list.innerHTML = html;
-    totalEl.textContent = "মোট: ৳ " + total;
-  }
-  modal.style.display = "flex";
-}
-
-function closeCart(){
-  document.getElementById("cartModal").style.display = "none";
-}
-
-function checkout(){
-  if(cart.length === 0){
-    alert("আপনার কার্টে কোনো পণ্য নেই!");
-    return;
-  }
-
-  const orderData = {
-    customerName: localStorage.getItem("dhakaName"),
-    customerPhone: localStorage.getItem("dhakaPhone"),
-    location: localStorage.getItem("dhakaLocation"),
-    items: cart,
-    orderTime: new Date().toLocaleString()
-  };
-
-  db.collection("orders").add(orderData).finally(() => {
-    alert("ধন্যবাদ! আপনার অর্ডারটি বিক্রেতার কাছে সফলভাবে পৌঁছে গেছে।");
-    cart = [];
-    document.getElementById("cartCount").textContent = "0";
-    closeCart();
-  });
-}
-
-function goHome(){ openHome(); }
-
-function logout(){
-  localStorage.removeItem("dhakaName");
-  localStorage.removeItem("dhakaPhone");
-  localStorage.removeItem("dhakaLocation");
-  cart = [];
-  document.getElementById("cartCount").textContent = "0";
-  showScreen("loginScreen");
-}
-
-function searchProducts(value){
-  const products = document.querySelectorAll(".product");
-  value = value.toLowerCase();
-
-  products.forEach(function(product){
-    const name = product.querySelector("h3").textContent.toLowerCase();
-    if(name.includes(value)){
-      product.style.display = "";
-    } else {
-      product.style.display = "none";
-    }
-  });
-}
-
-window.onload = function(){
-  const savedName = localStorage.getItem("dhakaName");
-  const savedPhone = localStorage.getItem("dhakaPhone");
-
-  if(savedName && savedPhone){
-    openHome();
-  } else {
-    showScreen("loginScreen");
-  }
-};
-</script>
-
+            input.value = '';
+        }
+    </script>
 </body>
 </html>
