@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ঢাকা বাজার - Online Grocery</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,"Noto Sans Bengali",sans-serif;
+  background:#f5f7f6;
+  color:#17201b;
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  max-width:600px;
+  margin:auto;
+  min-height:100vh;
+  background:#fff;
+}
+
+/* Header */
+.header{
+  background:linear-gradient(135deg,#006b45,#009b64);
+  color:white;
+  padding:18px 16px 22px;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.tagline{
+  font-size:11px;
+  opacity:.9;
+  margin-top:3px;
+}
+
+.cart-btn{
+  background:white;
+  color:#006b45;
+  border:0;
+  border-radius:12px;
+  padding:9px 12px;
+  font-weight:bold;
+}
+
+.cart-count{
+  background:#ff4d4d;
+  color:white;
+  border-radius:20px;
+  padding:2px 7px;
+  font-size:12px;
+}
+
+.location{
+  background:rgba(255,255,255,.15);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:13px;
+  margin-bottom:12px;
+}
+
+.search{
+  width:100%;
+  padding:13px 15px;
+  border:0;
+  border-radius:12px;
+  outline:none;
+  background:white;
+}
+
+/* Main */
+.main{
+  padding:16px;
+}
+
+.banner{
+  background:linear-gradient(135deg,#fff4d6,#fffdf5);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:20px;
+  border:1px solid #f0e5c5;
+}
+
+.banner h2{
+  color:#006b45;
+  font-size:20px;
+  margin-bottom:5px;
+}
+
+.banner p{
+  font-size:13px;
+  color:#555;
+}
+
+/* Categories */
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 0 12px;
+}
+
+.section-title h2{
+  font-size:18px;
+}
+
+.section-title span{
+  font-size:12px;
+  color:#00875a;
+}
+
+.categories{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.category{
+  background:#f7faf8;
+  border:1px solid #e4ebe7;
+  border-radius:13px;
+  padding:11px 4px;
+  text-align:center;
+  transition:.15s;
+}
+
+.category:active{
+  transform:scale(.96);
+}
+
+.category-icon{
+  font-size:28px;
+  margin-bottom:5px;
+}
+
+.category-name{
+  font-size:12px;
+}
+
+/* Products */
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.product{
+  border:1px solid #e6ebe8;
+  border-radius:15px;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.product-image{
+  height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f5f8f6;
+  font-size:62px;
+}
+
+.product-info{
+  padding:11px;
+}
+
+.product-name{
+  font-weight:bold;
+  font-size:14px;
+  min-height:36px;
+}
+
+.product-unit{
+  color:#777;
+  font-size:11px;
+  margin:5px 0;
+}
+
+.price{
+  color:#00875a;
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:9px;
+}
+
+.add-btn{
+  width:100%;
+  border:0;
+  border-radius:9px;
+  padding:9px 4px;
+  background:#00875a;
+  color:white;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.add-btn:active{
+  transform:scale(.97);
+}
+
+/* Cart */
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.cart-item{
+  display:flex;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+  align-items:center;
+}
+
+.cart-emoji{
+  width:55px;
+  height:55px;
+  background:#f4f7f5;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+}
+
+.cart-details{
+  flex:1;
+}
+
+.cart-name{
+  font-weight:bold;
+  font-size:14px;
+}
+
+.cart-price{
+  color:#00875a;
+  font-size:13px;
+  margin-top:4px;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:7px;
+}
+
+.qty button{
+  width:28px;
+  height:28px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  background:#fff;
+}
+
+.qty strong{
+  min-width:20px;
+  text-align:center;
+}
+
+.remove{
+  color:#e33;
+  background:none;
+  border:0;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.summary{
+  margin-top:18px;
+  padding:15px;
+  border-radius:14px;
+  background:#f7faf8;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+}
+
+.total{
+  border-top:1px solid #ddd;
+  padding-top:10px;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.primary{
+  width:100%;
+  background:#00875a;
+  color:white;
+  border:0;
+  border-radius:11px;
+  padding:13px;
+  margin-top:13px;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+  color:#777;
+}
+
+/* Checkout */
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #d9e1dc;
+  border-radius:10px;
+  outline:none;
+  background:white;
+}
+
+.form-group textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.payment{
+  border:1px solid #dce5df;
+  padding:13px;
+  border-radius:11px;
+  margin-bottom:9px;
+}
+
+.payment input{
+  margin-right:7px;
+}
+
+/* Order */
+.success{
+  text-align:center;
+  padding:35px 15px;
+}
+
+.success-icon{
+  font-size:65px;
+  margin-bottom:15px;
+}
+
+.order-id{
+  display:inline-block;
+  background:#e7f7ef;
+  color:#006b45;
+  padding:9px 15px;
+  border-radius:20px;
+  font-weight:bold;
+  margin:15px 0;
+}
+
+.status{
+  text-align:left;
+  margin-top:20px;
+  border:1px solid #e3e9e5;
+  border-radius:14px;
+  padding:16px;
+}
+
+.status-row{
+  display:flex;
+  gap:12px;
+  margin:15px 0;
+}
+
+.status-icon{
+  font-size:20px;
+}
+
+.status-text strong{
+  display:block;
+  font-size:14px;
+}
+
+.status-text small{
+  color:#777;
+}
+
+/* Bottom nav */
+.bottom-nav{
+  position:sticky;
+  bottom:0;
+  background:white;
+  border-top:1px solid #e5e5e5;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  padding:7px 4px;
+  z-index:30;
+}
+
+.nav-btn{
+  border:0;
+  background:white;
+  color:#777;
+  padding:7px 2px;
+  font-size:11px;
+}
+
+.nav-btn.active{
+  color:#00875a;
+  font-weight:bold;
+}
+
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+/* Back */
+.back{
+  border:0;
+  background:none;
+  color:#006b45;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+/* Responsive */
+@media(max-width:360px){
+  .categories{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .products{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .product-image{
+    height:100px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HOME -->
+<div id="homePage" class="page active">
+
+<header class="header">
+  <div class="header-top">
+    <div>
+      <div class="logo">🛒 ঢাকা বাজার</div>
+      <div class="tagline">ঢাকার বাজার, এখন হাতের মুঠোয়</div>
+    </div>
+
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒 <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+
+  <div class="location">📍 ডেলিভারি: ঢাকা শহর</div>
+
+  <input
+    class="search"
+    id="searchInput"
+    type="search"
+    placeholder="🔍 পণ্য খুঁজুন..."
+    oninput="searchProducts()"
+  >
+</header>
+
+<main class="main">
+
+  <div class="banner">
+    <h2>🥬 টাটকা পণ্য, সহজ অর্ডার</h2>
+    <p>ঢাকার মধ্যে নিত্যপ্রয়োজনীয় বাজারের পণ্য অর্ডার করুন।</p>
+  </div>
+
+  <div class="section-title">
+    <h2>ক্যাটাগরি</h2>
+    <span>সব দেখুন</span>
+  </div>
+
+  <div class="categories" id="categories"></div>
+
+  <div class="section-title">
+    <h2>জনপ্রিয় পণ্য</h2>
+    <span id="productCount"></span>
+  </div>
+
+  <div class="products" id="products"></div>
+
+</main>
+
+</div>
+
+
+<!-- CART -->
+<div id="cartPage" class="page">
+
+<header class="header">
+  <div class="logo">🛒 আমার কার্ট</div>
+</header>
+
+<main class="main">
+
+<button class="back" onclick="showPage('home')">← কেনাকাটায় ফিরে যান</button>
+
+<div id="cartItems"></div>
+
+<div id="cartSummary"></div>
+
+</main>
+
+</div>
+
+
+<!-- CHECKOUT -->
+<div id="checkoutPage" class="page">
+
+<header class="header">
+  <div class="logo">📦 Checkout</div>
+  <div class="tagline">ঢাকার মধ্যে ডেলিভারি</div>
+</header>
+
+<main class="main">
+
+<button class="back" onclick="showPage('cart')">← কার্টে ফিরে যান</button>
+
+<h2 style="margin-bottom:18px;">আপনার তথ্য</h2>
+
+<div class="form-group">
+  <label>আপনার নাম *</label>
+  <input id="customerName" type="text" placeholder="নাম লিখুন">
+</div>
+
+<div class="form-group">
+  <label>মোবাইল নম্বর *</label>
+  <input id="customerPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
+</div>
+
+<div class="form-group">
+  <label>ঢাকার এলাকা *</label>
+  <select id="area">
+    <option value="">এলাকা নির্বাচন করুন</option>
+    <option>ধানমন্ডি</option>
+    <option>মিরপুর</option>
+    <option>উত্তরা</option>
+    <option>মোহাম্মদপুর</option>
+    <option>বনানী</option>
+    <option>গুলশান</option>
+    <option>বাড্ডা</option>
+    <option>খিলগাঁও</option>
+    <option>যাত্রাবাড়ী</option>
+    <option>পুরান ঢাকা</option>
+    <option>রামপুরা</option>
+    <option>শাহবাগ</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>সম্পূর্ণ ঠিকানা *</label>
+  <textarea id="address" placeholder="বাড়ি/ফ্ল্যাট, রোড, গলি, ল্যান্ডমার্ক লিখুন"></textarea>
+</div>
+
+<h3 style="margin:20px 0 12px;">ডেলিভারি সময়</h3>
+
+<div class="payment">
+  <label>
+    <input type="radio" name="delivery" value="express" checked>
+    ⚡ Express — প্রায় 45-60 মিনিট
+  </label>
+</div>
+
+<div class="payment">
+  <label>
+    <input type="radio" name="delivery" value="evening">
+    🌆 Evening — সন্ধ্যা ৬টা-৯টা
+  </label>
+</div>
+
+<div class="payment">
+  <label>
+    <input type="radio" name="delivery" value="morning">
+    🌅 Morning — সকাল ৮টা-১০টা
+  </label>
+</div>
+
+<h3 style="margin:20px 0 12px;">পেমেন্ট</h3>
+
+<div class="payment">
+  <label>
+    <input type="radio" name="payment" value="cod" checked>
+    💵 Cash on Delivery
+  </label>
+</div>
+
+<div id="checkoutSummary"></div>
+
+<button class="primary" onclick="placeOrder()">
+  ✅ অর্ডার নিশ্চিত করুন
+</button>
+
+</main>
+</div>
+
+
+<!-- ORDER -->
+<div id="orderPage" class="page">
+
+<header class="header">
+  <div class="logo">📦 অর্ডার স্ট্যাটাস</div>
+</header>
+
+<main class="main">
+
+<div class="success">
+
+<div class="success-icon">✅</div>
+
+<h2>অর্ডার সফলভাবে গ্রহণ করা হয়েছে!</h2>
+
+<p style="margin-top:8px;color:#666;">
+আপনার অর্ডারটি প্রস্তুত করা হবে।
+</p>
+
+<div class="order-id" id="orderId"></div>
+
+</div>
+
+<div class="status">
+
+<h3>লাইভ ডেলিভারি স্ট্যাটাস</h3>
+
+<div class="status-row">
+  <div class="status-icon">✅</div>
+  <div class="status-text">
+    <strong>অর্ডার গ্রহণ করা হয়েছে</strong>
+    <small>আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে।</small>
+  </div>
+</div>
+
+<div class="status-row">
+  <div class="status-icon">📦</div>
+  <div class="status-text">
+    <strong>প্যাকিং চলছে</strong>
+    <small>আপনার পণ্য প্রস্তুত করা হচ্ছে।</small>
+  </div>
+</div>
+
+<div class="status-row">
+  <div class="status-icon">🛵</div>
+  <div class="status-text">
+    <strong>রাইডারের পথে রয়েছে</strong>
+    <small>ডেলিভারি কর্মী পণ্য নিয়ে রওনা হবে।</small>
+  </div>
+</div>
+
+<div class="status-row">
+  <div class="status-icon">🏠</div>
+  <div class="status-text">
+    <strong>ডেলিভারি সম্পন্ন</strong>
+    <small>পণ্য আপনার ঠিকানায় পৌঁছে দেওয়া হবে।</small>
+  </div>
+</div>
+
+</div>
+
+<button class="primary" onclick="showPage('home')">
+  🛍️ আরও কেনাকাটা করুন
+</button>
+
+</main>
+</div>
+
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+<button class="nav-btn active" id="navHome" onclick="showPage('home')">
+  <span class="nav-icon">🏠</span>
+  হোম
+</button>
+
+<button class="nav-btn" id="navCart" onclick="showPage('cart')">
+  <span class="nav-icon">🛒</span>
+  কার্ট
+</button>
+
+<button class="nav-btn" id="navOrders" onclick="showLastOrder()">
+  <span class="nav-icon">📦</span>
+  অর্ডার
+</button>
+
+<button class="nav-btn" onclick="showPage('home')">
+  <span class="nav-icon">👤</span>
+  প্রোফাইল
+</button>
+
+</nav>
+
+</div>
+
+
+<script>
+
+/* =========================
+   PRODUCT DATABASE
+========================= */
+
+const products = [
+
+{ id:1, name:"ইলিশ মাছ", category:"মাছ", price:950, unit:"১ কেজি", emoji:"🐟" },
+{ id:2, name:"রুই মাছ", category:"মাছ", price:420, unit:"১ কেজি", emoji:"🐟" },
+{ id:3, name:"কাতলা মাছ", category:"মাছ", price:450, unit:"১ কেজি", emoji:"🐠" },
+{ id:4, name:"তেলাপিয়া মাছ", category:"মাছ", price:260, unit:"১ কেজি", emoji:"🐟" },
+{ id:5, name:"চিংড়ি", category:"মাছ", price:750, unit:"৫০০ গ্রাম", emoji:"🦐" },
+
+{ id:6, name:"গরুর মাংস", category:"মাংস", price:780, unit:"১ কেজি", emoji:"🥩" },
+{ id:7, name:"খাসির মাংস", category:"মাংস", price:1050, unit:"১ কেজি", emoji:"🥩" },
+{ id:8, name:"ব্রয়লার মুরগি", category:"মাংস", price:220, unit:"১ কেজি", emoji:"🍗" },
+{ id:9, name:"দেশি মুরগি", category:"মাংস", price:650, unit:"১ কেজি", emoji:"🐔" },
+
+{ id:10, name:"আলু", category:"সবজি", price:45, unit:"১ কেজি", emoji:"🥔" },
+{ id:11, name:"পেঁয়াজ", category:"সবজি", price:80, unit:"১ কেজি", emoji:"🧅" },
+{ id:12, name:"টমেটো", category:"সবজি", price:70, unit:"১ কেজি", emoji:"🍅" },
+{ id:13, name:"বেগুন", category:"সবজি", price:60, unit:"১ কেজি", emoji:"🍆" },
+{ id:14, name:"গাজর", category:"সবজি", price:80, unit:"১ কেজি", emoji:"🥕" },
+
+{ id:15, name:"মিনিকেট চাল", category:"চাল ও ডাল", price:850, unit:"১০ কেজি", emoji:"🍚" },
+{ id:16, name:"মসুর ডাল", category:"চাল ও ডাল", price:150, unit:"১ কেজি", emoji:"🥣" },
+{ id:17, name:"ছোলা ডাল", category:"চাল ও ডাল", price:130, unit:"১ কেজি", emoji:"🫘" },
+
+{ id:18, name:"ডিম", category:"ডিম", price:145, unit:"১২টি", emoji:"🥚" },
+{ id:19, name:"দেশি ডিম", category:"ডিম", price:220, unit:"১২টি", emoji:"🥚" },
+
+{ id:20, name:"হলুদ গুঁড়া", category:"মসলা", price:120, unit:"২০০ গ্রাম", emoji:"🟡" },
+{ id:21, name:"মরিচ গুঁড়া", category:"মসলা", price:140, unit:"২০০ গ্রাম", emoji:"🌶️" },
+{ id:22, name:"জিরা", category:"মসলা", price:180, unit:"২০০ গ্রাম", emoji:"🌿" },
+
+{ id:23, name:"সয়াবিন তেল", category:"তেল", price:180, unit:"১ লিটার", emoji:"🛢️" },
+{ id:24, name:"সরিষার তেল", category:"তেল", price:220, unit:"১ লিটার", emoji:"🫗" },
+
+{ id:25, name:"পাস্তুরিত দুধ", category:"দুধ", price:90, unit:"১ লিটার", emoji:"🥛" },
+{ id:26, name:"দই", category:"দুধ", price:120, unit:"৫০০ গ্রাম", emoji:"🥛" },
+
+{ id:27, name:"চিনি", category:"অন্যান্য", price:140, unit:"১ কেজি", emoji:"🍬" },
+{ id:28, name:"লবণ", category:"অন্যান্য", price:45, unit:"১ কেজি", emoji:"🧂" }
+
+];
+
+
+/* =========================
+   CATEGORY DATABASE
+========================= */
+
+const categories = [
+{ name:"মাছ", icon:"🐟" },
+{ name:"মাংস", icon:"🥩" },
+{ name:"সবজি", icon:"🥬" },
+{ name:"চাল ও ডাল", icon:"🍚" },
+{ name:"ডিম", icon:"🥚" },
+{ name:"মসলা", icon:"🌶️" },
+{ name:"তেল", icon:"🛢️" },
+{ name:"দুধ", icon:"🥛" },
+{ name:"অন্যান্য", icon:"🛒" }
+];
+
+
+/* =========================
+   CART
+========================= */
+
+let cart = JSON.parse(localStorage.getItem("dhakaCart") || "[]");
+
+
+/* =========================
+   INIT
+========================= */
+
+function init(){
+
+  renderCategories();
+
+  renderProducts(products);
+
+  updateCartCount();
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+function renderCategories(){
+
+  const box = document.getElementById("categories");
+
+  box.innerHTML = categories.map(cat => `
+    <button class="category" onclick="filterCategory('${cat.name}')">
+      <div class="category-icon">${cat.icon}</div>
+      <div class="category-name">${cat.name}</div>
+    </button>
+  `).join("");
+
+}
+
+
+function filterCategory(category){
+
+  const result = products.filter(p => p.category === category);
+
+  renderProducts(result);
+
+  document.getElementById("productCount").textContent =
+    result.length + "টি পণ্য";
+
+  window.scrollTo({
+    top:350,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
+function renderProducts(list){
+
+  const box = document.getElementById("products");
+
+  if(!list.length){
+
+    box.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:#777;">
+        কোনো পণ্য পাওয়া যায়নি।
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML = list.map(p => `
+
+    <div class="product">
+
+      <div class="product-image">
+        ${p.emoji}
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-name">
+          ${p.name}
+        </div>
+
+        <div class="product-unit">
+          ${p.unit}
+        </div>
+
+        <div class="price">
+          ৳${p.price}
+        </div>
+
+        <button class="add-btn"
+          onclick="addToCart(${p.id})">
+          + কার্টে যোগ করুন
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchProducts(){
+
+  const query =
+    document.getElementById("searchInput").value
+    .trim()
+    .toLowerCase();
+
+  const result = products.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    p.category.toLowerCase().includes(query)
+  );
+
+  renderProducts(result);
+
+  document.getElementById("productCount").textContent =
+    result.length + "টি পণ্য";
+
+}
+
+
+/* =========================
+   ADD CART
+========================= */
+
+function addToCart(id){
+
+  const product = products.find(p => p.id === id);
+
+  if(!product) return;
+
+  const existing = cart.find(item => item.id === id);
+
+  if(existing){
+
+    existing.quantity += 1;
+
+  }else{
+
+    cart.push({
+      id:product.id,
+      name:product.name,
+      price:product.price,
+      unit:product.unit,
+      emoji:product.emoji,
+      quantity:1
+    });
+
+  }
+
+  saveCart();
+
+  updateCartCount();
+
+}
+
+
+/* =========================
+   SAVE CART
+========================= */
+
+function saveCart(){
+
+  localStorage.setItem(
+    "dhakaCart",
+    JSON.stringify(cart)
+  );
+
+}
+
+
+/* =========================
+   CART COUNT
+========================= */
+
+function updateCartCount(){
+
+  const count = cart.reduce(
+    (total,item)=>total + item.quantity,
+    0
+  );
+
+  document.getElementById("cartCount").textContent = count;
+
+}
+
+
+/* =========================
+   CART PAGE
+========================= */
+
+function renderCart(){
+
+  const box = document.getElementById("cartItems");
+
+  if(!cart.length){
+
+    box.innerHTML = `
+      <div class="empty">
+        <div style="font-size:60px;">🛒</div>
+        <h3>আপনার কার্ট খালি</h3>
+        <p style="margin-top:8px;">কিছু পণ্য যোগ করুন।</p>
+        <button class="primary"
+          onclick="showPage('home')">
+          🛍️ পণ্য দেখুন
+        </button>
+      </div>
+    `;
+
+    document.getElementById("cartSummary").innerHTML="";
+
+    return;
+  }
+
+
+  box.innerHTML = cart.map(item => `
+
+    <div class="cart-item">
+
+      <div class="cart-emoji">
+        ${item.emoji}
+      </div>
+
+      <div class="cart-details">
+
+        <div class="cart-name">
+          ${item.name}
+        </div>
+
+        <div class="cart-price">
+          ৳${item.price} / ${item.unit}
+        </div>
+
+        <div class="qty">
+
+          <button onclick="changeQuantity(${item.id},-1)">
+            −
+          </button>
+
+          <strong>${item.quantity}</strong>
+
+          <button onclick="changeQuantity(${item.id},1)">
+            +
+          </button>
+
+        </div>
+
+        <button class="remove"
+          onclick="removeFromCart(${item.id})">
+          মুছে ফেলুন
+        </button>
+
+      </div>
+
+      <strong>
+        ৳${item.price * item.quantity}
+      </strong>
+
+    </div>
+
+  `).join("");
+
+
+  const subtotal = getSubtotal();
+
+  const delivery = subtotal > 0 ? 50 : 0;
+
+  const total = subtotal + delivery;
+
+
+  document.getElementById("cartSummary").innerHTML = `
+
+    <div class="summary">
+
+      <div class="summary-row">
+        <span>পণ্যের মূল্য</span>
+        <strong>৳${subtotal}</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>ডেলিভারি চার্জ</span>
+        <strong>৳${delivery}</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>সর্বমোট</span>
+        <strong>৳${total}</strong>
+      </div>
+
+      <button class="primary"
+        onclick="showPage('checkout')">
+        Checkout করুন →
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   QUANTITY
+========================= */
+
+function changeQuantity(id, change){
+
+  const item = cart.find(i => i.id === id);
+
+  if(!item) return;
+
+  item.quantity += change;
+
+  if(item.quantity <= 0){
+
+    cart = cart.filter(i => i.id !== id);
+
+  }
+
+  saveCart();
+
+  updateCartCount();
+
+  renderCart();
+
+}
+
+
+/* =========================
+   REMOVE
+========================= */
+
+function removeFromCart(id){
+
+  cart = cart.filter(item => item.id !== id);
+
+  saveCart();
+
+  updateCartCount();
+
+  renderCart();
+
+}
+
+
+/* =========================
+   SUBTOTAL
+========================= */
+
+function getSubtotal(){
+
+  return cart.reduce(
+    (sum,item)=>sum + item.price * item.quantity,
+    0
+  );
+
+}
+
+
+/* =========================
+   CHECKOUT
+========================= */
+
+function renderCheckout(){
+
+  if(!cart.length){
+
+    showPage("home");
+
+    return;
+  }
+
+  const subtotal = getSubtotal();
+
+  const delivery = 50;
+
+  const total = subtotal + delivery;
+
+
+  document.getElementById("checkoutSummary").innerHTML = `
+
+    <div class="summary">
+
+      <div class="summary-row">
+        <span>পণ্য</span>
+        <strong>৳${subtotal}</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>ডেলিভারি</span>
+        <strong>৳${delivery}</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>সর্বমোট</span>
+        <strong>৳${total}</strong>
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   PLACE ORDER
+========================= */
+
+function placeOrder(){
+
+  if(!cart.length){
+
+    alert("আপনার কার্ট খালি।");
+
+    return;
+  }
+
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
+
+  const area =
+    document.getElementById("area").value;
+
+  const address =
+    document.getElementById("address").value.trim();
+
+
+  if(!name){
+
+    alert("আপনার নাম লিখুন।");
+
+    return;
+  }
+
+
+  if(!/^01[3-9]\d{8}$/.test(phone)){
+
+    alert("সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।");
+
+    return;
+  }
+
+
+  if(!area){
+
+    alert("ঢাকার এলাকা নির্বাচন করুন।");
+
+    return;
+  }
+
+
+  if(!address){
+
+    alert("সম্পূর্ণ ঠিকানা লিখুন।");
+
+    return;
+  }
+
+
+  const orderId =
+    "DB-" +
+    new Date().getFullYear() +
+    "-" +
+    Math.floor(1000 + Math.random()*9000);
+
+
+  const order = {
+
+    id:orderId,
+
+    name:name,
+
+    phone:phone,
+
+    area:area,
+
+    address:address,
+
+    items:[...cart],
+
+    subtotal:getSubtotal(),
+
+    delivery:50,
+
+    total:getSubtotal()+50,
+
+    date:new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    "dhakaLastOrder",
+    JSON.stringify(order)
+  );
+
+
+  cart=[];
+
+  saveCart();
+
+  updateCartCount();
+
+
+  document.getElementById("orderId").textContent =
+    "অর্ডার আইডি: #" + orderId;
+
+
+  showPage("order");
+
+}
+
+
+/* =========================
+   LAST ORDER
+========================= */
+
+function showLastOrder(){
+
+  const order =
+    localStorage.getItem("dhakaLastOrder");
+
+  if(!order){
+
+    alert("এখনও কোনো অর্ডার নেই।");
+
+    showPage("home");
+
+    return;
+  }
+
+  const data = JSON.parse(order);
+
+  document.getElementById("orderId").textContent =
+    "অর্ডার আইডি: #" + data.id;
+
+  showPage("order");
+
+}
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(page){
+
+  document.querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
+
+
+  const target =
+    document.getElementById(page + "Page");
+
+  if(target){
+
+    target.classList.add("active");
+
+  }
+
+
+  if(page === "cart"){
+
+    renderCart();
+
+  }
+
+
+  if(page === "checkout"){
+
+    renderCheckout();
+
+  }
+
+
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn => btn.classList.remove("active"));
+
+
+  if(page === "home"){
+
+    document.getElementById("navHome")
+      .classList.add("active");
+
+  }
+
+  if(page === "cart"){
+
+    document.getElementById("navCart")
+      .classList.add("active");
+
+  }
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+init();
+
+</script>
+
+</body>
+</html>
