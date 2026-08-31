@@ -34,8 +34,6 @@
     --muted:#6b7280;
     --border:#e5e7eb;
     --danger:#e53935;
-    --warning:#fff7ed;
-    --warning-border:#fed7aa;
 }
 
 body{
@@ -330,7 +328,51 @@ header{
     align-items:center;
     justify-content:center;
     font-size:63px;
+    position:relative;
 }
+
+/* ================= FAVORITE ================= */
+
+.favorite-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid #e5e7eb;
+    background:rgba(255,255,255,.95);
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:5;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+.favorite-btn.active{
+    color:#e53935;
+    background:#fff1f2;
+}
+
+/* ================= SHARE ================= */
+
+.share-btn{
+    border:1px solid var(--border);
+    background:white;
+    color:#444;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    font-size:17px;
+}
+
+.share-btn:hover{
+    background:#f0fdf4;
+    color:var(--primary);
+}
+
+/* ================= PRODUCT INFO ================= */
 
 .product-info{
     padding:13px;
@@ -373,6 +415,12 @@ header{
     margin-top:11px;
 }
 
+.product-actions{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
 .add-btn{
     border:0;
     background:var(--primary);
@@ -390,6 +438,28 @@ header{
     border-radius:8px;
     background:#fee2e2;
     color:#b91c1c;
+}
+
+/* ================= FAVORITES MODAL ================= */
+
+.favorite-empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#777;
+}
+
+.favorite-count{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:22px;
+    height:22px;
+    padding:0 6px;
+    background:#fee2e2;
+    color:#b91c1c;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
 }
 
 /* ================= COD ================= */
@@ -887,8 +957,6 @@ onclick="openProfile()">
 </div>
 
 
-<!-- WARNING -->
-
 <div class="warning-bar">
 
 <div class="warning-track">
@@ -1052,8 +1120,6 @@ Backend Checking...
 </main>
 
 
-<!-- CART -->
-
 <div class="cart-floating">
 
 <button class="cart-button" onclick="openCart()">
@@ -1068,8 +1134,6 @@ Backend Checking...
 
 </div>
 
-
-<!-- NAV -->
 
 <nav class="bottom-nav">
 
@@ -1124,8 +1188,6 @@ Profile
 </div>
 
 
-<!-- LOGIN -->
-
 <div id="loginBox">
 
 <div class="form-group">
@@ -1167,8 +1229,6 @@ Register করুন
 
 </div>
 
-
-<!-- REGISTER -->
 
 <div id="registerBox" style="display:none">
 
@@ -1234,8 +1294,6 @@ Login করুন
 </div>
 
 
-<!-- OTP -->
-
 <div id="otpBox" style="display:none">
 
 <div class="otp-box">
@@ -1271,8 +1329,6 @@ placeholder="••••••">
 
 </div>
 
-
-<!-- HELP -->
 
 <div class="help-box">
 
@@ -1446,6 +1502,7 @@ placeholder="বাড়ি/রোড/এলাকার ঠিকানা"></
 </div>
 
 <div class="form-group">
+
 <label>Category</label>
 
 <select id="sellerProductCategory">
@@ -1501,7 +1558,33 @@ placeholder="বাড়ি/রোড/এলাকার ঠিকানা"></
 </div>
 
 
-<!-- ================= CART MODAL ================= -->
+<!-- ================= FAVORITES ================= -->
+
+<div class="modal" id="favoritesModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>
+❤️ আমার Favorites
+<span id="favoriteCount" class="favorite-count">0</span>
+</h3>
+
+<button class="close" onclick="closeModal('favoritesModal')">
+×
+</button>
+
+</div>
+
+<div id="favoritesList"></div>
+
+</div>
+
+</div>
+
+
+<!-- ================= CART ================= -->
 
 <div class="modal" id="cartModal">
 
@@ -1671,7 +1754,7 @@ onclick="closeModal('successModal')">
 
 /* =====================================================
    DHAKA BAZAR
-   COMPLETE FRONTEND
+   COMPLETE FRONTEND + FAVORITE + SHARE
    ===================================================== */
 
 const API_BASE =
@@ -1704,6 +1787,11 @@ localStorage.getItem("dhakaLocation")
 let currentAddress=
 localStorage.getItem("dhakaAddress")
 ||"";
+
+let favorites=
+JSON.parse(
+localStorage.getItem("dhakaFavorites")
+)||[];
 
 let deferredPrompt=null;
 
@@ -1825,6 +1913,7 @@ async()=>{
 updateCart();
 updateLocation();
 updateProfile();
+updateFavoriteCount();
 
 await checkBackend();
 await loadProducts();
@@ -2450,6 +2539,15 @@ onclick="closeModal('profileModal');openOrders()">
 
 <button
 class="secondary-btn"
+onclick="closeModal('profileModal');openFavorites()">
+
+❤️ আমার Favorites
+<span class="favorite-count">${favorites.length}</span>
+
+</button>
+
+<button
+class="secondary-btn"
 onclick="logoutUser()">
 
 🚪 Logout
@@ -2640,6 +2738,466 @@ error.message||
 }
 
 
+/* ================= FAVORITE ================= */
+
+function isFavorite(id){
+
+return favorites.some(
+item=>String(item)===String(id)
+);
+
+}
+
+
+function saveFavorites(){
+
+localStorage.setItem(
+"dhakaFavorites",
+JSON.stringify(favorites)
+);
+
+updateFavoriteCount();
+
+}
+
+
+function updateFavoriteCount(){
+
+const count=
+document.getElementById("favoriteCount");
+
+if(count){
+
+count.innerText=
+favorites.length;
+
+}
+
+}
+
+
+function toggleFavorite(id){
+
+const product=
+products.find(
+p=>String(p.id)===String(id)
+);
+
+if(!product)return;
+
+
+const index=
+favorites.findIndex(
+item=>String(item)===String(id)
+);
+
+
+if(index!==-1){
+
+favorites.splice(index,1);
+
+showToast(
+"❤️ Favorite থেকে সরানো হয়েছে"
+);
+
+}else{
+
+favorites.push(product.id);
+
+showToast(
+"❤️ Favorite-এ রাখা হয়েছে ✓"
+);
+
+}
+
+
+saveFavorites();
+
+renderProducts();
+
+}
+
+
+function openFavorites(){
+
+renderFavorites();
+
+openModal("favoritesModal");
+
+}
+
+
+function renderFavorites(){
+
+const list=
+document.getElementById(
+"favoritesList"
+);
+
+if(!list)return;
+
+
+const favoriteProducts=
+products.filter(
+product=>
+isFavorite(product.id)
+);
+
+
+if(favoriteProducts.length===0){
+
+list.innerHTML=`
+
+<div class="favorite-empty">
+
+<div style="font-size:50px">
+❤️
+</div>
+
+<h3 style="margin-top:10px">
+এখনো কোনো Favorite নেই
+</h3>
+
+<p style="margin-top:7px;font-size:13px">
+পছন্দের Product-এর ❤️ বাটনে চাপ দিলে এখানে থাকবে।
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+list.innerHTML="";
+
+
+favoriteProducts.forEach(product=>{
+
+const div=
+document.createElement("div");
+
+div.className="cart-item";
+
+div.innerHTML=`
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px">
+
+<div style="
+width:50px;
+height:50px;
+background:#f3f4f6;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:27px">
+
+${escapeHTML(product.icon)}
+
+</div>
+
+<div>
+
+<strong>
+${escapeHTML(product.name)}
+</strong>
+
+<div style="
+font-size:12px;
+color:#777;
+margin-top:4px">
+
+৳${product.price.toLocaleString("bn-BD")}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+display:flex;
+align-items:center;
+gap:5px">
+
+<button
+class="share-btn"
+onclick="shareProduct('${escapeHTML(product.id)}')">
+
+📤
+
+</button>
+
+<button
+style="
+border:0;
+background:#fff1f2;
+color:#e53935;
+border-radius:50%;
+width:35px;
+height:35px;
+font-size:17px"
+onclick="toggleFavorite('${escapeHTML(product.id)}');renderFavorites()">
+
+❤️
+
+</button>
+
+</div>
+
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+
+/* ================= SHARE PRODUCT ================= */
+
+async function shareProduct(id){
+
+const product=
+products.find(
+p=>String(p.id)===String(id)
+);
+
+if(!product){
+
+showToast("Product পাওয়া যায়নি");
+
+return;
+
+}
+
+
+const productUrl=
+window.location.origin+
+window.location.pathname+
+"?product="+
+encodeURIComponent(product.id);
+
+
+const shareText=
+"🛍️ Dhaka Bazar-এ এই Productটি দেখুন:\n\n"+
+product.name+
+"\n💰 Price: ৳"+
+product.price+
+"\n🚚 Delivery: ৳"+
+product.deliveryCharge+
+"\n\nCash on Delivery Available";
+
+
+if(navigator.share){
+
+try{
+
+await navigator.share({
+
+title:
+"Dhaka Bazar - "+
+product.name,
+
+text:shareText,
+
+url:productUrl
+
+});
+
+return;
+
+}catch(error){
+
+if(error.name==="AbortError"){
+
+return;
+
+}
+
+}
+
+}
+
+
+showShareFallback(
+product,
+productUrl,
+shareText
+);
+
+}
+
+
+/* ================= SHARE FALLBACK ================= */
+
+function showShareFallback(
+product,
+productUrl,
+shareText
+){
+
+const oldModal=
+document.getElementById(
+"shareModal"
+);
+
+if(oldModal){
+oldModal.remove();
+}
+
+
+const modal=
+document.createElement("div");
+
+modal.className="modal show";
+
+modal.id="shareModal";
+
+modal.innerHTML=`
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>📤 Product Share করুন</h3>
+
+<button class="close"
+onclick="document.getElementById('shareModal').remove()">
+
+×
+</button>
+
+</div>
+
+<p style="
+font-size:13px;
+color:#666;
+line-height:1.6;
+margin-bottom:15px">
+
+${escapeHTML(product.name)}
+<br>
+৳${product.price.toLocaleString("bn-BD")}
+</p>
+
+
+<button
+class="primary-btn"
+onclick="shareWhatsApp('${escapeHTML(productUrl)}','${escapeHTML(product.name)}')">
+
+💬 WhatsApp-এ Share
+
+</button>
+
+
+<button
+class="secondary-btn"
+onclick="copyProductLink('${escapeHTML(productUrl)}')">
+
+🔗 Product Link Copy
+
+</button>
+
+
+<button
+class="secondary-btn"
+onclick="shareFacebook('${escapeHTML(productUrl)}')">
+
+📘 Facebook-এ Share
+
+</button>
+
+
+<button
+class="secondary-btn"
+onclick="shareTelegram('${escapeHTML(productUrl)}')">
+
+✈️ Telegram-এ Share
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(modal);
+
+}
+
+
+function shareWhatsApp(url,name){
+
+const text=
+"🛍️ "+name+
+"\n\nDhaka Bazar-এ Productটি দেখুন:\n"+
+url;
+
+window.open(
+"https://wa.me/?text="+
+encodeURIComponent(text),
+"_blank"
+);
+
+}
+
+
+function shareFacebook(url){
+
+window.open(
+"https://www.facebook.com/sharer/sharer.php?u="+
+encodeURIComponent(url),
+"_blank"
+);
+
+}
+
+
+function shareTelegram(url){
+
+window.open(
+"https://t.me/share/url?url="+
+encodeURIComponent(url),
+"_blank"
+);
+
+}
+
+
+async function copyProductLink(url){
+
+try{
+
+await navigator.clipboard.writeText(url);
+
+showToast(
+"🔗 Product Link Copy হয়েছে ✓"
+);
+
+const modal=
+document.getElementById("shareModal");
+
+if(modal){
+modal.remove();
+}
+
+}catch(error){
+
+showToast(
+"Link Copy করা যায়নি"
+);
+
+}
+
+}
+
+
 /* ================= RENDER PRODUCTS ================= */
 
 function renderProducts(list=products){
@@ -2671,6 +3229,10 @@ container.innerHTML="";
 
 list.forEach(product=>{
 
+const favorite=
+isFavorite(product.id);
+
+
 const card=
 document.createElement("div");
 
@@ -2679,7 +3241,18 @@ card.className="product";
 card.innerHTML=`
 
 <div class="product-img">
+
 ${escapeHTML(product.icon)}
+
+<button
+class="favorite-btn ${favorite?"active":""}"
+title="Favorite"
+onclick="toggleFavorite('${escapeHTML(product.id)}')">
+
+${favorite?"❤️":"♡"}
+
+</button>
+
 </div>
 
 <div class="product-info">
@@ -2714,6 +3287,17 @@ ${escapeHTML(product.seller)}
 
 <span>⭐ 4.8</span>
 
+<div class="product-actions">
+
+<button
+class="share-btn"
+title="Share Product"
+onclick="shareProduct('${escapeHTML(product.id)}')">
+
+📤
+
+</button>
+
 <button
 class="add-btn"
 onclick="addToCart('${escapeHTML(product.id)}')"
@@ -2722,6 +3306,8 @@ ${product.stock<=0?"disabled":""}>
 ${product.stock<=0?"Stock শেষ":"+ যোগ"}
 
 </button>
+
+</div>
 
 </div>
 
@@ -3806,6 +4392,67 @@ event.target.classList.contains("modal")
 event.target.classList.remove("show");
 
 }
+
+});
+
+
+/* ================= OPEN SHARED PRODUCT ================= */
+
+function openSharedProduct(){
+
+const params=
+new URLSearchParams(
+window.location.search
+);
+
+const productId=
+params.get("product");
+
+if(!productId)return;
+
+const check=
+setInterval(()=>{
+
+if(products.length>0){
+
+clearInterval(check);
+
+const product=
+products.find(
+p=>String(p.id)===String(productId)
+);
+
+if(product){
+
+const favorite=
+isFavorite(product.id);
+
+showToast(
+"🛍️ "+product.name+
+" দেখানো হচ্ছে"
+);
+
+scrollToProducts();
+
+}
+
+}
+
+},300);
+
+}
+
+
+/* ================= START ================= */
+
+window.addEventListener(
+"load",
+()=>{
+
+setTimeout(
+openSharedProduct,
+1000
+);
 
 });
 
