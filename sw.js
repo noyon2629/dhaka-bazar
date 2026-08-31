@@ -1,6 +1,6 @@
 const CACHE_NAME = "dhaka-bazar-v1";
 
-const APP_FILES = [
+const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json"
@@ -9,35 +9,76 @@ const APP_FILES = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_FILES))
+      .then(cache => cache.addAll(APP_SHELL))
       .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const copy = response.clone();
+  const request = event.request;
 
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, copy);
-        });
+  if (request.method !== "GET") {
+    return;
+  }
+
+  // API request হলে সরাসরি network ব্যবহার করবে
+  if (request.url.includes("/api/")) {
+    event.respondWith(
+      fetch(request).catch(() => {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: "Internet connection unavailable"
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        );
+      })
+    );
+    return;
+  }
+
+  // Website files: network first, cache fallback
+  event.respondWith(
+    fetch(request)
+      .then(response => {
+
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(request, responseClone);
+            });
+        }
 
         return response;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => {
+        return caches.match(request)
+          .then(cachedResponse => {
+
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+
+            return caches.match("./index.html");
+          });
+      })
   );
 });
