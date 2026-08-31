@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Dhaka Bazar - ঢাকা বাজার</title>
 
 <meta name="theme-color" content="#0b8f55">
-<meta name="description" content="Dhaka Bazar - Online Shopping with Cash on Delivery">
+<meta name="description" content="Dhaka Bazar - Cash on Delivery Online Shopping">
 
-<!-- PWA -->
 <link rel="manifest" href="./manifest.json">
+
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -28,18 +27,21 @@
 
 :root{
     --primary:#0b8f55;
-    --primary-dark:#067443;
+    --dark:#067443;
     --light:#f4f7f5;
     --white:#fff;
     --text:#202124;
     --muted:#6b7280;
     --border:#e5e7eb;
     --danger:#e53935;
+    --warning:#fff7ed;
+    --warning-border:#fed7aa;
 }
 
 body{
     background:var(--light);
     color:var(--text);
+    padding-bottom:70px;
 }
 
 button{
@@ -51,25 +53,27 @@ button:disabled{
     cursor:not-allowed;
 }
 
+/* ================= HEADER ================= */
+
 header{
     position:sticky;
     top:0;
     z-index:1000;
-    background:white;
+    background:#fff;
     box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 
 .topbar{
     max-width:1200px;
     margin:auto;
-    padding:12px 16px;
+    padding:11px 16px;
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:12px;
 }
 
 .logo{
-    font-size:22px;
+    font-size:21px;
     font-weight:800;
     color:var(--primary);
     white-space:nowrap;
@@ -78,7 +82,7 @@ header{
 .logo span{
     display:block;
     color:#222;
-    font-size:11px;
+    font-size:10px;
     font-weight:500;
 }
 
@@ -89,7 +93,7 @@ header{
 
 .search input{
     width:100%;
-    padding:12px 45px 12px 15px;
+    padding:11px 45px 11px 15px;
     border:1px solid var(--border);
     border-radius:25px;
     outline:none;
@@ -100,8 +104,8 @@ header{
     position:absolute;
     right:5px;
     top:5px;
-    width:34px;
-    height:34px;
+    width:33px;
+    height:33px;
     border:0;
     border-radius:50%;
     background:var(--primary);
@@ -110,7 +114,7 @@ header{
 
 .header-actions{
     display:flex;
-    gap:8px;
+    gap:7px;
 }
 
 .icon-btn{
@@ -124,27 +128,59 @@ header{
 
 .install-btn{
     border:0;
-    background:#0b8f55;
+    background:var(--primary);
     color:white;
-    padding:10px 14px;
+    padding:9px 13px;
     border-radius:20px;
     font-weight:700;
     display:none;
 }
 
+/* ================= WARNING ================= */
+
+.warning-bar{
+    background:#fff7ed;
+    color:#9a3412;
+    border-top:1px solid #fed7aa;
+    border-bottom:1px solid #fed7aa;
+    overflow:hidden;
+    white-space:nowrap;
+    height:39px;
+    display:flex;
+    align-items:center;
+}
+
+.warning-track{
+    display:inline-block;
+    padding-left:100%;
+    animation:warningMove 28s linear infinite;
+    font-size:12px;
+    font-weight:700;
+}
+
+@keyframes warningMove{
+    0%{
+        transform:translateX(0);
+    }
+    100%{
+        transform:translateX(-100%);
+    }
+}
+
+/* ================= LOCATION ================= */
+
 .location-bar{
     background:#f0fdf4;
-    border-top:1px solid #e2eee7;
     border-bottom:1px solid #e2eee7;
 }
 
 .location-inner{
     max-width:1200px;
     margin:auto;
-    padding:9px 16px;
+    padding:8px 16px;
     display:flex;
-    gap:10px;
     align-items:center;
+    gap:8px;
     font-size:13px;
 }
 
@@ -156,10 +192,12 @@ header{
     font-weight:700;
 }
 
+/* ================= MAIN ================= */
+
 .container{
     max-width:1200px;
     margin:auto;
-    padding:20px 16px 100px;
+    padding:18px 16px 100px;
 }
 
 .hero{
@@ -173,7 +211,7 @@ header{
 }
 
 .hero h1{
-    font-size:32px;
+    font-size:31px;
     margin-bottom:10px;
 }
 
@@ -188,12 +226,25 @@ header{
     border:0;
     border-radius:25px;
     background:white;
-    color:var(--primary-dark);
+    color:var(--dark);
     font-weight:700;
 }
 
+.server-status{
+    font-size:11px;
+    margin-top:10px;
+}
+
+.online{
+    color:#dcfce7;
+}
+
+.offline{
+    color:#fee2e2;
+}
+
 .section-title{
-    margin:28px 0 15px;
+    margin:27px 0 14px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -211,6 +262,8 @@ header{
     font-weight:700;
 }
 
+/* ================= CATEGORIES ================= */
+
 .categories{
     display:grid;
     grid-template-columns:repeat(6,1fr);
@@ -221,7 +274,7 @@ header{
     background:white;
     border:1px solid var(--border);
     border-radius:15px;
-    padding:15px 8px;
+    padding:14px 8px;
     text-align:center;
     cursor:pointer;
     transition:.2s;
@@ -249,6 +302,8 @@ header{
     font-weight:700;
 }
 
+/* ================= PRODUCTS ================= */
+
 .products{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -269,16 +324,16 @@ header{
 }
 
 .product-img{
-    height:170px;
+    height:165px;
     background:#f3f4f6;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:65px;
+    font-size:63px;
 }
 
 .product-info{
-    padding:14px;
+    padding:13px;
 }
 
 .product-name{
@@ -290,7 +345,7 @@ header{
 .product-desc{
     color:var(--muted);
     font-size:12px;
-    margin-bottom:10px;
+    margin-bottom:9px;
 }
 
 .price{
@@ -306,7 +361,7 @@ header{
 }
 
 .seller-name{
-    margin-top:8px;
+    margin-top:7px;
     font-size:11px;
     color:#555;
 }
@@ -315,8 +370,7 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-top:12px;
-    gap:5px;
+    margin-top:11px;
 }
 
 .add-btn{
@@ -336,15 +390,12 @@ header{
     border-radius:8px;
     background:#fee2e2;
     color:#b91c1c;
-    font-size:12px;
 }
+
+/* ================= COD ================= */
 
 .cod-banner{
     margin-top:28px;
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:20px;
 }
 
 .cod-card{
@@ -356,17 +407,18 @@ header{
 
 .cod-icon{
     font-size:35px;
-    margin-bottom:8px;
 }
 
 .cod-card h2{
-    margin-bottom:7px;
+    margin:6px 0;
 }
 
 .cod-card p{
     font-size:13px;
     line-height:1.6;
 }
+
+/* ================= FEATURES ================= */
 
 .features{
     display:grid;
@@ -384,7 +436,7 @@ header{
 
 .feature-icon{
     font-size:28px;
-    margin-bottom:10px;
+    margin-bottom:9px;
 }
 
 .feature h3{
@@ -396,6 +448,8 @@ header{
     font-size:13px;
     line-height:1.5;
 }
+
+/* ================= CART ================= */
 
 .cart-floating{
     position:fixed;
@@ -430,6 +484,8 @@ header{
     justify-content:center;
 }
 
+/* ================= NAV ================= */
+
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -450,7 +506,7 @@ header{
 .nav-item{
     border:0;
     background:white;
-    padding:9px 4px;
+    padding:8px 4px;
     color:#777;
     font-size:11px;
 }
@@ -465,6 +521,8 @@ header{
     color:var(--primary);
     font-weight:700;
 }
+
+/* ================= MODAL ================= */
 
 .modal{
     position:fixed;
@@ -495,7 +553,7 @@ header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .close{
@@ -508,7 +566,7 @@ header{
 }
 
 .form-group{
-    margin-bottom:15px;
+    margin-bottom:14px;
 }
 
 .form-group label{
@@ -537,6 +595,65 @@ header{
     color:white;
     font-weight:700;
 }
+
+.secondary-btn{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--primary);
+    border-radius:10px;
+    background:white;
+    color:var(--primary);
+    font-weight:700;
+    margin-top:9px;
+}
+
+.switch-text{
+    text-align:center;
+    font-size:13px;
+    color:#666;
+    margin-top:15px;
+}
+
+.switch-text button{
+    border:0;
+    background:none;
+    color:var(--primary);
+    font-weight:700;
+}
+
+.help-box{
+    margin-top:15px;
+    padding:14px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-radius:12px;
+}
+
+.help-box a{
+    color:var(--primary);
+    font-weight:700;
+    text-decoration:none;
+}
+
+.otp-box{
+    text-align:center;
+}
+
+.otp-box input{
+    text-align:center;
+    letter-spacing:7px;
+    font-size:22px;
+    font-weight:800;
+}
+
+.account-card{
+    background:#f8faf9;
+    border-radius:14px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+/* ================= CART / ORDER ================= */
 
 .cart-item{
     display:flex;
@@ -591,24 +708,6 @@ header{
     margin:15px 0;
 }
 
-.order-success{
-    text-align:center;
-    padding:20px 5px;
-}
-
-.success-icon{
-    font-size:65px;
-    margin-bottom:10px;
-}
-
-.order-id{
-    background:#f0fdf4;
-    padding:12px;
-    border-radius:10px;
-    margin:15px 0;
-    font-weight:700;
-}
-
 .order-card{
     border:1px solid var(--border);
     border-radius:12px;
@@ -626,6 +725,31 @@ header{
     font-size:11px;
     font-weight:700;
 }
+
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:25px;
+}
+
+.order-success{
+    text-align:center;
+    padding:20px 5px;
+}
+
+.success-icon{
+    font-size:65px;
+}
+
+.order-id{
+    background:#f0fdf4;
+    padding:12px;
+    border-radius:10px;
+    margin:15px 0;
+    font-weight:700;
+}
+
+/* ================= TOAST ================= */
 
 .toast{
     position:fixed;
@@ -649,31 +773,7 @@ header{
     transform:translateX(-50%) translateY(0);
 }
 
-.empty{
-    text-align:center;
-    color:var(--muted);
-    padding:25px;
-}
-
-.small-note{
-    color:#777;
-    font-size:11px;
-    line-height:1.5;
-    margin-top:7px;
-}
-
-.server-status{
-    font-size:11px;
-    margin-top:8px;
-}
-
-.online{
-    color:#0b8f55;
-}
-
-.offline{
-    color:#e53935;
-}
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:900px){
 
@@ -698,7 +798,6 @@ header{
     }
 
     .logo{
-        width:auto;
         flex:1;
     }
 
@@ -721,7 +820,6 @@ header{
     }
 
     .products{
-        grid-template-columns:repeat(2,1fr);
         gap:10px;
     }
 
@@ -780,13 +878,27 @@ oninput="searchProducts()">
 
 <button
 class="icon-btn"
-onclick="openModal('accountModal')">
+onclick="openProfile()">
 👤
 </button>
 
 </div>
 
 </div>
+
+
+<!-- WARNING -->
+
+<div class="warning-bar">
+
+<div class="warning-track">
+
+⚠️ ডিসক্লেমার: এই ঢাকা বাজার শুধু ক্যাশ অন ডেলিভারিতে প্রোডাক্ট সেল হয়। অন্যথায় কেউ অগ্রিম টাকা চাইলে তাকে অগ্রিম কোন টাকা দিবেন না। আগে প্রোডাক্ট হাতে নিয়ে দেখে শুনে তারপরে টাকা দিবেন। অন্যথায় ঢাকা বাজার অ্যাপস দায়ী থাকবে না। ধন্যবাদ। ⚠️
+
+</div>
+
+</div>
+
 
 <div class="location-bar">
 
@@ -907,8 +1019,7 @@ Backend Checking...
 
 <p>
 পণ্য হাতে পাওয়ার পর টাকা পরিশোধ করুন।
-বর্তমানে ঢাকা এলাকার জন্য Cash on Delivery
-সিস্টেম চালু রয়েছে।
+অগ্রিম টাকা দেওয়ার প্রয়োজন নেই।
 </p>
 
 </div>
@@ -919,42 +1030,21 @@ Backend Checking...
 <section class="features">
 
 <div class="feature">
-
 <div class="feature-icon">🚚</div>
-
 <h3>Delivery</h3>
-
-<p>
-Seller নিজের Delivery Charge নির্ধারণ
-করতে পারবেন।
-</p>
-
+<p>Seller নিজের Delivery Charge নির্ধারণ করতে পারবেন।</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">💵</div>
-
 <h3>Cash on Delivery</h3>
-
-<p>
-পণ্য হাতে পাওয়ার সময় Cash Payment করুন।
-</p>
-
+<p>পণ্য হাতে পাওয়ার সময় Cash Payment করুন।</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">🏪</div>
-
 <h3>Seller Product</h3>
-
-<p>
-Seller নিজের Product Add করতে পারবেন।
-</p>
-
+<p>Seller নিজের Product Add করতে পারবেন।</p>
 </div>
 
 </section>
@@ -962,17 +1052,15 @@ Seller নিজের Product Add করতে পারবেন।
 </main>
 
 
+<!-- CART -->
+
 <div class="cart-floating">
 
-<button
-class="cart-button"
-onclick="openCart()">
+<button class="cart-button" onclick="openCart()">
 
 🛒
 
-<span
-class="cart-count"
-id="cartCount">
+<span class="cart-count" id="cartCount">
 0
 </span>
 
@@ -981,53 +1069,35 @@ id="cartCount">
 </div>
 
 
+<!-- NAV -->
+
 <nav class="bottom-nav">
 
 <div class="nav-inner">
 
-<button
-class="nav-item active"
-onclick="goHome(this)">
-
+<button class="nav-item active" onclick="goHome(this)">
 <span>🏠</span>
 হোম
-
 </button>
 
-<button
-class="nav-item"
-onclick="scrollToProducts();setActive(this)">
-
+<button class="nav-item" onclick="scrollToProducts();setActive(this)">
 <span>🛍️</span>
 বাজার
-
 </button>
 
-<button
-class="nav-item"
-onclick="openCart();setActive(this)">
-
+<button class="nav-item" onclick="openCart();setActive(this)">
 <span>🛒</span>
 কার্ট
-
 </button>
 
-<button
-class="nav-item"
-onclick="openOrders();setActive(this)">
-
+<button class="nav-item" onclick="openOrders();setActive(this)">
 <span>📦</span>
 Orders
-
 </button>
 
-<button
-class="nav-item"
-onclick="openModal('accountModal');setActive(this)">
-
+<button class="nav-item" onclick="openProfile();setActive(this)">
 <span>👤</span>
-Account
-
+Profile
 </button>
 
 </div>
@@ -1035,29 +1105,79 @@ Account
 </nav>
 
 
-<!-- ACCOUNT -->
+<!-- ================= AUTH MODAL ================= -->
 
-<div class="modal" id="accountModal">
+<div class="modal" id="authModal">
 
 <div class="modal-box">
 
 <div class="modal-header">
 
-<h3>👤 আমার Account</h3>
+<h3 id="authTitle">
+🔐 Login
+</h3>
 
-<button class="close"
-onclick="closeModal('accountModal')">
+<button class="close" onclick="closeModal('authModal')">
 ×
 </button>
 
 </div>
+
+
+<!-- LOGIN -->
+
+<div id="loginBox">
+
+<div class="form-group">
+
+<label>মোবাইল নম্বর</label>
+
+<input
+id="loginPhone"
+type="tel"
+maxlength="15"
+placeholder="01XXXXXXXXX">
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="আপনার Password">
+
+</div>
+
+<button class="primary-btn" onclick="loginUser()">
+🔑 Login করুন
+</button>
+
+<div class="switch-text">
+
+Account নেই?
+
+<button onclick="showRegister()">
+Register করুন
+</button>
+
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div id="registerBox" style="display:none">
 
 <div class="form-group">
 
 <label>আপনার নাম</label>
 
 <input
-id="accountName"
+id="registerName"
 type="text"
 placeholder="আপনার নাম">
 
@@ -1068,43 +1188,168 @@ placeholder="আপনার নাম">
 <label>মোবাইল নম্বর</label>
 
 <input
-id="accountPhone"
+id="registerPhone"
 type="tel"
 maxlength="15"
 placeholder="01XXXXXXXXX">
 
 </div>
 
-<button
-class="primary-btn"
-onclick="saveAccount()">
+<div class="form-group">
 
-Account Save করুন
+<label>Password</label>
 
+<input
+id="registerPassword"
+type="password"
+placeholder="কমপক্ষে 6 অক্ষর">
+
+</div>
+
+<div class="form-group">
+
+<label>Confirm Password</label>
+
+<input
+id="registerPassword2"
+type="password"
+placeholder="Password আবার লিখুন">
+
+</div>
+
+<button class="primary-btn" onclick="requestOTP()">
+📲 OTP পাঠান
 </button>
 
-<div
-style="
-margin-top:15px;
-padding:12px;
-background:#f8faf9;
-border-radius:10px;
-font-size:12px">
+<div class="switch-text">
 
-<strong>বর্তমান Account:</strong>
+আগে থেকেই Account আছে?
 
-<div id="accountInfo">
-Login করা হয়নি
-</div>
-
-</div>
+<button onclick="showLogin()">
+Login করুন
+</button>
 
 </div>
 
 </div>
 
 
-<!-- LOCATION -->
+<!-- OTP -->
+
+<div id="otpBox" style="display:none">
+
+<div class="otp-box">
+
+<p style="color:#666;font-size:13px;margin-bottom:15px">
+
+আপনার মোবাইল নম্বরে OTP পাঠানো হয়েছে।
+
+</p>
+
+<div class="form-group">
+
+<label>OTP Code</label>
+
+<input
+id="registerOTP"
+type="text"
+inputmode="numeric"
+maxlength="6"
+placeholder="••••••">
+
+</div>
+
+<button class="primary-btn" onclick="verifyOTP()">
+✅ OTP Verify করে Register
+</button>
+
+<button class="secondary-btn" onclick="requestOTP()">
+🔄 OTP আবার পাঠান
+</button>
+
+</div>
+
+</div>
+
+
+<!-- HELP -->
+
+<div class="help-box">
+
+<strong>🆘 HelpLine</strong>
+
+<br><br>
+
+WhatsApp:
+
+<a
+href="https://wa.me/8801954799646"
+target="_blank">
+
+01954799646
+</a>
+
+<br><br>
+
+<a
+href="https://wa.me/8801954799646"
+target="_blank">
+
+💬 WhatsApp Help নিন
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= PROFILE ================= -->
+
+<div class="modal" id="profileModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<h3>👤 আমার Profile</h3>
+
+<button class="close" onclick="closeModal('profileModal')">
+×
+</button>
+
+</div>
+
+<div id="profileContent"></div>
+
+<div class="help-box">
+
+<strong>🆘 HelpLine</strong>
+
+<br><br>
+
+WhatsApp:
+
+<a href="https://wa.me/8801954799646" target="_blank">
+01954799646
+</a>
+
+<br><br>
+
+<a href="https://wa.me/8801954799646" target="_blank">
+💬 WhatsApp Help
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= LOCATION ================= -->
 
 <div class="modal" id="locationModal">
 
@@ -1114,8 +1359,7 @@ Login করা হয়নি
 
 <h3>📍 Delivery Location</h3>
 
-<button class="close"
-onclick="closeModal('locationModal')">
+<button class="close" onclick="closeModal('locationModal')">
 ×
 </button>
 
@@ -1127,10 +1371,7 @@ onclick="closeModal('locationModal')">
 
 <select id="areaSelect">
 
-<option value="">
-এলাকা নির্বাচন করুন
-</option>
-
+<option value="">এলাকা নির্বাচন করুন</option>
 <option>ঢাকা</option>
 <option>কেরানীগঞ্জ</option>
 <option>মিরপুর</option>
@@ -1154,12 +1395,8 @@ placeholder="বাড়ি/রোড/এলাকার ঠিকানা"></
 
 </div>
 
-<button
-class="primary-btn"
-onclick="saveLocation()">
-
+<button class="primary-btn" onclick="saveLocation()">
 লোকেশন সেভ করুন
-
 </button>
 
 </div>
@@ -1167,7 +1404,7 @@ onclick="saveLocation()">
 </div>
 
 
-<!-- SELLER -->
+<!-- ================= SELLER ================= -->
 
 <div class="modal" id="sellerModal">
 
@@ -1177,73 +1414,38 @@ onclick="saveLocation()">
 
 <h3>🏪 Product Add করুন</h3>
 
-<button class="close"
-onclick="closeModal('sellerModal')">
+<button class="close" onclick="closeModal('sellerModal')">
 ×
 </button>
 
 </div>
 
 <div class="form-group">
-
 <label>Product Name</label>
-
-<input
-id="sellerProductName"
-placeholder="যেমন: বাসমতি চাল">
-
+<input id="sellerProductName" placeholder="যেমন: বাসমতি চাল">
 </div>
 
 <div class="form-group">
-
 <label>Description</label>
-
-<input
-id="sellerProductDesc"
-placeholder="যেমন: ৫ কেজি প্যাক">
-
+<input id="sellerProductDesc" placeholder="যেমন: ৫ কেজি প্যাক">
 </div>
 
 <div class="form-group">
-
 <label>Product Price (৳)</label>
-
-<input
-id="sellerProductPrice"
-type="number"
-min="1"
-placeholder="500">
-
+<input id="sellerProductPrice" type="number" min="1" placeholder="500">
 </div>
 
 <div class="form-group">
-
 <label>Stock</label>
-
-<input
-id="sellerProductStock"
-type="number"
-min="0"
-value="10"
-placeholder="কতটি আছে?">
-
+<input id="sellerProductStock" type="number" min="0" value="10">
 </div>
 
 <div class="form-group">
-
 <label>Delivery Charge (৳)</label>
-
-<input
-id="sellerDeliveryCharge"
-type="number"
-min="0"
-value="60"
-placeholder="60">
-
+<input id="sellerDeliveryCharge" type="number" min="0" value="60">
 </div>
 
 <div class="form-group">
-
 <label>Category</label>
 
 <select id="sellerProductCategory">
@@ -1281,24 +1483,17 @@ placeholder="60">
 <option>💻</option>
 <option>⌚</option>
 <option>🏠</option>
-<option>🛏️</option>
 <option>🧴</option>
-<option>🔌</option>
 <option>🍼</option>
 <option>⚽</option>
 <option>📚</option>
-<option>🚗</option>
 
 </select>
 
 </div>
 
-<button
-class="primary-btn"
-onclick="addSellerProduct()">
-
+<button class="primary-btn" onclick="addSellerProduct()">
 + Product Add করুন
-
 </button>
 
 </div>
@@ -1306,7 +1501,7 @@ onclick="addSellerProduct()">
 </div>
 
 
-<!-- CART -->
+<!-- ================= CART MODAL ================= -->
 
 <div class="modal" id="cartModal">
 
@@ -1316,8 +1511,7 @@ onclick="addSellerProduct()">
 
 <h3>🛒 আমার Cart</h3>
 
-<button class="close"
-onclick="closeModal('cartModal')">
+<button class="close" onclick="closeModal('cartModal')">
 ×
 </button>
 
@@ -1341,7 +1535,7 @@ Checkout →
 </div>
 
 
-<!-- CHECKOUT -->
+<!-- ================= CHECKOUT ================= -->
 
 <div class="modal" id="checkoutModal">
 
@@ -1351,8 +1545,7 @@ Checkout →
 
 <h3>🧾 Checkout</h3>
 
-<button class="close"
-onclick="closeModal('checkoutModal')">
+<button class="close" onclick="closeModal('checkoutModal')">
 ×
 </button>
 
@@ -1365,32 +1558,18 @@ Delivery Information
 </h4>
 
 <div class="form-group">
-
 <label>নাম</label>
-
 <input id="checkoutName">
-
 </div>
 
 <div class="form-group">
-
 <label>মোবাইল নম্বর</label>
-
-<input
-id="checkoutPhone"
-type="tel"
-maxlength="15">
-
+<input id="checkoutPhone" type="tel" maxlength="15">
 </div>
 
 <div class="form-group">
-
 <label>Delivery Address</label>
-
-<textarea
-id="checkoutAddress"
-rows="3"></textarea>
-
+<textarea id="checkoutAddress" rows="3"></textarea>
 </div>
 
 <div class="cod-only">
@@ -1398,25 +1577,17 @@ rows="3"></textarea>
 <strong>💵 Payment Method</strong>
 
 <div style="margin-top:7px;font-size:13px">
-
 🚚 <b>Cash on Delivery</b>
-
 </div>
 
-<div class="small-note">
-
-পণ্য হাতে পাওয়ার সময় Cash Payment করতে হবে।
-
+<div style="font-size:11px;margin-top:7px">
+পণ্য হাতে নিয়ে দেখে তারপর টাকা পরিশোধ করবেন।
 </div>
 
 </div>
 
-<button
-class="primary-btn"
-onclick="placeOrder()">
-
+<button class="primary-btn" onclick="placeOrder()">
 অর্ডার Confirm করুন ✓
-
 </button>
 
 </div>
@@ -1424,7 +1595,7 @@ onclick="placeOrder()">
 </div>
 
 
-<!-- SUCCESS -->
+<!-- ================= SUCCESS ================= -->
 
 <div class="modal" id="successModal">
 
@@ -1441,24 +1612,15 @@ onclick="placeOrder()">
 </h2>
 
 <p style="margin-top:8px;color:#666">
-
-আপনার Cash on Delivery অর্ডার
-সফলভাবে গ্রহণ করা হয়েছে।
-
+আপনার Cash on Delivery অর্ডার গ্রহণ করা হয়েছে।
 </p>
 
-<div
-class="order-id"
-id="successOrderId">
+<div class="order-id" id="successOrderId">
 Order ID
 </div>
 
-<div
-id="successDetails"
-style="
-text-align:left;
-font-size:13px;
-line-height:1.7">
+<div id="successDetails"
+style="text-align:left;font-size:13px;line-height:1.7">
 </div>
 
 <button
@@ -1477,7 +1639,7 @@ onclick="closeModal('successModal')">
 </div>
 
 
-<!-- ORDERS -->
+<!-- ================= ORDERS ================= -->
 
 <div class="modal" id="ordersModal">
 
@@ -1487,8 +1649,7 @@ onclick="closeModal('successModal')">
 
 <h3>📦 আমার Orders</h3>
 
-<button class="close"
-onclick="closeModal('ordersModal')">
+<button class="close" onclick="closeModal('ordersModal')">
 ×
 </button>
 
@@ -1510,59 +1671,53 @@ onclick="closeModal('ordersModal')">
 
 /* =====================================================
    DHAKA BAZAR
-   PWA + BACKEND
+   COMPLETE FRONTEND
    ===================================================== */
-
-
-/* =========================
-   BACKEND
-   ========================= */
 
 const API_BASE =
 "https://dhaka-bazar-1.onrender.com";
 
 
-/* =========================
-   LOCAL DATA
-   ========================= */
+/* ================= DATA ================= */
 
-let products = [];
+let products=[];
 
-let cart =
+let cart=
 JSON.parse(
 localStorage.getItem("dhakaCart")
-) || [];
+)||[];
 
-let orders =
+let orders=
 JSON.parse(
 localStorage.getItem("dhakaOrders")
-) || [];
+)||[];
 
-let currentLocation =
-localStorage.getItem("dhakaLocation") || "";
-
-let currentAddress =
-localStorage.getItem("dhakaAddress") || "";
-
-let currentUser =
+let currentUser=
 JSON.parse(
 localStorage.getItem("dhakaUser")
-) || null;
+)||null;
+
+let currentLocation=
+localStorage.getItem("dhakaLocation")
+||"";
+
+let currentAddress=
+localStorage.getItem("dhakaAddress")
+||"";
+
+let deferredPrompt=null;
+
+let pendingRegistration=null;
 
 
-/* =====================================================
-   PWA SERVICE WORKER
-   ===================================================== */
+/* ================= SERVICE WORKER ================= */
 
 if("serviceWorker" in navigator){
 
-window.addEventListener(
-"load",
-async function(){
+window.addEventListener("load",async()=>{
 
 try{
 
-const registration =
 await navigator.serviceWorker.register(
 "./sw.js",
 {
@@ -1570,17 +1725,11 @@ scope:"./"
 }
 );
 
-console.log(
-"Service Worker Registered:",
-registration.scope
-);
+console.log("Service Worker registered");
 
 }catch(error){
 
-console.error(
-"Service Worker registration failed:",
-error
-);
+console.error(error);
 
 }
 
@@ -1589,35 +1738,24 @@ error
 }
 
 
-/* =====================================================
-   INSTALL APP
-   ===================================================== */
-
-let deferredPrompt = null;
-
+/* ================= PWA INSTALL ================= */
 
 window.addEventListener(
 "beforeinstallprompt",
-function(event){
+event=>{
 
 event.preventDefault();
 
-deferredPrompt = event;
+deferredPrompt=event;
 
-const button =
-document.getElementById(
-"installButton"
-);
+const btn=
+document.getElementById("installButton");
 
-if(button){
-
-button.style.display =
-"block";
-
+if(btn){
+btn.style.display="block";
 }
 
-}
-);
+});
 
 
 async function installApp(){
@@ -1625,7 +1763,7 @@ async function installApp(){
 if(!deferredPrompt){
 
 showToast(
-"Browser Menu থেকে 'Add to Home screen' দিন"
+"Browser Menu → Add to Home screen ব্যবহার করুন"
 );
 
 return;
@@ -1634,42 +1772,22 @@ return;
 
 try{
 
-deferredPrompt.prompt();
+await deferredPrompt.prompt();
 
-const result =
+const result=
 await deferredPrompt.userChoice;
 
-deferredPrompt = null;
+deferredPrompt=null;
 
-const button =
-document.getElementById(
-"installButton"
-);
-
-if(button){
-
-button.style.display =
-"none";
-
-}
-
-if(result.outcome === "accepted"){
+if(result.outcome==="accepted"){
 
 showToast(
 "Dhaka Bazar Install হচ্ছে ✓"
 );
 
-}else{
-
-showToast(
-"Install বাতিল করা হয়েছে"
-);
-
 }
 
 }catch(error){
-
-console.error(error);
 
 showToast(
 "Install করা যায়নি"
@@ -1682,144 +1800,69 @@ showToast(
 
 window.addEventListener(
 "appinstalled",
-function(){
+()=>{
 
-const button =
-document.getElementById(
-"installButton"
-);
+const btn=
+document.getElementById("installButton");
 
-if(button){
-
-button.style.display =
-"none";
-
+if(btn){
+btn.style.display="none";
 }
 
 showToast(
-"Dhaka Bazar App Install হয়েছে ✓"
+"Dhaka Bazar Install হয়েছে ✓"
 );
 
-}
-);
+});
 
 
-/* =====================================================
-   PAGE LOAD
-   ===================================================== */
+/* ================= PAGE LOAD ================= */
 
 document.addEventListener(
 "DOMContentLoaded",
-async function(){
+async()=>{
 
 updateCart();
-
 updateLocation();
-
-updateAccount();
+updateProfile();
 
 await checkBackend();
-
 await loadProducts();
 
-}
-);
+});
 
 
-/* =====================================================
-   BACKEND STATUS
-   ===================================================== */
-
-async function checkBackend(){
-
-const status =
-document.getElementById(
-"serverStatus"
-);
-
-if(!status){
-
-return;
-
-}
-
-try{
-
-const data =
-await apiRequest(
-"/api/status"
-);
-
-if(data.success){
-
-status.innerHTML =
-"🟢 Backend Online";
-
-status.className =
-"server-status online";
-
-}else{
-
-status.innerHTML =
-"🔴 Backend Error";
-
-status.className =
-"server-status offline";
-
-}
-
-}catch(error){
-
-status.innerHTML =
-"🔴 Backend Offline";
-
-status.className =
-"server-status offline";
-
-}
-
-}
-
-
-/* =====================================================
-   API HELPER
-   ===================================================== */
+/* ================= API ================= */
 
 async function apiRequest(
 endpoint,
 options={}
 ){
 
-const requestOptions = {
+const requestOptions={
 
 ...options,
 
 headers:{
-"Content-Type":
-"application/json",
-
-...(options.headers || {})
-
+"Content-Type":"application/json",
+...(options.headers||{})
 }
 
 };
 
-try{
-
-const response =
+const response=
 await fetch(
-API_BASE + endpoint,
+API_BASE+endpoint,
 requestOptions
 );
 
-let data;
+let data={};
 
 try{
 
-data =
-await response.json();
+data=await response.json();
 
-}catch(error){
+}catch(e){
 
 throw new Error(
 "Server থেকে সঠিক response পাওয়া যায়নি"
@@ -1830,7 +1873,8 @@ throw new Error(
 if(!response.ok){
 
 throw new Error(
-data.message ||
+data.message||
+data.error||
 "Server Error"
 );
 
@@ -1838,72 +1882,95 @@ data.message ||
 
 return data;
 
-}catch(error){
+}
 
-console.error(
-"API ERROR:",
-error
+
+/* ================= BACKEND STATUS ================= */
+
+async function checkBackend(){
+
+const status=
+document.getElementById(
+"serverStatus"
 );
 
-throw error;
+try{
+
+const data=
+await apiRequest(
+"/api/status"
+);
+
+if(data.success){
+
+status.innerHTML=
+"🟢 Backend Online";
+
+status.className=
+"server-status online";
+
+}else{
+
+status.innerHTML=
+"🔴 Backend Error";
+
+status.className=
+"server-status offline";
+
+}
+
+}catch(error){
+
+status.innerHTML=
+"🔴 Backend Offline";
+
+status.className=
+"server-status offline";
 
 }
 
 }
 
 
-/* =====================================================
-   LOAD PRODUCTS
-   ===================================================== */
+/* ================= PRODUCTS ================= */
 
 async function loadProducts(){
 
 try{
 
-const data =
+const data=
 await apiRequest(
 "/api/products"
 );
 
-products =
-(data.products || []).map(
-product => ({
+products=
+(data.products||[]).map(p=>({
 
-id:product.id,
+id:p.id,
 
-name:product.name,
+name:p.name,
 
-desc:
-product.description || "",
+desc:p.description||"",
 
-price:Number(
-product.price
-),
+price:Number(p.price)||0,
 
 deliveryCharge:
-Number(
-product.deliveryCharge || 0
-),
+Number(p.deliveryCharge)||0,
 
-category:
-product.category || "other",
+category:p.category||"other",
 
-icon:
-product.icon || "📦",
+icon:p.icon||"📦",
 
 seller:
-product.sellerName ||
-product.sellerId ||
+p.sellerName||
+p.sellerId||
 "Seller",
 
-stock:
-Number(product.stock || 0),
+stock:Number(p.stock)||0,
 
-sellerId:
-product.sellerId
+sellerId:p.sellerId
 
-})
-);
+}));
 
 renderProducts();
 
@@ -1911,7 +1978,7 @@ renderProducts();
 
 console.error(error);
 
-products = [];
+products=[];
 
 renderProducts();
 
@@ -1920,19 +1987,15 @@ renderProducts();
 }
 
 
-/* =====================================================
-   MODAL
-   ===================================================== */
+/* ================= MODAL ================= */
 
 function openModal(id){
 
-const modal =
+const modal=
 document.getElementById(id);
 
 if(modal){
-
 modal.classList.add("show");
-
 }
 
 }
@@ -1940,30 +2003,499 @@ modal.classList.add("show");
 
 function closeModal(id){
 
-const modal =
+const modal=
 document.getElementById(id);
 
 if(modal){
-
 modal.classList.remove("show");
+}
+
+}
+
+
+/* ================= AUTH ================= */
+
+function openProfile(){
+
+if(!currentUser){
+
+showLogin();
+
+openModal("authModal");
+
+return;
+
+}
+
+updateProfile();
+
+openModal("profileModal");
+
+}
+
+
+function showLogin(){
+
+document.getElementById("authTitle").innerText=
+"🔐 Login";
+
+document.getElementById("loginBox").style.display=
+"block";
+
+document.getElementById("registerBox").style.display=
+"none";
+
+document.getElementById("otpBox").style.display=
+"none";
+
+openModal("authModal");
+
+}
+
+
+function showRegister(){
+
+document.getElementById("authTitle").innerText=
+"📝 Registration";
+
+document.getElementById("loginBox").style.display=
+"none";
+
+document.getElementById("registerBox").style.display=
+"block";
+
+document.getElementById("otpBox").style.display=
+"none";
+
+openModal("authModal");
+
+}
+
+
+/* ================= REGISTER OTP ================= */
+
+async function requestOTP(){
+
+const name=
+document
+.getElementById("registerName")
+.value.trim();
+
+const phone=
+document
+.getElementById("registerPhone")
+.value.trim();
+
+const password=
+document
+.getElementById("registerPassword")
+.value;
+
+const password2=
+document
+.getElementById("registerPassword2")
+.value;
+
+
+if(name.length<2){
+
+showToast("সঠিক নাম দিন");
+return;
+
+}
+
+if(phone.length<10){
+
+showToast("সঠিক মোবাইল নম্বর দিন");
+return;
+
+}
+
+if(password.length<6){
+
+showToast("Password কমপক্ষে 6 অক্ষরের হতে হবে");
+return;
+
+}
+
+if(password!==password2){
+
+showToast("Password মিলছে না");
+return;
+
+}
+
+
+pendingRegistration={
+name,
+phone,
+password
+};
+
+
+try{
+
+showToast("OTP পাঠানো হচ্ছে...");
+
+
+const data=
+await apiRequest(
+"/api/auth/request-otp",
+{
+
+method:"POST",
+
+body:JSON.stringify({
+name,
+phone
+})
+
+});
+
+
+document.getElementById("registerBox")
+.style.display="none";
+
+document.getElementById("otpBox")
+.style.display="block";
+
+document.getElementById("authTitle")
+.innerText=
+"📲 OTP Verification";
+
+showToast(
+data.message||
+"OTP পাঠানো হয়েছে ✓"
+);
+
+}catch(error){
+
+showToast(
+error.message||
+"OTP পাঠানো যায়নি"
+);
 
 }
 
 }
 
 
-/* =====================================================
-   SELLER
-   ===================================================== */
+/* ================= VERIFY OTP ================= */
+
+async function verifyOTP(){
+
+if(!pendingRegistration){
+
+showToast(
+"Registration তথ্য পাওয়া যায়নি"
+);
+
+return;
+
+}
+
+const otp=
+document
+.getElementById("registerOTP")
+.value.trim();
+
+if(otp.length<4){
+
+showToast(
+"সঠিক OTP দিন"
+);
+
+return;
+
+}
+
+
+try{
+
+showToast(
+"OTP Verify হচ্ছে..."
+);
+
+
+const data=
+await apiRequest(
+"/api/auth/verify-otp",
+{
+
+method:"POST",
+
+body:JSON.stringify({
+
+name:
+pendingRegistration.name,
+
+phone:
+pendingRegistration.phone,
+
+password:
+pendingRegistration.password,
+
+otp:otp
+
+})
+
+});
+
+
+currentUser={
+
+id:
+data.user?.id||"",
+
+name:
+data.user?.name||
+pendingRegistration.name,
+
+phone:
+data.user?.phone||
+pendingRegistration.phone
+
+};
+
+
+localStorage.setItem(
+"dhakaUser",
+JSON.stringify(currentUser)
+);
+
+
+pendingRegistration=null;
+
+closeModal("authModal");
+
+updateProfile();
+
+showToast(
+"Registration সফল হয়েছে ✓"
+);
+
+}catch(error){
+
+showToast(
+error.message||
+"OTP সঠিক নয়"
+);
+
+}
+
+}
+
+
+/* ================= LOGIN ================= */
+
+async function loginUser(){
+
+const phone=
+document
+.getElementById("loginPhone")
+.value.trim();
+
+const password=
+document
+.getElementById("loginPassword")
+.value;
+
+
+if(phone.length<10){
+
+showToast("সঠিক মোবাইল নম্বর দিন");
+return;
+
+}
+
+if(!password){
+
+showToast("Password দিন");
+return;
+
+}
+
+
+try{
+
+showToast("Login হচ্ছে...");
+
+
+const data=
+await apiRequest(
+"/api/auth/login",
+{
+
+method:"POST",
+
+body:JSON.stringify({
+phone,
+password
+})
+
+});
+
+
+currentUser={
+
+id:data.user?.id||"",
+
+name:data.user?.name||"User",
+
+phone:data.user?.phone||phone
+
+};
+
+
+localStorage.setItem(
+"dhakaUser",
+JSON.stringify(currentUser)
+);
+
+
+closeModal("authModal");
+
+updateProfile();
+
+showToast(
+"Login সফল হয়েছে ✓"
+);
+
+}catch(error){
+
+showToast(
+error.message||
+"Login করা যায়নি"
+);
+
+}
+
+}
+
+
+/* ================= PROFILE ================= */
+
+function updateProfile(){
+
+const box=
+document.getElementById(
+"profileContent"
+);
+
+if(!box){
+
+return;
+
+}
+
+
+if(!currentUser){
+
+box.innerHTML=`
+
+<div class="empty">
+
+👤 আপনি Login করেননি।
+
+</div>
+
+<button
+class="primary-btn"
+onclick="closeModal('profileModal');showLogin()">
+
+Login / Registration
+
+</button>
+
+`;
+
+return;
+
+}
+
+
+box.innerHTML=`
+
+<div class="account-card">
+
+<h3>
+👤 ${escapeHTML(currentUser.name)}
+</h3>
+
+<p style="margin-top:8px;color:#666">
+📱 ${escapeHTML(currentUser.phone)}
+</p>
+
+<p style="margin-top:8px;color:#666">
+🟢 Account Active
+</p>
+
+</div>
+
+<button
+class="primary-btn"
+onclick="closeModal('profileModal');openSeller()">
+
+🏪 Product Sell করুন
+
+</button>
+
+<button
+class="secondary-btn"
+onclick="closeModal('profileModal');openOrders()">
+
+📦 আমার Orders
+
+</button>
+
+<button
+class="secondary-btn"
+onclick="logoutUser()">
+
+🚪 Logout
+
+</button>
+
+`;
+
+}
+
+
+function logoutUser(){
+
+if(!confirm(
+"আপনি কি Logout করতে চান?"
+)){
+
+return;
+
+}
+
+currentUser=null;
+
+localStorage.removeItem(
+"dhakaUser"
+);
+
+closeModal("profileModal");
+
+showToast(
+"Logout হয়েছে"
+);
+
+}
+
+
+/* ================= SELLER ================= */
 
 function openSeller(){
 
 if(!currentUser){
 
-openModal("accountModal");
+showLogin();
 
 showToast(
-"আগে Account তৈরি করুন"
+"Product Sell করতে আগে Registration/Login করুন"
 );
 
 return;
@@ -1975,312 +2507,83 @@ openModal("sellerModal");
 }
 
 
-/* =====================================================
-   PRODUCT RENDER
-   ===================================================== */
-
-function renderProducts(list=products){
-
-const container =
-document.getElementById(
-"products"
-);
-
-if(!container){
-
-return;
-
-}
-
-container.innerHTML="";
-
-
-if(list.length===0){
-
-container.innerHTML=`
-
-<div
-class="empty"
-style="grid-column:1/-1">
-
-কোনো Product পাওয়া যায়নি।
-
-<br>
-
-<button
-style="
-margin-top:12px;
-padding:9px 15px;
-border:0;
-border-radius:20px;
-background:#0b8f55;
-color:white"
-onclick="loadProducts()">
-
-Reload Products
-
-</button>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-list.forEach(function(product){
-
-const card =
-document.createElement("div");
-
-card.className="product";
-
-const stock =
-Number(product.stock || 0);
-
-card.innerHTML=`
-
-<div class="product-img">
-
-${escapeHTML(product.icon)}
-
-</div>
-
-<div class="product-info">
-
-<div class="product-name">
-
-${escapeHTML(product.name)}
-
-</div>
-
-<div class="product-desc">
-
-${escapeHTML(product.desc)}
-
-</div>
-
-<div class="price">
-
-৳${Number(product.price)
-.toLocaleString("bn-BD")}
-
-</div>
-
-<div class="delivery-charge">
-
-🚚 Delivery:
-৳${Number(
-product.deliveryCharge || 0
-).toLocaleString("bn-BD")}
-
-</div>
-
-<div class="seller-name">
-
-🏪 Seller:
-${escapeHTML(
-product.seller || "Seller"
-)}
-
-</div>
-
-<div
-style="
-font-size:11px;
-margin-top:6px;
-color:#777">
-
-📦 Stock: ${stock}
-
-</div>
-
-<div class="product-bottom">
-
-<span>⭐ 4.8</span>
-
-<button
-class="add-btn"
-onclick="addToCart('${escapeHTML(product.id)}')"
-${stock<=0 ? "disabled" : ""}>
-
-${stock<=0
-? "Stock শেষ"
-: "+ যোগ"}
-
-</button>
-
-</div>
-
-${
-currentUser &&
-product.sellerId === currentUser.phone
-?
-`
-
-<button
-class="seller-delete"
-onclick="deleteProduct('${escapeHTML(product.id)}')">
-
-🗑️ Product Delete
-
-</button>
-
-`
-:""
-}
-
-</div>
-
-`;
-
-container.appendChild(card);
-
-});
-
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-   ===================================================== */
-
-function escapeHTML(text){
-
-return String(text ?? "")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-/* =====================================================
-   ADD SELLER PRODUCT
-   ===================================================== */
-
 async function addSellerProduct(){
 
 if(!currentUser){
 
-closeModal("sellerModal");
-
-openModal("accountModal");
-
-showToast(
-"আগে Account তৈরি করুন"
-);
-
 return;
 
 }
 
-const name =
+const name=
 document
-.getElementById(
-"sellerProductName"
-).value.trim();
+.getElementById("sellerProductName")
+.value.trim();
 
-const desc =
+const desc=
 document
-.getElementById(
-"sellerProductDesc"
-).value.trim();
+.getElementById("sellerProductDesc")
+.value.trim();
 
-const price =
+const price=
 Number(
 document
-.getElementById(
-"sellerProductPrice"
-).value
+.getElementById("sellerProductPrice")
+.value
 );
 
-const stock =
+const stock=
 Number(
 document
-.getElementById(
-"sellerProductStock"
-).value
+.getElementById("sellerProductStock")
+.value
 );
 
-const deliveryCharge =
+const deliveryCharge=
 Number(
 document
-.getElementById(
-"sellerDeliveryCharge"
-).value
+.getElementById("sellerDeliveryCharge")
+.value
 );
 
-const category =
+const category=
 document
-.getElementById(
-"sellerProductCategory"
-).value;
+.getElementById("sellerProductCategory")
+.value;
 
-const icon =
+const icon=
 document
-.getElementById(
-"sellerProductIcon"
-).value;
+.getElementById("sellerProductIcon")
+.value;
 
 
 if(!name){
 
-showToast(
-"Product Name দিন"
-);
-
+showToast("Product Name দিন");
 return;
 
 }
 
 if(!desc){
 
-showToast(
-"Description দিন"
-);
-
+showToast("Description দিন");
 return;
 
 }
 
-if(!Number.isFinite(price) || price<=0){
+if(!Number.isFinite(price)||price<=0){
 
-showToast(
-"সঠিক Product Price দিন"
-);
-
+showToast("সঠিক Price দিন");
 return;
 
 }
 
-if(!Number.isInteger(stock) || stock<0){
+if(!Number.isInteger(stock)||stock<0){
 
-showToast(
-"সঠিক Stock দিন"
-);
-
+showToast("সঠিক Stock দিন");
 return;
 
 }
-
-if(
-!Number.isFinite(deliveryCharge) ||
-deliveryCharge<0
-){
-
-showToast(
-"সঠিক Delivery Charge দিন"
-);
-
-return;
-
-}
-
 
 try{
 
@@ -2320,31 +2623,15 @@ deliveryCharge
 closeModal("sellerModal");
 
 showToast(
-"Product Backend-এ Add হয়েছে ✓"
+"Product Add হয়েছে ✓"
 );
-
-document.getElementById(
-"sellerProductName"
-).value="";
-
-document.getElementById(
-"sellerProductDesc"
-).value="";
-
-document.getElementById(
-"sellerProductPrice"
-).value="";
-
-document.getElementById(
-"sellerProductStock"
-).value="10";
 
 await loadProducts();
 
 }catch(error){
 
 showToast(
-error.message ||
+error.message||
 "Product Add করা যায়নি"
 );
 
@@ -2353,100 +2640,130 @@ error.message ||
 }
 
 
-/* =====================================================
-   DELETE PRODUCT
-   ===================================================== */
+/* ================= RENDER PRODUCTS ================= */
 
-async function deleteProduct(id){
+function renderProducts(list=products){
 
-const product =
-products.find(
-p=>String(p.id)===String(id)
-);
+const container=
+document.getElementById("products");
 
-if(!product){
+if(!container)return;
+
+if(list.length===0){
+
+container.innerHTML=`
+
+<div class="empty"
+style="grid-column:1/-1">
+
+কোনো Product পাওয়া যায়নি।
+
+</div>
+
+`;
 
 return;
 
 }
 
-if(!confirm(
-"এই Product Delete করতে চান?"
-)){
+container.innerHTML="";
 
-return;
+
+list.forEach(product=>{
+
+const card=
+document.createElement("div");
+
+card.className="product";
+
+card.innerHTML=`
+
+<div class="product-img">
+${escapeHTML(product.icon)}
+</div>
+
+<div class="product-info">
+
+<div class="product-name">
+${escapeHTML(product.name)}
+</div>
+
+<div class="product-desc">
+${escapeHTML(product.desc)}
+</div>
+
+<div class="price">
+৳${product.price.toLocaleString("bn-BD")}
+</div>
+
+<div class="delivery-charge">
+🚚 Delivery:
+৳${product.deliveryCharge.toLocaleString("bn-BD")}
+</div>
+
+<div class="seller-name">
+🏪 Seller:
+${escapeHTML(product.seller)}
+</div>
+
+<div style="font-size:11px;margin-top:6px;color:#777">
+📦 Stock: ${product.stock}
+</div>
+
+<div class="product-bottom">
+
+<span>⭐ 4.8</span>
+
+<button
+class="add-btn"
+onclick="addToCart('${escapeHTML(product.id)}')"
+${product.stock<=0?"disabled":""}>
+
+${product.stock<=0?"Stock শেষ":"+ যোগ"}
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
 
 }
 
-try{
 
-await apiRequest(
-"/api/products/"+encodeURIComponent(id),
-{
-method:"DELETE"
-}
-);
-
-showToast(
-"Product Delete হয়েছে ✓"
-);
-
-await loadProducts();
-
-}catch(error){
-
-showToast(
-error.message ||
-"Delete করা যায়নি"
-);
-
-}
-
-}
-
-
-/* =====================================================
-   CART
-   ===================================================== */
+/* ================= CART ================= */
 
 function addToCart(id){
 
-const product =
+const product=
 products.find(
 p=>String(p.id)===String(id)
 );
 
-if(!product){
+if(!product)return;
 
+if(product.stock<=0){
+
+showToast("Stock শেষ");
 return;
 
 }
 
-if(Number(product.stock)<=0){
-
-showToast(
-"এই Product-এর Stock শেষ"
-);
-
-return;
-
-}
-
-
-const existing =
+const existing=
 cart.find(
 item=>String(item.id)===String(id)
 );
-
 
 if(existing){
 
 if(existing.qty>=product.stock){
 
-showToast(
-"আর বেশি Quantity নেই"
-);
-
+showToast("আর বেশি Quantity নেই");
 return;
 
 }
@@ -2461,18 +2778,14 @@ id:product.id,
 
 name:product.name,
 
-price:Number(product.price),
+price:product.price,
 
 deliveryCharge:
-Number(
-product.deliveryCharge || 0
-),
+product.deliveryCharge,
 
-seller:
-product.seller,
+seller:product.seller,
 
-sellerId:
-product.sellerId,
+sellerId:product.sellerId,
 
 qty:1
 
@@ -2481,20 +2794,14 @@ qty:1
 }
 
 saveCart();
-
 updateCart();
 
 showToast(
-product.name +
-" কার্টে যোগ হয়েছে ✓"
+"Cart-এ যোগ হয়েছে ✓"
 );
 
 }
 
-
-/* =====================================================
-   SAVE CART
-   ===================================================== */
 
 function saveCart(){
 
@@ -2506,39 +2813,31 @@ JSON.stringify(cart)
 }
 
 
-/* =====================================================
-   CART TOTAL
-   ===================================================== */
-
 function calculateCartTotals(){
 
 let productTotal=0;
 
 let deliveryTotal=0;
 
-const sellerSet =
-new Set();
+const sellers=new Set();
 
 
-cart.forEach(function(item){
+cart.forEach(item=>{
 
-productTotal +=
-Number(item.price) *
-Number(item.qty);
+productTotal+=
+item.price*item.qty;
 
-const seller =
-item.sellerId ||
-item.seller ||
+const seller=
+item.sellerId||
+item.seller||
 item.id;
 
-if(!sellerSet.has(seller)){
+if(!sellers.has(seller)){
 
-deliveryTotal +=
-Number(
-item.deliveryCharge || 0
-);
+deliveryTotal+=
+item.deliveryCharge||0;
 
-sellerSet.add(seller);
+sellers.add(seller);
 
 }
 
@@ -2552,49 +2851,32 @@ productTotal,
 deliveryTotal,
 
 grandTotal:
-productTotal +
-deliveryTotal
+productTotal+deliveryTotal
 
 };
 
 }
 
 
-/* =====================================================
-   UPDATE CART
-   ===================================================== */
-
 function updateCart(){
 
-const count =
+const count=
 cart.reduce(
-(sum,item)=>
-sum + Number(item.qty),
+(sum,item)=>sum+Number(item.qty),
 0
 );
 
-const countElement =
 document.getElementById(
 "cartCount"
-);
-
-if(countElement){
-
-countElement.innerText=count;
-
-}
+).innerText=count;
 
 
-const list =
+const list=
 document.getElementById(
 "cartList"
 );
 
-if(!list){
-
-return;
-
-}
+if(!list)return;
 
 
 if(cart.length===0){
@@ -2602,9 +2884,7 @@ if(cart.length===0){
 list.innerHTML=`
 
 <div class="empty">
-
 🛒 আপনার Cart খালি।
-
 </div>
 
 `;
@@ -2621,14 +2901,9 @@ return;
 list.innerHTML="";
 
 
-cart.forEach(
-function(item,index){
+cart.forEach((item,index)=>{
 
-const productTotal =
-Number(item.price) *
-Number(item.qty);
-
-const div =
+const div=
 document.createElement("div");
 
 div.className="cart-item";
@@ -2641,42 +2916,22 @@ div.innerHTML=`
 ${escapeHTML(item.name)}
 </strong>
 
-<div
-style="
-font-size:12px;
-color:#777;
-margin-top:5px">
+<div style="font-size:12px;color:#777;margin-top:5px">
 
-৳${Number(item.price)
-.toLocaleString("bn-BD")}
+৳${item.price.toLocaleString("bn-BD")}
 × ${item.qty}
-
-</div>
-
-<div
-style="
-font-size:12px;
-color:#777;
-margin-top:3px">
-
-🚚 Delivery:
-৳${Number(
-item.deliveryCharge || 0
-).toLocaleString("bn-BD")}
 
 </div>
 
 <div class="qty-box">
 
-<button
-onclick="changeQty(${index},-1)">
+<button onclick="changeQty(${index},-1)">
 −
 </button>
 
 <span>${item.qty}</span>
 
-<button
-onclick="changeQty(${index},1)">
+<button onclick="changeQty(${index},1)">
 +
 </button>
 
@@ -2684,14 +2939,13 @@ onclick="changeQty(${index},1)">
 
 </div>
 
-<div
-style="text-align:right">
+<div style="text-align:right">
 
-<strong
-style="color:var(--primary)">
+<strong style="color:var(--primary)">
 
-৳${productTotal
-.toLocaleString("bn-BD")}
+৳${(
+item.price*item.qty
+).toLocaleString("bn-BD")}
 
 </strong>
 
@@ -2719,7 +2973,7 @@ list.appendChild(div);
 });
 
 
-const totals =
+const totals=
 calculateCartTotals();
 
 
@@ -2727,17 +2981,14 @@ document.getElementById(
 "cartTotals"
 ).innerHTML=`
 
-<div
-class="summary-box"
-style="margin:15px 0">
+<div class="summary-box" style="margin:15px 0">
 
 <div class="summary-row">
 
 <span>পণ্যের মোট</span>
 
 <strong>
-৳${totals.productTotal
-.toLocaleString("bn-BD")}
+৳${totals.productTotal.toLocaleString("bn-BD")}
 </strong>
 
 </div>
@@ -2747,8 +2998,7 @@ style="margin:15px 0">
 <span>Delivery Charge</span>
 
 <strong>
-৳${totals.deliveryTotal
-.toLocaleString("bn-BD")}
+৳${totals.deliveryTotal.toLocaleString("bn-BD")}
 </strong>
 
 </div>
@@ -2759,8 +3009,7 @@ style="margin:15px 0">
 
 <span style="color:var(--primary)">
 
-৳${totals.grandTotal
-.toLocaleString("bn-BD")}
+৳${totals.grandTotal.toLocaleString("bn-BD")}
 
 </span>
 
@@ -2773,39 +3022,27 @@ style="margin:15px 0">
 }
 
 
-/* =====================================================
-   QUANTITY
-   ===================================================== */
-
 function changeQty(index,change){
 
-if(!cart[index]){
+if(!cart[index])return;
 
-return;
-
-}
-
-const product =
+const product=
 products.find(
 p=>String(p.id)===String(cart[index].id)
 );
 
-if(change>0 && product){
+if(change>0&&product){
 
 if(cart[index].qty>=product.stock){
 
-showToast(
-"Stock অনুযায়ী Quantity বাড়ানো যাবে না"
-);
-
+showToast("Stock অনুযায়ী Quantity বাড়ানো যাবে না");
 return;
 
 }
 
 }
 
-cart[index].qty += change;
-
+cart[index].qty+=change;
 
 if(cart[index].qty<=0){
 
@@ -2814,22 +3051,16 @@ cart.splice(index,1);
 }
 
 saveCart();
-
 updateCart();
 
 }
 
-
-/* =====================================================
-   REMOVE
-   ===================================================== */
 
 function removeCart(index){
 
 cart.splice(index,1);
 
 saveCart();
-
 updateCart();
 
 showToast(
@@ -2838,10 +3069,6 @@ showToast(
 
 }
 
-
-/* =====================================================
-   OPEN CART
-   ===================================================== */
 
 function openCart(){
 
@@ -2852,173 +3079,16 @@ openModal("cartModal");
 }
 
 
-/* =====================================================
-   ACCOUNT
-   ===================================================== */
-
-async function saveAccount(){
-
-const name =
-document.getElementById(
-"accountName"
-).value.trim();
-
-const phone =
-document.getElementById(
-"accountPhone"
-).value.trim();
-
-
-if(name.length<2){
-
-showToast(
-"সঠিক নাম দিন"
-);
-
-return;
-
-}
-
-if(phone.length<10){
-
-showToast(
-"সঠিক মোবাইল নম্বর দিন"
-);
-
-return;
-
-}
-
-
-try{
-
-const data =
-await apiRequest(
-"/api/users",
-{
-
-method:"POST",
-
-body:JSON.stringify({
-
-name:name,
-
-phone:phone
-
-})
-
-}
-);
-
-currentUser = {
-
-id:
-data.user?.id || "",
-
-name:
-data.user?.name || name,
-
-phone:
-data.user?.phone || phone
-
-};
-
-localStorage.setItem(
-"dhakaUser",
-JSON.stringify(currentUser)
-);
-
-updateAccount();
-
-closeModal("accountModal");
-
-showToast(
-"Account Backend-এ Save হয়েছে ✓"
-);
-
-await loadProducts();
-
-}catch(error){
-
-showToast(
-error.message ||
-"Account Save করা যায়নি"
-);
-
-}
-
-}
-
-
-/* =====================================================
-   ACCOUNT UI
-   ===================================================== */
-
-function updateAccount(){
-
-const info =
-document.getElementById(
-"accountInfo"
-);
-
-if(!info){
-
-return;
-
-}
-
-
-if(currentUser){
-
-info.innerHTML=`
-
-<strong>
-${escapeHTML(
-currentUser.name
-)}
-</strong>
-
-<br>
-
-📱
-${escapeHTML(
-currentUser.phone
-)}
-
-`;
-
-document.getElementById(
-"accountName"
-).value =
-currentUser.name;
-
-document.getElementById(
-"accountPhone"
-).value =
-currentUser.phone;
-
-}else{
-
-info.innerText=
-"Login করা হয়নি";
-
-}
-
-}
-
-
-/* =====================================================
-   LOCATION
-   ===================================================== */
+/* ================= LOCATION ================= */
 
 function saveLocation(){
 
-const area =
+const area=
 document.getElementById(
 "areaSelect"
 ).value;
 
-const address =
+const address=
 document.getElementById(
 "fullAddress"
 ).value.trim();
@@ -3026,27 +3096,19 @@ document.getElementById(
 
 if(!area){
 
-showToast(
-"এলাকা নির্বাচন করুন"
-);
-
+showToast("এলাকা নির্বাচন করুন");
 return;
 
 }
 
 if(!address){
 
-showToast(
-"সম্পূর্ণ Address দিন"
-);
-
+showToast("সম্পূর্ণ Address দিন");
 return;
 
 }
 
-
 currentLocation=area;
-
 currentAddress=address;
 
 localStorage.setItem(
@@ -3070,22 +3132,14 @@ showToast(
 }
 
 
-/* =====================================================
-   UPDATE LOCATION
-   ===================================================== */
-
 function updateLocation(){
 
-const text =
+const text=
 document.getElementById(
 "locationText"
 );
 
-if(!text){
-
-return;
-
-}
+if(!text)return;
 
 if(currentLocation){
 
@@ -3105,23 +3159,19 @@ text.innerText=
 }
 
 
-/* =====================================================
-   SEARCH
-   ===================================================== */
+/* ================= SEARCH ================= */
 
 function searchProducts(){
 
-const query =
-document.getElementById(
-"searchInput"
-).value
+const query=
+document
+.getElementById("searchInput")
+.value
 .toLowerCase()
 .trim();
 
-
-const filtered =
-products.filter(
-product=>
+const filtered=
+products.filter(product=>
 
 product.name
 .toLowerCase()
@@ -3135,31 +3185,24 @@ product.desc
 
 ||
 
-String(product.seller || "")
+String(product.seller||"")
 .toLowerCase()
 .includes(query)
 
 );
-
 
 renderProducts(filtered);
 
 }
 
 
-/* =====================================================
-   CATEGORY
-   ===================================================== */
-
 function filterCategory(category){
 
-const filtered =
+renderProducts(
 products.filter(
-product=>
-product.category===category
+p=>p.category===category
+)
 );
-
-renderProducts(filtered);
 
 scrollToProducts();
 
@@ -3173,9 +3216,7 @@ renderProducts(products);
 }
 
 
-/* =====================================================
-   CHECKOUT
-   ===================================================== */
+/* ================= CHECKOUT ================= */
 
 function startCheckout(){
 
@@ -3189,6 +3230,19 @@ return;
 
 }
 
+if(!currentUser){
+
+closeModal("cartModal");
+
+showLogin();
+
+showToast(
+"Checkout করতে Login করুন"
+);
+
+return;
+
+}
 
 if(!currentLocation){
 
@@ -3204,22 +3258,6 @@ return;
 
 }
 
-
-if(!currentUser){
-
-closeModal("cartModal");
-
-openModal("accountModal");
-
-showToast(
-"আগে Account তৈরি করুন"
-);
-
-return;
-
-}
-
-
 prepareCheckout();
 
 closeModal("cartModal");
@@ -3229,18 +3267,14 @@ openModal("checkoutModal");
 }
 
 
-/* =====================================================
-   PREPARE CHECKOUT
-   ===================================================== */
-
 function prepareCheckout(){
 
-const summary =
+const summary=
 document.getElementById(
 "checkoutSummary"
 );
 
-const totals =
+const totals=
 calculateCartTotals();
 
 
@@ -3248,39 +3282,27 @@ let html=
 "<div class='summary-box'>";
 
 
-cart.forEach(function(item){
+cart.forEach(item=>{
 
 html+=`
 
-<div
-style="
+<div style="
+display:flex;
+justify-content:space-between;
 padding-bottom:10px;
 margin-bottom:10px;
 border-bottom:1px solid #eee">
 
-<div
-style="
-display:flex;
-justify-content:space-between;
-font-size:13px">
-
 <span>
-
 ${escapeHTML(item.name)}
 × ${item.qty}
-
 </span>
 
 <strong>
-
 ৳${(
-Number(item.price) *
-Number(item.qty)
+item.price*item.qty
 ).toLocaleString("bn-BD")}
-
 </strong>
-
-</div>
 
 </div>
 
@@ -3296,10 +3318,7 @@ html+=`
 <span>পণ্যের মোট</span>
 
 <strong>
-
-৳${totals.productTotal
-.toLocaleString("bn-BD")}
-
+৳${totals.productTotal.toLocaleString("bn-BD")}
 </strong>
 
 </div>
@@ -3309,10 +3328,7 @@ html+=`
 <span>Delivery Charge</span>
 
 <strong>
-
-৳${totals.deliveryTotal
-.toLocaleString("bn-BD")}
-
+৳${totals.deliveryTotal.toLocaleString("bn-BD")}
 </strong>
 
 </div>
@@ -3322,10 +3338,7 @@ html+=`
 <span>সর্বমোট</span>
 
 <span style="color:var(--primary)">
-
-৳${totals.grandTotal
-.toLocaleString("bn-BD")}
-
+৳${totals.grandTotal.toLocaleString("bn-BD")}
 </span>
 
 </div>
@@ -3339,113 +3352,73 @@ summary.innerHTML=html;
 
 document.getElementById(
 "checkoutName"
-).value =
-currentUser
-? currentUser.name
-:"";
+).value=
+currentUser?.name||"";
 
 
 document.getElementById(
 "checkoutPhone"
-).value =
-currentUser
-? currentUser.phone
-:"";
+).value=
+currentUser?.phone||"";
 
 
 document.getElementById(
 "checkoutAddress"
-).value =
-currentAddress
-? currentLocation+
+).value=
+currentLocation+
 " — "+
-currentAddress
-:"";
+currentAddress;
 
 }
 
 
-/* =====================================================
-   PLACE ORDER
-   ===================================================== */
+/* ================= PLACE ORDER ================= */
 
 async function placeOrder(){
 
-const name =
-document.getElementById(
-"checkoutName"
-).value.trim();
+const name=
+document
+.getElementById("checkoutName")
+.value.trim();
 
-const phone =
-document.getElementById(
-"checkoutPhone"
-).value.trim();
+const phone=
+document
+.getElementById("checkoutPhone")
+.value.trim();
 
-const address =
-document.getElementById(
-"checkoutAddress"
-).value.trim();
+const address=
+document
+.getElementById("checkoutAddress")
+.value.trim();
 
 
 if(!name){
 
 showToast("নাম দিন");
-
 return;
 
 }
 
 if(phone.length<10){
 
-showToast(
-"সঠিক মোবাইল নম্বর দিন"
-);
-
+showToast("সঠিক মোবাইল নম্বর দিন");
 return;
 
 }
 
 if(!address){
 
-showToast(
-"Delivery Address দিন"
-);
-
-return;
-
-}
-
-if(!currentLocation){
-
-showToast(
-"Delivery Location দিন"
-);
-
+showToast("Delivery Address দিন");
 return;
 
 }
 
 if(cart.length===0){
 
-showToast(
-"Cart খালি"
-);
-
+showToast("Cart খালি");
 return;
 
 }
-
-
-const backendItems =
-cart.map(item=>({
-
-productId:
-item.id,
-
-quantity:
-Number(item.qty)
-
-}));
 
 
 try{
@@ -3455,7 +3428,7 @@ showToast(
 );
 
 
-const data =
+const data=
 await apiRequest(
 "/api/orders",
 {
@@ -3466,11 +3439,16 @@ body:JSON.stringify({
 
 phone:phone,
 
-deliveryAddress:
-address,
+deliveryAddress:address,
 
 items:
-backendItems,
+cart.map(item=>({
+
+productId:item.id,
+
+quantity:Number(item.qty)
+
+})),
 
 paymentMethod:
 "CASH_ON_DELIVERY"
@@ -3481,14 +3459,12 @@ paymentMethod:
 );
 
 
-const order =
-data.order;
+const order=data.order;
 
 
 cart=[];
 
 saveCart();
-
 updateCart();
 
 if(order){
@@ -3502,9 +3478,8 @@ JSON.stringify(orders)
 
 }
 
-closeModal(
-"checkoutModal"
-);
+
+closeModal("checkoutModal");
 
 await loadProducts();
 
@@ -3513,7 +3488,7 @@ showOrderSuccess(order);
 }catch(error){
 
 showToast(
-error.message ||
+error.message||
 "Order করা যায়নি"
 );
 
@@ -3522,16 +3497,14 @@ error.message ||
 }
 
 
-/* =====================================================
-   ORDER SUCCESS
-   ===================================================== */
+/* ================= ORDER SUCCESS ================= */
 
 function showOrderSuccess(order){
 
 if(!order){
 
 showToast(
-"Order হয়েছে, কিন্তু details পাওয়া যায়নি"
+"Order হয়েছে"
 );
 
 return;
@@ -3549,123 +3522,67 @@ document.getElementById(
 "successDetails"
 ).innerHTML=`
 
-<strong>
-Customer:
-</strong>
-
-${escapeHTML(
-order.customerName || ""
-)}
-
+<strong>Customer:</strong>
+${escapeHTML(order.customerName||"")}
 <br>
 
-<strong>
-Phone:
-</strong>
-
-${escapeHTML(
-order.phone || ""
-)}
-
+<strong>Phone:</strong>
+${escapeHTML(order.phone||"")}
 <br>
 
-<strong>
-Address:
-</strong>
-
-${escapeHTML(
-order.deliveryAddress || ""
-)}
-
+<strong>Address:</strong>
+${escapeHTML(order.deliveryAddress||"")}
 <br>
 
-<strong>
-Product Total:
-</strong>
-
-৳${Number(
-order.productTotal || 0
-).toLocaleString("bn-BD")}
-
+<strong>Product Total:</strong>
+৳${Number(order.productTotal||0).toLocaleString("bn-BD")}
 <br>
 
-<strong>
-Delivery Charge:
-</strong>
-
-৳${Number(
-order.deliveryCharge || 0
-).toLocaleString("bn-BD")}
-
+<strong>Delivery:</strong>
+৳${Number(order.deliveryCharge||0).toLocaleString("bn-BD")}
 <br>
 
-<strong>
-Payment:
-</strong>
-
+<strong>Payment:</strong>
 Cash on Delivery
-
 <br>
 
-<strong>
-Total:
-</strong>
-
-৳${Number(
-order.grandTotal || 0
-).toLocaleString("bn-BD")}
-
-<br>
-
-<strong>
-Status:
-</strong>
-
-<span style="color:var(--primary)">
-
-অর্ডার Confirmed ✓
-
-</span>
+<strong>Total:</strong>
+৳${Number(order.grandTotal||0).toLocaleString("bn-BD")}
 
 `;
 
-openModal(
-"successModal"
-);
+openModal("successModal");
 
 }
 
 
-/* =====================================================
-   ORDERS
-   ===================================================== */
+/* ================= ORDERS ================= */
 
 async function openOrders(){
 
 if(!currentUser){
 
-openModal("accountModal");
+showLogin();
 
 showToast(
-"আগে Account তৈরি করুন"
+"আগে Login করুন"
 );
 
 return;
 
 }
 
-
-const list =
+const list=
 document.getElementById(
 "ordersList"
 );
 
+list.innerHTML=`
 
-list.innerHTML=
-`
 <div class="empty">
 Orders Load হচ্ছে...
 </div>
+
 `;
 
 openModal("ordersModal");
@@ -3673,7 +3590,7 @@ openModal("ordersModal");
 
 try{
 
-const data =
+const data=
 await apiRequest(
 "/api/orders/customer/"+
 encodeURIComponent(
@@ -3681,8 +3598,8 @@ currentUser.phone
 )
 );
 
-const backendOrders =
-data.orders || [];
+const backendOrders=
+data.orders||[];
 
 
 if(backendOrders.length===0){
@@ -3690,9 +3607,7 @@ if(backendOrders.length===0){
 list.innerHTML=`
 
 <div class="empty">
-
 📦 এখনো কোনো Order নেই।
-
 </div>
 
 `;
@@ -3705,28 +3620,20 @@ return;
 list.innerHTML="";
 
 
-backendOrders.forEach(
-function(order){
+backendOrders.forEach(order=>{
 
-const div =
-document.createElement(
-"div"
-);
+const div=
+document.createElement("div");
 
-div.className=
-"order-card";
-
+div.className="order-card";
 
 div.innerHTML=`
 
 <strong>
-
 ${escapeHTML(order.id)}
-
 </strong>
 
-<div
-style="
+<div style="
 font-size:12px;
 color:#777;
 margin-top:5px">
@@ -3734,54 +3641,33 @@ margin-top:5px">
 ${escapeHTML(
 new Date(
 order.createdAt
-).toLocaleString(
-"bn-BD"
-))}
+).toLocaleString("bn-BD")
+)}
 
 </div>
 
-<hr
-style="
+<hr style="
 border:0;
 border-top:1px solid #eee;
 margin:10px 0">
 
 <div>
-
 মোট:
-
 <strong>
-
 ৳${Number(
-order.grandTotal || 0
+order.grandTotal||0
 ).toLocaleString("bn-BD")}
-
 </strong>
-
 </div>
 
-<div style="margin-top:4px">
-
-Delivery:
-
-৳${Number(
-order.deliveryCharge || 0
-).toLocaleString("bn-BD")}
-
-</div>
-
-<div style="margin-top:4px">
-
-Payment:
-
-Cash on Delivery
-
+<div style="margin-top:5px">
+Payment: Cash on Delivery
 </div>
 
 <div class="order-status">
 
 ${escapeHTML(
-order.orderStatus ||
+order.orderStatus||
 "ORDER_CONFIRMED"
 )}
 
@@ -3794,8 +3680,6 @@ list.appendChild(div);
 });
 
 }catch(error){
-
-console.error(error);
 
 list.innerHTML=`
 
@@ -3827,9 +3711,7 @@ color:white">
 }
 
 
-/* =====================================================
-   NAVIGATION
-   ===================================================== */
+/* ================= NAVIGATION ================= */
 
 function scrollToProducts(){
 
@@ -3868,25 +3750,17 @@ button.classList.add("active");
 }
 
 
-/* =====================================================
-   TOAST
-   ===================================================== */
+/* ================= TOAST ================= */
 
 let toastTimer;
 
 
 function showToast(message){
 
-const toast =
-document.getElementById(
-"toast"
-);
+const toast=
+document.getElementById("toast");
 
-if(!toast){
-
-return;
-
-}
+if(!toast)return;
 
 toast.innerText=message;
 
@@ -3896,58 +3770,44 @@ clearTimeout(toastTimer);
 
 toastTimer=
 setTimeout(
-function(){
-
-toast.classList.remove(
-"show"
-);
-
+()=>{
+toast.classList.remove("show");
 },
-2500
+3000
 );
 
 }
 
 
-/* =====================================================
-   CLOSE MODAL OUTSIDE
-   ===================================================== */
+/* ================= ESCAPE HTML ================= */
+
+function escapeHTML(text){
+
+return String(text??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* ================= CLOSE MODAL OUTSIDE ================= */
 
 document.addEventListener(
 "click",
-function(event){
+event=>{
 
 if(
-event.target.classList.contains(
-"modal"
-)
+event.target.classList.contains("modal")
 ){
 
-event.target.classList.remove(
-"show"
-);
+event.target.classList.remove("show");
 
 }
 
 });
-
-
-/* =====================================================
-   PWA DISPLAY MODE
-   ===================================================== */
-
-if(
-window.matchMedia &&
-window.matchMedia(
-"(display-mode: standalone)"
-).matches
-){
-
-console.log(
-"Dhaka Bazar is running as installed PWA"
-);
-
-}
 
 </script>
 
