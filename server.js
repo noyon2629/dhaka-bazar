@@ -249,6 +249,15 @@ app.post("/api/sellers", (req, res) => {
     });
 });
 
+// ============================================
+// ROOT & DASHBOARD ROUTE
+// ============================================
+
+// সরাসরি ডোমেইনে ঢুকলেই owner.html ওপেন হবে
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/owner.html");
+});
+
 // Default 404 Route
 app.use((req, res) => {
     res.status(404).json({
