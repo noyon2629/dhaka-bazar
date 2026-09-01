@@ -167,7 +167,7 @@ header{
 .section-title h2{ font-size:20px; }
 .section-title button{ border:0; background:none; color:var(--primary); font-weight:700; }
 
-/* CATEGORIES */
+/* CATEGories */
 .categories{
     display:grid;
     grid-template-columns:repeat(6,1fr);
@@ -260,10 +260,6 @@ header{
     white-space:nowrap;
 }
 
-.share-btn:hover{
-    background:#f0fdf4;
-}
-
 .admin-action-btns{
     display:flex;
     gap:5px;
@@ -318,7 +314,6 @@ header{
 .primary-btn{ width:100%; padding:12px; border:0; border-radius:10px; background:var(--primary); color:white; font-weight:700; }
 .secondary-btn{ width:100%; padding:11px; border:1px solid var(--primary); border-radius:10px; background:white; color:var(--primary); font-weight:700; margin-top:8px; }
 
-/* PROFILE AVATAR DESIGN */
 .profile-img-preview{
     width:90px;
     height:90px;
@@ -329,13 +324,11 @@ header{
     display:block;
 }
 
-/* ADMIN PANEL DESIGN */
 .admin-tabs{ display:flex; gap:8px; margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px; overflow-x:auto; }
 .admin-tab-btn{ padding:8px 12px; border:none; background:#eee; border-radius:8px; font-weight:bold; font-size:12px; white-space:nowrap; }
 .admin-tab-btn.active{ background:var(--primary); color:white; }
 .admin-card{ background:#f9fafb; border:1px solid var(--border); padding:12px; border-radius:10px; margin-bottom:10px; font-size:13px; }
 
-/* TOAST */
 .toast{ position:fixed; left:50%; bottom:85px; transform:translateX(-50%) translateY(30px); background:#111827; color:white; padding:12px 18px; border-radius:25px; opacity:0; pointer-events:none; transition:.3s; z-index:3000; font-size:13px; }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
@@ -381,9 +374,7 @@ header{
         <button onclick="renderProducts()">সব পণ্য</button>
     </div>
 
-    <section class="categories" id="categoriesContainer">
-        <!-- Categories load dynamically -->
-    </section>
+    <section class="categories" id="categoriesContainer"></section>
 
     <div class="section-title" id="productSection">
         <h2>জনপ্রিয় পণ্য</h2>
@@ -450,7 +441,6 @@ header{
             <button class="admin-tab-btn" onclick="switchAdminTab('orders', event)">📜 All Orders</button>
         </div>
 
-        <!-- OWNER DIRECT ITEM/FEATURE ADD FORM -->
         <div id="adminTabAddDirect">
             <h4 style="margin-bottom:10px;">অ্যাপসে সরাসরি পণ্য / ফিচার অ্যাড করুন</h4>
             <div class="form-group">
@@ -470,13 +460,12 @@ header{
                 <select id="ownerDirectCategory"></select>
             </div>
             <div class="form-group">
-                <label>ছবি নির্বাচন করুন (Optional)</label>
+                <label>ছবি নির্বাচন করুন (গ্যালারি থেকে)</label>
                 <input type="file" id="ownerDirectFile" accept="image/*">
             </div>
             <button class="primary-btn" style="background:#0b8f55;" onclick="saveOwnerDirectProduct()">🚀 সরাসরি অ্যাপসে লাইভ করুন</button>
         </div>
 
-        <!-- OWNER CATEGORY MANAGEMENT -->
         <div id="adminTabCategories" style="display:none;">
             <h4 style="margin-bottom:10px;">নতুন ক্যাটাগরি যোগ করুন</h4>
             <div class="form-group">
@@ -513,7 +502,7 @@ header{
     </div>
 </div>
 
-<!-- EDIT USER BY OWNER MODAL -->
+<!-- EDIT USER MODAL -->
 <div class="modal" id="editUserModal">
     <div class="modal-box">
         <div class="modal-header">
@@ -545,7 +534,7 @@ header{
 <div class="modal" id="editProductModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>✏️ পণ্য সম্পাদনা (Edit Product)</h3>
+            <h3>✏️ পণ্য সম্পাদনা ও ছবি পরিবর্তন</h3>
             <button class="close" onclick="closeModal('editProductModal')">×</button>
         </div>
         <input type="hidden" id="editProductId">
@@ -562,12 +551,8 @@ header{
             <input id="editProductPrice" type="number">
         </div>
         <div class="form-group">
-            <label>Delivery Charge (৳)</label>
-            <input id="editProductDelivery" type="number">
-        </div>
-        <div class="form-group">
-            <label>Stock</label>
-            <input id="editProductStock" type="number">
+            <label>নতুন ছবি আপলোড (Optional)</label>
+            <input type="file" id="editProductFile" accept="image/*">
         </div>
         <button class="primary-btn" onclick="saveProductEdit()">পণ্য আপডেট করুন</button>
     </div>
@@ -657,14 +642,6 @@ header{
             <input id="sellerProductPrice" type="number" placeholder="500">
         </div>
         <div class="form-group">
-            <label>Stock</label>
-            <input id="sellerProductStock" type="number" value="10">
-        </div>
-        <div class="form-group">
-            <label>Delivery Charge (৳)</label>
-            <input id="sellerDeliveryCharge" type="number" value="60">
-        </div>
-        <div class="form-group">
             <label>Category</label>
             <select id="sellerProductCategory"></select>
         </div>
@@ -715,8 +692,8 @@ let categories = JSON.parse(localStorage.getItem("dhakaCategories")) || [
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts")) || [
-    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, deliveryCharge: 60, stock: 20, category: "grocery", icon: "🌾", seller: "Dhaka Bazar Owner" },
-    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, deliveryCharge: 100, stock: 5, category: "electronics", icon: "📱", seller: "Dhaka Bazar Owner" }
+    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, category: "grocery", icon: "🌾", seller: "Dhaka Bazar Owner", image: null },
+    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, category: "electronics", icon: "📱", seller: "Dhaka Bazar Owner", image: null }
 ];
 
 let cart = JSON.parse(localStorage.getItem("dhakaCart")) || [];
@@ -729,7 +706,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCart();
     updateProfileBtnHeader();
     
-    // শেয়ার লিঙ্ক চেক
     const urlParams = new URLSearchParams(window.location.search);
     const sharedProductId = urlParams.get('product');
     
@@ -746,7 +722,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* DYNAMIC CATEGORY RENDER */
 function renderCategories(){
     const container = document.getElementById("categoriesContainer");
     const sellerCatSelect = document.getElementById("sellerProductCategory");
@@ -766,17 +741,42 @@ function renderCategories(){
     if(ownerCatSelect) ownerCatSelect.innerHTML = optionsHTML;
 }
 
-/* GALLERY IMAGE CONVERTER TO BASE64 */
+/* SMART IMAGE COMPRESSOR & BASE64 CONVERTER (Prevents Storage Size Issues) */
 function convertFileToBase64(file){
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const max_size = 500; // Resize to max 500px to avoid localstorage quota error
+
+                if (width > height) {
+                    if (width > max_size) {
+                        height *= max_size / width;
+                        width = max_size;
+                    }
+                } else {
+                    if (height > max_size) {
+                        width *= max_size / height;
+                        height = max_size;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', 0.8));
+            };
+        };
     });
 }
 
-/* USER PROFILE AVATAR SAVE */
 async function saveUserProfilePhoto(){
     const fileInput = document.getElementById("userAvatarFile");
     if(!fileInput.files || !fileInput.files[0]){
@@ -809,7 +809,6 @@ function updateProfileBtnHeader(){
     }
 }
 
-/* AUTHENTICATION */
 function loginUser(){
     const phone = document.getElementById("loginPhone").value.trim();
     const pass = document.getElementById("loginPassword").value;
@@ -867,7 +866,6 @@ function loginOwner(){
     }
 }
 
-/* PROFILE MODAL DISPLAY */
 function updateProfile(){
     const box = document.getElementById("profileContent");
     if(!currentUser){
@@ -891,7 +889,6 @@ function updateProfile(){
     `;
 }
 
-/* OWNER CONTROL DIRECT EDITING & MODERATION */
 function openOwnerDashboard(){
     if(!currentUser || currentUser.role !== "owner") return;
     openModal("ownerDashboardModal");
@@ -915,7 +912,6 @@ function switchAdminTab(tab, evt){
     if(evt) evt.target.classList.add("active");
 }
 
-/* OWNER DIRECT ADD PRODUCT/FEATURE */
 async function saveOwnerDirectProduct(){
     const name = document.getElementById("ownerDirectName").value.trim();
     const desc = document.getElementById("ownerDirectDesc").value.trim();
@@ -935,8 +931,6 @@ async function saveOwnerDirectProduct(){
         name,
         desc,
         price,
-        deliveryCharge: 60,
-        stock: 50,
         category: cat,
         image: imageBase64,
         icon: "✨",
@@ -950,7 +944,6 @@ async function saveOwnerDirectProduct(){
     showToast("নতুন আইটেম সরাসরি অ্যাপসে যোগ হয়েছে 🎉");
 }
 
-/* OWNER ADD NEW CATEGORY */
 function addNewCategoryByOwner(){
     const name = document.getElementById("newCatName").value.trim();
     const key = document.getElementById("newCatKey").value.trim().toLowerCase();
@@ -1064,13 +1057,12 @@ function openEditProduct(id){
     document.getElementById("editProductName").value = p.name;
     document.getElementById("editProductDesc").value = p.desc;
     document.getElementById("editProductPrice").value = p.price;
-    document.getElementById("editProductDelivery").value = p.deliveryCharge;
-    document.getElementById("editProductStock").value = p.stock;
+    document.getElementById("editProductFile").value = "";
 
     openModal("editProductModal");
 }
 
-function saveProductEdit(){
+async function saveProductEdit(){
     const id = document.getElementById("editProductId").value;
     const p = products.find(prod => String(prod.id) === String(id));
     if(!p) return;
@@ -1078,14 +1070,17 @@ function saveProductEdit(){
     p.name = document.getElementById("editProductName").value;
     p.desc = document.getElementById("editProductDesc").value;
     p.price = Number(document.getElementById("editProductPrice").value);
-    p.deliveryCharge = Number(document.getElementById("editProductDelivery").value);
-    p.stock = Number(document.getElementById("editProductStock").value);
+
+    const fileInput = document.getElementById("editProductFile");
+    if(fileInput.files && fileInput.files[0]){
+        p.image = await convertFileToBase64(fileInput.files[0]);
+    }
 
     localStorage.setItem("dhakaProducts", JSON.stringify(products));
     closeModal("editProductModal");
     renderProducts();
     if(currentUser && currentUser.role==='owner') loadAdminData();
-    showToast("পণ্য আপডেট হয়েছে ✓");
+    showToast("পণ্য এবং ছবি সফলভাবে আপডেট হয়েছে ✓");
 }
 
 function deleteProduct(id){
@@ -1116,8 +1111,6 @@ async function addSellerProduct(){
         name,
         desc,
         price,
-        deliveryCharge: Number(document.getElementById("sellerDeliveryCharge").value) || 60,
-        stock: Number(document.getElementById("sellerProductStock").value) || 10,
         category: document.getElementById("sellerProductCategory").value,
         image: imageBase64,
         icon: "📦",
@@ -1128,7 +1121,7 @@ async function addSellerProduct(){
     localStorage.setItem("dhakaProducts", JSON.stringify(products));
     closeModal("sellerModal");
     renderProducts();
-    showToast("পণ্য যোগ করা হয়েছে ✓");
+    showToast("পণ্য ও ছবি সফলভাবে যোগ করা হয়েছে ✓");
 }
 
 function renderProducts(list = products){
@@ -1165,10 +1158,8 @@ function renderProducts(list = products){
     `).join('');
 }
 
-/* SHARE PRODUCT FUNCTION */
 function shareProduct(id, name) {
     const shareUrl = window.location.origin + window.location.pathname + '?product=' + id;
-    
     if (navigator.share) {
         navigator.share({
             title: name,
@@ -1178,8 +1169,6 @@ function shareProduct(id, name) {
     } else {
         navigator.clipboard.writeText(shareUrl).then(() => {
             showToast("লিঙ্ক কপি করা হয়েছে! 📋");
-        }).catch(() => {
-            showToast("লিঙ্ক কপি করতে সমস্যা হয়েছে");
         });
     }
 }
@@ -1195,7 +1184,6 @@ function searchProducts(){
     renderProducts(filtered);
 }
 
-/* CART & ORDERS HANDLERS */
 function addToCart(id){
     const p = products.find(i => String(i.id) === String(id));
     if(p){
@@ -1270,7 +1258,6 @@ function openOrders(){
     openModal("ordersModal");
 }
 
-/* UTILS & UI CONTROLS */
 function openModal(id){ document.getElementById(id).classList.add("show"); }
 function closeModal(id){ document.getElementById(id).classList.remove("show"); }
 function showLogin(){ openModal("authModal"); document.getElementById("loginBox").style.display="block"; document.getElementById("registerBox").style.display="none"; document.getElementById("ownerBox").style.display="none"; }
@@ -1279,7 +1266,7 @@ function showOwnerLogin(){ openModal("authModal"); document.getElementById("logi
 function openProfile(){ updateProfile(); openModal("profileModal"); }
 function openSeller(){ if(!currentUser){ showLogin(); return; } openModal("sellerModal"); }
 function logoutUser(){ currentUser=null; localStorage.removeItem("dhakaUser"); updateProfileBtnHeader(); closeModal("profileModal"); renderProducts(); showToast("Logout হয়েছে"); }
-function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
+function showToast(msg){ const t =Document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
 function escapeHTML(str){ return String(str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 function openCart(){ updateCart(); openModal("cartModal"); }
 function scrollToProducts(){ document.getElementById("productSection").scrollIntoView({behavior:"smooth"}); }
