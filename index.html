@@ -236,6 +236,7 @@ header{
     justify-content:space-between;
     align-items:center;
     margin-top:10px;
+    gap:8px;
 }
 
 .add-btn{
@@ -245,7 +246,22 @@ header{
     padding:8px 14px;
     border-radius:20px;
     font-weight:700;
-    width:100%;
+    flex:1;
+}
+
+.share-btn{
+    border:1px solid var(--primary);
+    background:white;
+    color:var(--primary);
+    padding:8px 12px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+.share-btn:hover{
+    background:#f0fdf4;
 }
 
 .admin-action-btns{
@@ -314,8 +330,8 @@ header{
 }
 
 /* ADMIN PANEL DESIGN */
-.admin-tabs{ display:flex; gap:8px; margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px; }
-.admin-tab-btn{ padding:8px 12px; border:none; background:#eee; border-radius:8px; font-weight:bold; font-size:12px; }
+.admin-tabs{ display:flex; gap:8px; margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px; overflow-x:auto; }
+.admin-tab-btn{ padding:8px 12px; border:none; background:#eee; border-radius:8px; font-weight:bold; font-size:12px; white-space:nowrap; }
 .admin-tab-btn.active{ background:var(--primary); color:white; }
 .admin-card{ background:#f9fafb; border:1px solid var(--border); padding:12px; border-radius:10px; margin-bottom:10px; font-size:13px; }
 
@@ -365,13 +381,8 @@ header{
         <button onclick="renderProducts()">সব পণ্য</button>
     </div>
 
-    <section class="categories">
-        <div class="category" onclick="filterCategory('grocery')"><div class="category-icon">🥬</div><p>মুদিখানা</p></div>
-        <div class="category" onclick="filterCategory('food')"><div class="category-icon">🍔</div><p>খাবার</p></div>
-        <div class="category" onclick="filterCategory('fashion')"><div class="category-icon">👕</div><p>ফ্যাশন</p></div>
-        <div class="category" onclick="filterCategory('electronics')"><div class="category-icon">📱</div><p>ইলেকট্রনিক্স</p></div>
-        <div class="category" onclick="filterCategory('home')"><div class="category-icon">🏠</div><p>হোম</p></div>
-        <div class="category" onclick="filterCategory('beauty')"><div class="category-icon">🧴</div><p>বিউটি</p></div>
+    <section class="categories" id="categoriesContainer">
+        <!-- Categories load dynamically -->
     </section>
 
     <div class="section-title" id="productSection">
@@ -427,17 +438,65 @@ header{
 <div class="modal" id="ownerDashboardModal">
     <div class="modal-box" style="max-width:700px;">
         <div class="modal-header">
-            <h3>👑 Owner Control Panel</h3>
+            <h3>👑 Owner Panel & Manager</h3>
             <button class="close" onclick="closeModal('ownerDashboardModal')">×</button>
         </div>
         
         <div class="admin-tabs">
-            <button class="admin-tab-btn active" onclick="switchAdminTab('users', event)">👥 Users & Sellers</button>
+            <button class="admin-tab-btn active" onclick="switchAdminTab('addDirect', event)">➕ সরাসরি আইটেম যোগ</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('categories', event)">📁 ক্যাটাগরি ম্যানেজমেন্ট</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('users', event)">👥 Users & Sellers</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('products', event)">📦 All Products</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('orders', event)">📜 All Orders</button>
         </div>
 
-        <div id="adminTabUsers">
+        <!-- OWNER DIRECT ITEM/FEATURE ADD FORM -->
+        <div id="adminTabAddDirect">
+            <h4 style="margin-bottom:10px;">অ্যাপসে সরাসরি পণ্য / ফিচার অ্যাড করুন</h4>
+            <div class="form-group">
+                <label>পণ্য/আইটেমের নাম</label>
+                <input id="ownerDirectName" placeholder="যেমন: নতুন আইটেম">
+            </div>
+            <div class="form-group">
+                <label>বিবরণ (Description)</label>
+                <input id="ownerDirectDesc" placeholder="আইটেমের শর্ট ডিটেইলস">
+            </div>
+            <div class="form-group">
+                <label>দাম (৳)</label>
+                <input id="ownerDirectPrice" type="number" placeholder="100">
+            </div>
+            <div class="form-group">
+                <label>ক্যাটাগরি সিলেক্ট করুন</label>
+                <select id="ownerDirectCategory"></select>
+            </div>
+            <div class="form-group">
+                <label>ছবি নির্বাচন করুন (Optional)</label>
+                <input type="file" id="ownerDirectFile" accept="image/*">
+            </div>
+            <button class="primary-btn" style="background:#0b8f55;" onclick="saveOwnerDirectProduct()">🚀 সরাসরি অ্যাপসে লাইভ করুন</button>
+        </div>
+
+        <!-- OWNER CATEGORY MANAGEMENT -->
+        <div id="adminTabCategories" style="display:none;">
+            <h4 style="margin-bottom:10px;">নতুন ক্যাটাগরি যোগ করুন</h4>
+            <div class="form-group">
+                <label>ক্যাটাগরির নাম (Bangla)</label>
+                <input id="newCatName" placeholder="যেমন: খেলাধুলা">
+            </div>
+            <div class="form-group">
+                <label>ক্যাটাগরি আইডি (English Key)</label>
+                <input id="newCatKey" placeholder="যেমন: sports">
+            </div>
+            <div class="form-group">
+                <label>ইমোজি আইকন</label>
+                <input id="newCatIcon" placeholder="যেমন: ⚽">
+            </div>
+            <button class="primary-btn" style="margin-bottom:15px;" onclick="addNewCategoryByOwner()">+ নতুন ক্যাটাগরি যোগ করুন</button>
+            <h4>বিদ্যমান ক্যাটাগরি সমূহ:</h4>
+            <div id="adminCategoryList" style="margin-top:10px;"></div>
+        </div>
+
+        <div id="adminTabUsers" style="display:none;">
             <h4>সকল ব্যবহারকারী পরিচালনা</h4>
             <div id="adminUsersList" style="margin-top:10px;"></div>
         </div>
@@ -607,14 +666,7 @@ header{
         </div>
         <div class="form-group">
             <label>Category</label>
-            <select id="sellerProductCategory">
-                <option value="grocery">মুদিখানা</option>
-                <option value="food">খাবার</option>
-                <option value="fashion">ফ্যাশন</option>
-                <option value="electronics">ইলেকট্রনিক্স</option>
-                <option value="home">হোম</option>
-                <option value="beauty">বিউটি</option>
-            </select>
+            <select id="sellerProductCategory"></select>
         </div>
         <div class="form-group">
             <label>ছবি আপলোড করুন (গ্যালারি থেকে)</label>
@@ -653,20 +705,66 @@ header{
 const OWNER_UID_SECRET = "2629574242";
 const OWNER_PASS_SECRET = "DhakaBazar@2026#Owner";
 
-let products = JSON.parse(localStorage.getItem("dhakaProducts")) || [
-    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, deliveryCharge: 60, stock: 20, category: "grocery", icon: "🌾", seller: "Dhaka Bazar" },
-    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, deliveryCharge: 100, stock: 5, category: "electronics", icon: "📱", seller: "Dhaka Bazar" }
+let categories = JSON.parse(localStorage.getItem("dhakaCategories")) || [
+    { key: "grocery", name: "মুদিখানা", icon: "🥬" },
+    { key: "food", name: "খাবার", icon: "🍔" },
+    { key: "fashion", name: "ফ্যাশন", icon: "👕" },
+    { key: "electronics", name: "ইলেকট্রনিক্স", icon: "📱" },
+    { key: "home", name: "হোম", icon: "🏠" },
+    { key: "beauty", name: "বিউটি", icon: "🧴" }
 ];
+
+let products = JSON.parse(localStorage.getItem("dhakaProducts")) || [
+    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, deliveryCharge: 60, stock: 20, category: "grocery", icon: "🌾", seller: "Dhaka Bazar Owner" },
+    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, deliveryCharge: 100, stock: 5, category: "electronics", icon: "📱", seller: "Dhaka Bazar Owner" }
+];
+
 let cart = JSON.parse(localStorage.getItem("dhakaCart")) || [];
 let orders = JSON.parse(localStorage.getItem("dhakaOrders")) || [];
 let usersList = JSON.parse(localStorage.getItem("dhakaUsersList")) || [];
 let currentUser = JSON.parse(localStorage.getItem("dhakaUser")) || null;
 
 document.addEventListener("DOMContentLoaded", () => {
+    renderCategories();
     updateCart();
     updateProfileBtnHeader();
-    renderProducts();
+    
+    // শেয়ার লিঙ্ক চেক
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedProductId = urlParams.get('product');
+    
+    if(sharedProductId){
+        const found = products.filter(p => String(p.id) === String(sharedProductId));
+        if(found.length > 0){
+            renderProducts(found);
+            showToast("শেয়ার করা পণ্যটি দেখানো হচ্ছে ✓");
+        } else {
+            renderProducts();
+        }
+    } else {
+        renderProducts();
+    }
 });
+
+/* DYNAMIC CATEGORY RENDER */
+function renderCategories(){
+    const container = document.getElementById("categoriesContainer");
+    const sellerCatSelect = document.getElementById("sellerProductCategory");
+    const ownerCatSelect = document.getElementById("ownerDirectCategory");
+
+    if(container){
+        container.innerHTML = categories.map(c => `
+            <div class="category" onclick="filterCategory('${c.key}')">
+                <div class="category-icon">${c.icon}</div>
+                <p>${escapeHTML(c.name)}</p>
+            </div>
+        `).join('');
+    }
+
+    const optionsHTML = categories.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
+    if(sellerCatSelect) sellerCatSelect.innerHTML = optionsHTML;
+    if(ownerCatSelect) ownerCatSelect.innerHTML = optionsHTML;
+}
 
 /* GALLERY IMAGE CONVERTER TO BASE64 */
 function convertFileToBase64(file){
@@ -787,7 +885,7 @@ function updateProfile(){
             <p>📱 ${escapeHTML(currentUser.phone)}</p>
             <p>🏷️ Type: <b>${currentUser.role.toUpperCase()}</b></p>
         </div>
-        ${currentUser.role === 'owner' ? `<button class="primary-btn" style="background:#1f2937;margin-bottom:8px" onclick="closeModal('profileModal');openOwnerDashboard()">👑 Owner Dashboard</button>` : ''}
+        ${currentUser.role === 'owner' ? `<button class="primary-btn" style="background:#1f2937;margin-bottom:8px" onclick="closeModal('profileModal');openOwnerDashboard()">👑 Owner Control Panel</button>` : ''}
         ${currentUser.role === 'seller' || currentUser.role === 'owner' ? `<button class="primary-btn" onclick="closeModal('profileModal');openSeller()">🏪 Product Add করুন</button>` : ''}
         <button class="secondary-btn" onclick="logoutUser()">🚪 Logout</button>
     `;
@@ -802,49 +900,130 @@ function openOwnerDashboard(){
 
 function switchAdminTab(tab, evt){
     document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("adminTabAddDirect").style.display = "none";
+    document.getElementById("adminTabCategories").style.display = "none";
     document.getElementById("adminTabUsers").style.display = "none";
     document.getElementById("adminTabProducts").style.display = "none";
     document.getElementById("adminTabOrders").style.display = "none";
 
-    if(tab==='users'){ document.getElementById("adminTabUsers").style.display="block"; }
+    if(tab==='addDirect'){ document.getElementById("adminTabAddDirect").style.display="block"; }
+    else if(tab==='categories'){ document.getElementById("adminTabCategories").style.display="block"; }
+    else if(tab==='users'){ document.getElementById("adminTabUsers").style.display="block"; }
     else if(tab==='products'){ document.getElementById("adminTabProducts").style.display="block"; }
     else if(tab==='orders'){ document.getElementById("adminTabOrders").style.display="block"; }
+    
     if(evt) evt.target.classList.add("active");
 }
 
+/* OWNER DIRECT ADD PRODUCT/FEATURE */
+async function saveOwnerDirectProduct(){
+    const name = document.getElementById("ownerDirectName").value.trim();
+    const desc = document.getElementById("ownerDirectDesc").value.trim();
+    const price = Number(document.getElementById("ownerDirectPrice").value);
+    const cat = document.getElementById("ownerDirectCategory").value;
+    const fileInput = document.getElementById("ownerDirectFile");
+
+    if(!name || !price){ showToast("নাম এবং দাম আবশ্যক!"); return; }
+
+    let imageBase64 = null;
+    if(fileInput.files && fileInput.files[0]){
+        imageBase64 = await convertFileToBase64(fileInput.files[0]);
+    }
+
+    const newProd = {
+        id: "PRD_" + Date.now(),
+        name,
+        desc,
+        price,
+        deliveryCharge: 60,
+        stock: 50,
+        category: cat,
+        image: imageBase64,
+        icon: "✨",
+        seller: "Owner (Dhaka Bazar)"
+    };
+
+    products.unshift(newProd);
+    localStorage.setItem("dhakaProducts", JSON.stringify(products));
+    renderProducts();
+    closeModal("ownerDashboardModal");
+    showToast("নতুন আইটেম সরাসরি অ্যাপসে যোগ হয়েছে 🎉");
+}
+
+/* OWNER ADD NEW CATEGORY */
+function addNewCategoryByOwner(){
+    const name = document.getElementById("newCatName").value.trim();
+    const key = document.getElementById("newCatKey").value.trim().toLowerCase();
+    const icon = document.getElementById("newCatIcon").value.trim() || "📦";
+
+    if(!name || !key){ showToast("ক্যাটাগরির নাম ও আইডেন্টিফায়ার দিন"); return; }
+
+    categories.push({ key, name, icon });
+    localStorage.setItem("dhakaCategories", JSON.stringify(categories));
+    renderCategories();
+    loadAdminData();
+    showToast("নতুন ক্যাটাগরি তৈরি হয়েছে ✓");
+}
+
+function deleteCategoryByOwner(index){
+    if(confirm("ক্যাটাগরি মুছে ফেলতে চান?")){
+        categories.splice(index, 1);
+        localStorage.setItem("dhakaCategories", JSON.stringify(categories));
+        renderCategories();
+        loadAdminData();
+        showToast("ক্যাটাগরি মুছে ফেলা হয়েছে");
+    }
+}
+
 function loadAdminData(){
-    const usersBox = document.getElementById("adminUsersList");
-    usersBox.innerHTML = usersList.map((u, i) => `
-        <div class="admin-card">
-            <strong>${escapeHTML(u.name)}</strong> (${u.role})<br>
-            📱 Phone: ${escapeHTML(u.phone)}<br>
-            <div style="display:flex;gap:5px;margin-top:8px">
-                <button class="edit-btn" onclick="openEditUserByOwner(${i})">✏️ Edit User</button>
-                <button class="delete-btn" onclick="deleteUserByOwner(${i})">🗑️ Delete User</button>
+    const catBox = document.getElementById("adminCategoryList");
+    if(catBox){
+        catBox.innerHTML = categories.map((c, i) => `
+            <div class="admin-card" style="display:flex;justify-content:space-between;align-items:center;">
+                <div>${c.icon} <strong>${escapeHTML(c.name)}</strong> (${c.key})</div>
+                <button class="delete-btn" style="max-width:70px;" onclick="deleteCategoryByOwner(${i})">ডিলিট</button>
             </div>
-        </div>
-    `).join('') || "<div class='empty'>ইউজার নেই।</div>";
+        `).join('');
+    }
+
+    const usersBox = document.getElementById("adminUsersList");
+    if(usersBox){
+        usersBox.innerHTML = usersList.map((u, i) => `
+            <div class="admin-card">
+                <strong>${escapeHTML(u.name)}</strong> (${u.role})<br>
+                📱 Phone: ${escapeHTML(u.phone)}<br>
+                <div style="display:flex;gap:5px;margin-top:8px">
+                    <button class="edit-btn" onclick="openEditUserByOwner(${i})">✏️ Edit User</button>
+                    <button class="delete-btn" onclick="deleteUserByOwner(${i})">🗑️ Delete User</button>
+                </div>
+            </div>
+        `).join('') || "<div class='empty'>ইউজার নেই।</div>";
+    }
 
     const productsBox = document.getElementById("adminProductsList");
-    productsBox.innerHTML = products.map(p => `
-        <div class="admin-card">
-            <strong>${escapeHTML(p.name)}</strong> - ৳${p.price}<br>
-            🏪 Seller: ${escapeHTML(p.seller)}<br>
-            <div style="display:flex;gap:5px;margin-top:8px">
-                <button class="edit-btn" onclick="openEditProduct('${p.id}')">✏️ Edit Product</button>
-                <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete Product</button>
+    if(productsBox){
+        productsBox.innerHTML = products.map(p => `
+            <div class="admin-card">
+                <strong>${escapeHTML(p.name)}</strong> - ৳${p.price}<br>
+                🏪 Seller: ${escapeHTML(p.seller)}<br>
+                <div style="display:flex;gap:5px;margin-top:8px">
+                    <button class="edit-btn" onclick="openEditProduct('${p.id}')">✏️ Edit Product</button>
+                    <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete Product</button>
+                </div>
             </div>
-        </div>
-    `).join('') || "<div class='empty'>প্রোডাক্ট নেই।</div>";
+        `).join('') || "<div class='empty'>প্রোডাক্ট নেই।</div>";
+    }
 
     const ordersBox = document.getElementById("adminOrdersList");
-    ordersBox.innerHTML = orders.map(o => `
-        <div class="admin-card">
-            <strong>Order ID: ${o.id}</strong><br>
-            👤 Customer: ${escapeHTML(o.customerName)} (${o.phone})<br>
-            💰 Total: ৳${o.grandTotal}
-        </div>
-    `).join('') || "<div class='empty'>অর্ডার নেই।</div>";
+    if(ordersBox){
+        ordersBox.innerHTML = orders.map(o => `
+            <div class="admin-card">
+                <strong>Order ID: ${o.id}</strong><br>
+                👤 Customer: ${escapeHTML(o.customerName)} (${o.phone})<br>
+                💰 Total: ৳${o.grandTotal}
+            </div>
+        `).join('') || "<div class='empty'>অর্ডার নেই।</div>";
+    }
 }
 
 function openEditUserByOwner(index){
@@ -974,6 +1153,7 @@ function renderProducts(list = products){
                 <div class="price">৳${p.price}</div>
                 <div class="product-bottom">
                     <button class="add-btn" onclick="addToCart('${p.id}')">+ যোগ</button>
+                    <button class="share-btn" onclick="shareProduct('${p.id}', '${escapeHTML(p.name)}')">🔗 শেয়ার</button>
                 </div>
                 ${isOwner ? `
                 <div class="admin-action-btns">
@@ -983,6 +1163,25 @@ function renderProducts(list = products){
             </div>
         </div>
     `).join('');
+}
+
+/* SHARE PRODUCT FUNCTION */
+function shareProduct(id, name) {
+    const shareUrl = window.location.origin + window.location.pathname + '?product=' + id;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: name,
+            text: `ঢাকা বাজারে '${name}' পণ্যটি দেখুন:`,
+            url: shareUrl
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            showToast("লিঙ্ক কপি করা হয়েছে! 📋");
+        }).catch(() => {
+            showToast("লিঙ্ক কপি করতে সমস্যা হয়েছে");
+        });
+    }
 }
 
 function filterCategory(cat){
