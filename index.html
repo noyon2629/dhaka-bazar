@@ -3,81 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaka Bazar - ঢাকা বাজার</title>
+    <title>Dhaka Bazar</title>
     <style>
         :root {
-            --primary: #1b5e20;
-            --primary-light: #2e7d32;
-            --accent: #ff9800;
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --danger: #d32f2f;
+            --primary: #0f7a42;
+            --primary-dark: #09502a;
+            --bg-gray: #f2f4f7;
+            --text-main: #1f2937;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 75px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: var(--bg-gray); color: var(--text-main); padding-bottom: 70px; }
 
-        /* Top Header */
-        header { background: var(--primary); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
-        .logo-icon { font-size: 26px; }
+        /* Top Bar */
+        header { background: #1a1a1a; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 20px; font-weight: 600; }
+        .star-icon { color: #82c91e; font-size: 24px; }
 
-        .notice-bar { background: #e8f5e9; color: var(--primary); padding: 8px 12px; font-size: 13px; text-align: center; font-weight: 500; border-bottom: 1px solid #c8e6c9; }
+        .sub-header { background: #ffffff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+        .app-title { display: flex; align-items: center; gap: 8px; color: var(--primary); font-size: 20px; font-weight: bold; }
+        .user-avatar { width: 38px; height: 38px; background: #e0e7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3730a3; font-size: 18px; cursor: pointer; }
 
-        /* Container */
-        .container { max-width: 600px; margin: 0 auto; padding: 12px; }
+        /* Search Box */
+        .search-area { padding: 12px 16px; background: white; }
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+        .search-wrapper input { width: 100%; padding: 10px 40px 10px 14px; border: 1px solid #d1d5db; border-radius: 20px; outline: none; background: #f9fafb; font-size: 14px; }
+        .search-btn { position: absolute; right: 5px; background: var(--primary); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-        /* Search & Filter Bar */
-        .search-box { background: var(--card-bg); padding: 10px; border-radius: 10px; display: flex; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
-        .search-box input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 14px; }
-        .search-box button { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        /* Disclaimer */
+        .disclaimer { background: #fffbe3; color: #b45309; padding: 8px 16px; font-size: 12px; font-weight: 500; border-bottom: 1px solid #fef3c7; }
 
-        /* Categories Section */
-        .categories { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
-        .category-chip { background: var(--card-bg); padding: 8px 15px; border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; border: 1px solid #e0e0e0; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .category-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* Banner Section */
+        .content-area { padding: 16px; }
+        .banner-card { background: white; border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .seller-badge { background: #e5e7eb; width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
-        /* Product Grid */
-        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; color: var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .product-card { background: var(--card-bg); border-radius: 10px; padding: 12px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-        .product-img { font-size: 50px; text-align: center; margin: 10px 0; background: #fafafa; padding: 15px; border-radius: 8px; }
-        .product-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #222; }
-        .product-seller { font-size: 11px; color: #777; margin-bottom: 8px; }
-        .product-price { color: var(--primary); font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; }
-        .btn-add:hover { background: var(--primary-light); }
+        /* Floating Cart Button */
+        .floating-cart { position: fixed; right: 20px; bottom: 85px; background: var(--primary); color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; }
+        .cart-count { position: absolute; top: 0; right: 0; background: #dc2626; color: white; font-size: 11px; font-weight: bold; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* Card Sections */
-        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* Navigation */
+        nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid #e5e7eb; z-index: 100; }
+        .nav-item { text-align: center; font-size: 11px; color: #6b7280; text-decoration: none; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item div { font-size: 18px; margin-bottom: 2px; }
 
-        /* Forms */
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; }
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; }
-        .btn-danger { background: var(--danger); }
-        .btn-warning { background: var(--accent); color: white; }
+        /* Modal / Overlay */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 16px; }
+        .modal-card { background: white; width: 100%; max-width: 380px; border-radius: 20px; padding: 24px 20px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .close-btn { position: absolute; right: 16px; top: 16px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #4b5563; }
 
-        /* Views management */
-        .view { display: none; }
-        .view.active { display: block; }
+        .modal-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #111827; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #374151; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; outline: none; font-size: 14px; background: #fafafa; }
+        .form-group input:focus { border-color: var(--primary); background: white; }
 
-        /* Navigation Bar */
-        nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid #ddd; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        nav div { text-align: center; font-size: 11px; color: #666; cursor: pointer; flex: 1; }
-        nav div.active { color: var(--primary); font-weight: bold; }
-        nav div span { font-size: 20px; display: block; margin-bottom: 2px; }
+        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 8px; }
+        .btn-submit:hover { background: var(--primary-dark); }
 
-        /* Badges & Status */
-        .badge { display: inline-block; padding: 3px 8px; font-size: 11px; border-radius: 12px; color: white; font-weight: bold; }
-        .badge-owner { background: #d32f2f; }
-        .badge-seller { background: #f57c00; }
-        .badge-customer { background: #388e3c; }
+        .toggle-text { text-align: center; margin: 16px 0; font-size: 13px; color: #4b5563; }
+        .toggle-text span { color: var(--primary); font-weight: bold; cursor: pointer; }
 
-        /* Notification Toast */
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; z-index: 2000; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* Help Box */
+        .help-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px; margin-top: 15px; }
+        .help-title { color: #dc2626; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+        .help-whatsapp { color: var(--primary); font-weight: bold; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-top: 6px; cursor: pointer; }
+
+        /* Toast Message */
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 10px 20px; border-radius: 25px; font-size: 13px; z-index: 2000; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     </style>
 </head>
 <body>
@@ -85,533 +80,159 @@
     <div id="toast">মেসেজ</div>
 
     <header>
-        <div class="logo-area">
-            <span class="logo-icon">🛒</span>
-            <span>ঢাকা বাজার</span>
-        </div>
-        <div style="font-size: 12px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 15px;">
-            ক্যাশ অন ডেলিভারি
-        </div>
+        <div class="brand">Dhaka Bazar</div>
+        <div class="star-icon">★</div>
     </header>
 
-    <div class="notice-bar">
-        📢 হেল্পলাইন / হোয়াটসঅ্যাপ: <b>01954799646</b> (সকাল ৯টা - রাত ১০টা)
+    <div class="sub-header">
+        <div class="app-title">🛒 ঢাকা বাজার</div>
+        <div class="user-avatar" onclick="openLoginModal()">👤</div>
     </div>
 
-    <div class="container">
-
-        <!-- ১. হোম পেজ (বাজার) -->
-        <div id="homeView" class="view active">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="পণ্য বা ব্র্যান্ড খুঁজুন..." onkeyup="filterProducts()">
-                <button onclick="filterProducts()">খুঁজুন</button>
-            </div>
-
-            <!-- ক্যাটাগরি ফিল্টার -->
-            <div class="categories">
-                <div class="category-chip active" onclick="setCategory('all', this)">🛍️ সব পণ্য</div>
-                <div class="category-chip" onclick="setCategory('grocery', this)">🥬 মুদিখানা</div>
-                <div class="category-chip" onclick="setCategory('electronics', this)">📱 ইলেকট্রনিক্স</div>
-                <div class="category-chip" onclick="setCategory('fashion', this)">👕 ফ্যাশন</div>
-            </div>
-
-            <div class="section-title">
-                <span>জনপ্রিয় পণ্যসমূহ</span>
-                <small style="font-weight: normal; color: #666;" id="productCount">০টি পণ্য</small>
-            </div>
-
-            <div id="productList" class="product-grid"></div>
+    <div class="search-area">
+        <div class="search-wrapper">
+            <input type="text" placeholder="পণ্য খুঁজুন...">
+            <button class="search-btn">🔍</button>
         </div>
+    </div>
 
-        <!-- ২. কার্ট পেজ -->
-        <div id="cartView" class="view">
-            <div class="card">
-                <div class="section-title">আপনার শপিং কার্ট</div>
-                <div id="cartItemsList"></div>
-                <div style="border-top: 2px dashed #eee; margin: 15px 0; padding-top: 10px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span>পণ্য মূল্য:</span>
-                        <b id="subTotal">৳ ০</b>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span>ডেলিভারি চার্জ:</span>
-                        <b>৳ ৬০</b>
-                    </div>
-                    <hr style="margin: 8px 0;">
-                    <div style="display: flex; justify-content: space-between; font-size: 16px; color: var(--primary);">
-                        <span>সর্বমোট মূল্য:</span>
-                        <b id="grandTotal">৳ ০</b>
-                    </div>
+    <div class="disclaimer">
+        ⚠️ ডিসক্লেইমার: এই অ্যাপে ক্যাশ অন ডেলিভারি সুবিধা পাওয়া যাবে।
+    </div>
+
+    <div class="content-area">
+        <div class="banner-card">
+            <div>
+                <h3 id="displayUserName">Seller Product</h3>
+                <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">সকল ক্যাটাগরির পণ্য এক ছাদের নিচে</p>
+            </div>
+            <div class="seller-badge">🏪</div>
+        </div>
+    </div>
+
+    <!-- ভাসমান কার্ট বোতাম -->
+    <div class="floating-cart" onclick="alert('কার্ট খালি রয়েছে')">
+        🛒
+        <div class="cart-count">0</div>
+    </div>
+
+    <!-- লগইন / রেজিস্ট্রেশন পপ-আপ (Popup Modal) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeLoginModal()">✕</button>
+            
+            <div class="modal-title">
+                🔑 <span id="modalHeaderTitle">Login</span>
+            </div>
+
+            <form onsubmit="handleUserSubmit(event)">
+                <div id="nameGroup" class="form-group" style="display: none;">
+                    <label>আপনার নাম</label>
+                    <input type="text" id="inputName" placeholder="আপনার পূর্ণ নাম লিখুন">
                 </div>
 
                 <div class="form-group">
-                    <label>ডেলিভারি ঠিকানা দিন:</label>
-                    <textarea id="deliveryAddress" rows="2" placeholder="আপনার বাসা/অফিস নম্বর, রোড নম্বর, এলাকা লিখুন..."></textarea>
+                    <label>মোবাইল নম্বর</label>
+                    <input type="tel" id="inputPhone" value="01954799646" required>
                 </div>
 
-                <button class="btn" onclick="placeOrder()">অর্ডার নিশ্চিত করুন (Cash on Delivery)</button>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="inputPassword" value="123456" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    🔑 <span id="btnSubmitText">Login করুন</span>
+                </button>
+            </form>
+
+            <div class="toggle-text">
+                <span id="toggleQuestion">Account নেই?</span> 
+                <span id="toggleBtnAction" onclick="toggleFormMode()">Register করুন</span>
+            </div>
+
+            <div class="help-box">
+                <div class="help-title">🆘 HelpLine</div>
+                <div style="font-size: 13px; color: #374151; font-weight: bold; margin-bottom: 4px;">
+                    WhatsApp: 01954799646
+                </div>
+                <a class="help-whatsapp" href="https://wa.me/8801954799646" target="_blank">
+                    💬 WhatsApp Help নিন
+                </a>
             </div>
         </div>
-
-        <!-- ৩. অর্ডার হিস্ট্রি পেজ -->
-        <div id="ordersView" class="view">
-            <div class="card">
-                <div class="section-title">আমার সকল অর্ডার</div>
-                <div id="myOrdersList"></div>
-            </div>
-        </div>
-
-        <!-- ৪. প্রোফাইল ও ইউজার কন্ট্রোল -->
-        <div id="profileView" class="view">
-            
-            <!-- লগইন / রেজিস্ট্রেশন ফর্ম -->
-            <div id="authBox" class="card">
-                <div class="section-title" id="authTitle">লগইন করুন</div>
-                <form onsubmit="handleAuth(event)">
-                    <div id="nameField" class="form-group" style="display: none;">
-                        <label>আপনার পূর্ণ নাম:</label>
-                        <input type="text" id="userName" placeholder="যেমন: আব্দুর রহমান">
-                    </div>
-
-                    <div id="roleField" class="form-group" style="display: none;">
-                        <label>অ্যাকাউন্টের ধরন বেছে নিন:</label>
-                        <select id="userRole">
-                            <option value="CUSTOMER">গ্রাহক / ক্রেতা (Customer)</option>
-                            <option value="SELLER">পণ্য বিক্রেতা (Seller)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>মোবাইল নম্বর:</label>
-                        <input type="tel" id="userPhone" placeholder="017XXXXXXXX" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>পাসওয়ার্ড:</label>
-                        <input type="password" id="userPassword" placeholder="******" required>
-                    </div>
-
-                    <button type="submit" class="btn" id="authBtn">Login করুন</button>
-                </form>
-
-                <p style="text-align: center; font-size: 13px; margin-top: 15px;">
-                    <span id="toggleMsg">অ্যাকাউন্ট নেই?</span>
-                    <a href="#" onclick="toggleAuthMode()" style="color: var(--primary); font-weight: bold;" id="toggleLink">Register করুন</a>
-                </p>
-
-                <!-- ওনার অটো লগইন অপশন -->
-                <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; text-align: center;">
-                    <small style="color: #666;">অ্যাপ এডমিন / ওনার প্যানেল প্রবেশদ্বারে:</small>
-                    <button class="btn btn-warning" onclick="fillOwnerCredentials()" style="margin-top: 5px;">মালিক (Owner) লগইন সিলেক্ট করুন</button>
-                </div>
-            </div>
-
-            <!-- ইউজার ড্যাশবোর্ড -->
-            <div id="userProfile" class="card" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h2 id="profName">নাম</h2>
-                        <p id="profPhone" style="color: #666; font-size: 13px;"></p>
-                    </div>
-                    <span id="profRoleBadge" class="badge"></span>
-                </div>
-                <button onclick="logout()" class="btn btn-danger" style="margin-top: 15px;">লগআউট করুন</button>
-            </div>
-
-            <!-- সেলার প্যানেল (Seller Panel) -->
-            <div id="sellerPanel" class="card" style="display: none; border-top: 3px solid var(--accent);">
-                <div class="section-title">বিক্রেতা প্যানেল - নতুন পণ্য পোস্ট করুন</div>
-                <form onsubmit="addNewProduct(event)">
-                    <div class="form-group">
-                        <label>পণ্যের নাম:</label>
-                        <input type="text" id="pName" required placeholder="যেমন: সুতি শার্ট">
-                    </div>
-                    <div class="form-group">
-                        <label>বিক্রয় মূল্য (টাকা):</label>
-                        <input type="number" id="pPrice" required placeholder="500">
-                    </div>
-                    <div class="form-group">
-                        <label>ক্যাটাগরি:</label>
-                        <select id="pCategory">
-                            <option value="grocery">মুদিখানা</option>
-                            <option value="electronics">ইলেকট্রনিক্স</option>
-                            <option value="fashion">ফ্যাশন</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>আইকন সিলেক্ট করুন:</label>
-                        <select id="pIcon">
-                            <option value="👕">👕 পোশাক</option>
-                            <option value="📱">📱 ডিভাইস</option>
-                            <option value="🍎">🍎 ফল/খাবার</option>
-                            <option value="📦">📦 সাধারণ পণ্য</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-warning">পণ্য পোস্ট করুন</button>
-                </form>
-            </div>
-
-            <!-- ওনার প্যানেল (Full Owner Dashboard) -->
-            <div id="ownerPanel" class="card" style="display: none; border: 2px solid var(--danger);">
-                <div class="section-title" style="color: var(--danger);">🔑 অ্যাপ ওনার ফুল কন্ট্রোল ড্যাশবোর্ড</div>
-                <p style="font-size: 12px; color: #666; margin-bottom: 12px;">আপনার সম্পূর্ণ ঢাকা বাজার অ্যাপের পরিসংখ্যানসমূহ:</p>
-
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px;">
-                    <div style="background: #ffebee; padding: 10px; border-radius: 8px; text-align: center;">
-                        <small>মোট ইউজার</small>
-                        <h2 id="totalUsersCount">০</h2>
-                    </div>
-                    <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; text-align: center;">
-                        <small>মোট অর্ডার</small>
-                        <h2 id="totalOrdersCount">০</h2>
-                    </div>
-                    <div style="background: #fff3e0; padding: 10px; border-radius: 8px; text-align: center;">
-                        <small>মোট পণ্য</small>
-                        <h2 id="totalProductsCount">০</h2>
-                    </div>
-                    <div style="background: #e1f5fe; padding: 10px; border-radius: 8px; text-align: center;">
-                        <small>মোট সেলস</small>
-                        <h2 id="totalSalesAmount">৳ ০</h2>
-                    </div>
-                </div>
-
-                <button class="btn" onclick="showAllAppUsers()" style="margin-bottom: 8px;">সকল নিবন্ধিত ইউজার দেখুন</button>
-                <button class="btn btn-danger" onclick="resetAppDatabase()">সম্পূর্ণ ডেটা রিকভার / রিসেট</button>
-            </div>
-
-        </div>
-
     </div>
 
     <!-- বটম নেভিগেশন -->
     <nav>
-        <div class="active" onclick="switchNav('homeView', this)"><span>🏠</span>হোম</div>
-        <div onclick="switchNav('cartView', this)"><span>🛒</span>কার্ট (<b id="cartBadge">০</b>)</div>
-        <div onclick="switchNav('ordersView', this)"><span>📦</span>অর্ডার</div>
-        <div onclick="switchNav('profileView', this)"><span>👤</span>প্রোফাইল</div>
+        <div class="nav-item active" onclick="switchTab('home', this)">
+            <div>🏠</div>
+            হোম
+        </div>
+        <div class="nav-item" onclick="switchTab('bazar', this)">
+            <div>🛍️</div>
+            বাজার
+        </div>
+        <div class="nav-item" onclick="switchTab('cart', this)">
+            <div>🛒</div>
+            কার্ট
+        </div>
+        <div class="nav-item" onclick="switchTab('orders', this)">
+            <div>📦</div>
+            Orders
+        </div>
+        <div class="nav-item" onclick="openLoginModal()">
+            <div>👤</div>
+            Profile
+        </div>
     </nav>
 
     <script>
-        // বিশ্বস্ত মেমরি ডেটাবেজ (LocalStorage)
-        let currentUser = JSON.parse(localStorage.getItem('db_user')) || null;
-        let isRegister = false;
-        let selectedCategory = 'all';
+        let isSignUpMode = false;
 
-        let products = JSON.parse(localStorage.getItem('db_products')) || [
-            { id: 101, name: "স্মার্টফোন A12", price: 13500, category: "electronics", icon: "📱", seller: "ঢাকা ইলেকট্রনিক্স" },
-            { id: 102, name: "প্রিমিয়াম সুতি পাঞ্জাবি", price: 1250, category: "fashion", icon: "👕", seller: "ফ্যাশন হাউজ" },
-            { id: 103, name: "দেশি ফ্রেশ আপেল (১ কেজি)", price: 280, category: "grocery", icon: "🍎", seller: "গ্রোসারিস বাজার" }
-        ];
-
-        let cart = [];
-        let orders = JSON.parse(localStorage.getItem('db_orders')) || [];
-        let users = JSON.parse(localStorage.getItem('db_users')) || [
-            { name: "ঢাকা বাজার ওনার", phone: "01954799646", role: "OWNER", pass: "123456" }
-        ];
-
-        window.onload = function() {
-            renderProducts();
-            updateCartDisplay();
-            initSession();
-        };
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(() => { t.style.display = 'none'; }, 2500);
+        function showNotification(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
-        function switchNav(viewId, elem) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-
-            if (elem) {
-                document.querySelectorAll('nav div').forEach(n => n.classList.remove('active'));
-                elem.classList.add('active');
-            }
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
         }
 
-        // প্রোডাক্ট রেন্ডার এবং ফিল্টারিং
-        function renderProducts() {
-            const grid = document.getElementById('productList');
-            grid.innerHTML = "";
-
-            const query = document.getElementById('searchInput').value.toLowerCase();
-
-            const list = products.filter(p => {
-                const matchCat = (selectedCategory === 'all' || p.category === selectedCategory);
-                const matchQuery = p.name.toLowerCase().includes(query);
-                return matchCat && matchQuery;
-            });
-
-            document.getElementById('productCount').innerText = list.length + "টি পণ্য";
-
-            if (list.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #777; padding: 20px;">কোনো পণ্য পাওয়া যায়নি!</div>`;
-                return;
-            }
-
-            list.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-img">${p.icon}</div>
-                        <div class="product-title">${p.name}</div>
-                        <div class="product-seller">বিক্রেতা: ${p.seller}</div>
-                        <div class="product-price">৳ ${p.price}</div>
-                        <button class="btn-add" onclick="addToCart(${p.id})">কার্টে যোগ করুন</button>
-                    </div>
-                `;
-            });
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
         }
 
-        function setCategory(cat, elem) {
-            selectedCategory = cat;
-            document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-            elem.classList.add('active');
-            renderProducts();
+        function toggleFormMode() {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('modalHeaderTitle').innerText = isSignUpMode ? "Register" : "Login";
+            document.getElementById('btnSubmitText').innerText = isSignUpMode ? "Register করুন" : "Login করুন";
+            document.getElementById('toggleQuestion').innerText = isSignUpMode ? "Account আছে?" : "Account নেই?";
+            document.getElementById('toggleBtnAction').innerText = isSignUpMode ? "Login করুন" : "Register করুন";
+            document.getElementById('nameGroup').style.display = isSignUpMode ? "block" : "none";
         }
 
-        function filterProducts() {
-            renderProducts();
-        }
-
-        // কার্ট সার্ভিস
-        function addToCart(pId) {
-            const prod = products.find(p => p.id === pId);
-            cart.push(prod);
-            updateCartDisplay();
-            showToast("পণ্যটি কার্টে যুক্ত করা হয়েছে!");
-        }
-
-        function updateCartDisplay() {
-            document.getElementById('cartBadge').innerText = cart.length;
-            const container = document.getElementById('cartItemsList');
-            container.innerHTML = "";
-
-            let sum = 0;
-            cart.forEach((item, index) => {
-                sum += item.price;
-                container.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 0; border-bottom: 1px solid #eee;">
-                        <div>
-                            <b>${item.icon} ${item.name}</b>
-                            <br><small style="color:#777;">৳ ${item.price}</small>
-                        </div>
-                        <button onclick="removeFromCart(${index})" style="background:#ffcdd2; color:#c62828; border:none; padding: 4px 8px; border-radius:4px; font-size:12px; cursor:pointer;">মুছুন</button>
-                    </div>
-                `;
-            });
-
-            document.getElementById('subTotal').innerText = "৳ " + sum;
-            document.getElementById('grandTotal').innerText = "৳ " + (sum > 0 ? (sum + 60) : 0);
-        }
-
-        function removeFromCart(idx) {
-            cart.splice(idx, 1);
-            updateCartDisplay();
-        }
-
-        // চেকআউট / অর্ডার
-        function placeOrder() {
-            if (!currentUser) {
-                showToast("অর্ডার করতে অ্যাকাউন্ট এ লগইন করুন!");
-                switchNav('profileView');
-                return;
-            }
-            if (cart.length === 0) {
-                showToast("আপনার কার্ট খালি!");
-                return;
-            }
-
-            const addr = document.getElementById('deliveryAddress').value.trim();
-            if (!addr) {
-                showToast("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন!");
-                return;
-            }
-
-            let total = cart.reduce((a, b) => a + b.price, 0) + 60;
-
-            const newOrd = {
-                id: "ORD-" + Math.floor(100000 + Math.random() * 900000),
-                customerName: currentUser.name,
-                phone: currentUser.phone,
-                address: addr,
-                items: [...cart],
-                amount: total,
-                status: "প্রসেসিং",
-                date: new Date().toLocaleDateString('bn-BD')
-            };
-
-            orders.push(newOrd);
-            localStorage.setItem('db_orders', JSON.stringify(orders));
-
-            cart = [];
-            updateCartDisplay();
-            document.getElementById('deliveryAddress').value = "";
-            renderMyOrders();
-            showToast("অর্ডার সফলভাবে প্লেস করা হয়েছে!");
-            switchNav('ordersView');
-        }
-
-        function renderMyOrders() {
-            const list = document.getElementById('myOrdersList');
-            list.innerHTML = "";
-
-            const filtered = (currentUser?.role === 'OWNER') ? orders : orders.filter(o => o.phone === currentUser?.phone);
-
-            if (filtered.length === 0) {
-                list.innerHTML = "<p style='color:#777;'>আপনার কোনো পূর্ববর্তী অর্ডার নেই।</p>";
-                return;
-            }
-
-            filtered.forEach(o => {
-                list.innerHTML += `
-                    <div style="border:1px solid #e0e0e0; border-radius:8px; padding:12px; margin-bottom:10px;">
-                        <div style="display:flex; justify-content:space-between;">
-                            <b>অর্ডার #${o.id}</b>
-                            <span class="badge badge-customer">${o.status}</span>
-                        </div>
-                        <small style="color:#666;">তারিখ: ${o.date}</small>
-                        <p style="font-size:13px; margin-top:5px;">গ্রাহক: ${o.customerName} (${o.phone})</p>
-                        <p style="font-size:12px; color:#555;">ঠিকানা: ${o.address}</p>
-                        <div style="margin-top:8px; font-weight:bold; color:var(--primary);">সর্বমোট: ৳ ${o.amount}</div>
-                    </div>
-                `;
-            });
-        }
-
-        // সাইনআপ ও সাইনইন
-        function toggleAuthMode() {
-            isRegister = !isRegister;
-            document.getElementById('authTitle').innerText = isRegister ? "রেজিস্ট্রেশন করুন" : "লগইন করুন";
-            document.getElementById('nameField').style.display = isRegister ? "block" : "none";
-            document.getElementById('roleField').style.display = isRegister ? "block" : "none";
-            document.getElementById('authBtn').innerText = isRegister ? "অ্যাকাউন্ট তৈরি করুন" : "Login করুন";
-            document.getElementById('toggleMsg').innerText = isRegister ? "আগে থেকেই অ্যাকাউন্ট আছে?" : "অ্যাকাউন্ট নেই?";
-            document.getElementById('toggleLink').innerText = isRegister ? "Login করুন" : "Register করুন";
-        }
-
-        function handleAuth(e) {
+        function handleUserSubmit(e) {
             e.preventDefault();
-            const phone = document.getElementById('userPhone').value.trim();
-            const pass = document.getElementById('userPassword').value.trim();
-
-            if (isRegister) {
-                const name = document.getElementById('userName').value.trim();
-                const role = document.getElementById('userRole').value;
-
-                if (!name) { showToast("আপনার নাম দিন!"); return; }
-
-                const newUser = { name, phone, pass, role };
-                users.push(newUser);
-                localStorage.setItem('db_users', JSON.stringify(users));
-                currentUser = newUser;
-                showToast("রেজিস্ট্রেশন সফল হয়েছে!");
+            const phone = document.getElementById('inputPhone').value;
+            
+            if(isSignUpMode) {
+                const name = document.getElementById('inputName').value || "ইউজার";
+                document.getElementById('displayUserName').innerText = name;
+                showNotification("রেজিস্ট্রেশন সফল হয়েছে!");
             } else {
-                const user = users.find(u => u.phone === phone && u.pass === pass);
-                if (user) {
-                    currentUser = user;
-                    showToast("লগইন সফল হয়েছে!");
-                } else {
-                    showToast("মোবাইল নম্বর বা পাসওয়ার্ড ভুল দেওয়া হয়েছে!");
-                    return;
-                }
+                showNotification("লগইন সফল হয়েছে!");
             }
-
-            localStorage.setItem('db_user', JSON.stringify(currentUser));
-            initSession();
+            
+            closeLoginModal();
         }
 
-        function fillOwnerCredentials() {
-            isRegister = false;
-            document.getElementById('nameField').style.display = "none";
-            document.getElementById('roleField').style.display = "none";
-            document.getElementById('userPhone').value = "01954799646";
-            document.getElementById('userPassword').value = "123456";
-            showToast("ওনারের তথ্য বসানো হয়েছে, এখন Login চাপুন!");
-        }
-
-        function initSession() {
-            if (currentUser) {
-                document.getElementById('authBox').style.display = 'none';
-                document.getElementById('userProfile').style.display = 'block';
-
-                document.getElementById('profName').innerText = currentUser.name;
-                document.getElementById('profPhone').innerText = currentUser.phone;
-
-                const badge = document.getElementById('profRoleBadge');
-                badge.innerText = currentUser.role;
-                badge.className = "badge badge-" + currentUser.role.toLowerCase();
-
-                // রোল অনুসারী অপশন
-                document.getElementById('sellerPanel').style.display = (currentUser.role === 'SELLER' || currentUser.role === 'OWNER') ? 'block' : 'none';
-                document.getElementById('ownerPanel').style.display = (currentUser.role === 'OWNER') ? 'block' : 'none';
-
-                if (currentUser.role === 'OWNER') {
-                    document.getElementById('totalUsersCount').innerText = users.length;
-                    document.getElementById('totalOrdersCount').innerText = orders.length;
-                    document.getElementById('totalProductsCount').innerText = products.length;
-
-                    let sales = orders.reduce((acc, obj) => acc + obj.amount, 0);
-                    document.getElementById('totalSalesAmount').innerText = "৳ " + sales;
-                }
-
-                renderMyOrders();
-            } else {
-                document.getElementById('authBox').style.display = 'block';
-                document.getElementById('userProfile').style.display = 'none';
-                document.getElementById('sellerPanel').style.display = 'none';
-                document.getElementById('ownerPanel').style.display = 'none';
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('db_user');
-            initSession();
-            showToast("লগআউট করা হয়েছে!");
-        }
-
-        // সেলার দ্বারা প্রোডাক্ট যোগ
-        function addNewProduct(e) {
-            e.preventDefault();
-            const name = document.getElementById('pName').value;
-            const price = Number(document.getElementById('pPrice').value);
-            const category = document.getElementById('pCategory').value;
-            const icon = document.getElementById('pIcon').value;
-
-            const newProduct = {
-                id: Date.now(),
-                name,
-                price,
-                category,
-                icon,
-                seller: currentUser.name
-            };
-
-            products.push(newProduct);
-            localStorage.setItem('db_products', JSON.stringify(products));
-            renderProducts();
-            showToast("আপনার নতুন পণ্য ঢাকা বাজারে যোগ হয়েছে!");
-            e.target.reset();
-        }
-
-        // ওনার বিশেষ ফিচার
-        function showAllAppUsers() {
-            let info = "নিবন্ধিত ইউজারদের তালিকা:\n\n";
-            users.forEach((u, i) => {
-                info += `${i + 1}. ${u.name} - ${u.phone} [${u.role}]\n`;
-            });
-            alert(info);
-        }
-
-        function resetAppDatabase() {
-            if (confirm("আপনি কি সমস্ত লোকাল ডেটা রিসেট করতে চান?")) {
-                localStorage.clear();
-                location.reload();
-            }
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if(element) element.classList.add('active');
         }
     </script>
 </body>
-</html>
+</html
