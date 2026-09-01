@@ -654,7 +654,7 @@ header{
         <h1>আপনার বাজার, এখন হাতের মুঠোয় 🛍️</h1>
         <p>ঢাকা বাজারে বিভিন্ন ধরনের পণ্য খুঁজুন, কার্টে যোগ করুন এবং Cash on Delivery-তে সহজে অর্ডার করুন।</p>
         <button onclick="scrollToProducts()">এখনই বাজার করুন →</button>
-        <div id="serverStatus" class="server-status">Backend Checking...</div>
+        <div id="serverStatus" class="server-status">Connecting to Backend...</div>
     </div>
 </section>
 
@@ -891,7 +891,6 @@ header{
 
 <script>
 /* JS CONFIGURATION */
-// আপনার ব্যাকএন্ড নোড/এক্সপ্রেস সার্ভার লাইভ থাকলে তার URL দিন, নতুবা লোকালহোস্ট দিন:
 const API_BASE = "https://dhaka-bazar-1.onrender.com";
 
 let products=[];
@@ -957,34 +956,47 @@ document.addEventListener("DOMContentLoaded",async()=>{
     await loadProducts();
 });
 
-/* API REQUEST */
-async function apiRequest(endpoint,options={}){
-    const requestOptions={
+/* API REQUEST WITH RETRY SYSTEM FOR SLEEPING SERVERS */
+async function apiRequest(endpoint, options = {}, retries = 3) {
+    const requestOptions = {
         ...options,
-        headers:{
-            "Content-Type":"application/json",
-            ...(options.headers||{})
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
         }
     };
-    const response=await fetch(API_BASE+endpoint,requestOptions);
-    let data={};
-    try{
-        data=await response.json();
-    }catch(e){
-        throw new Error("Server থেকে সঠিক response পাওয়া যায়নি");
+
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(API_BASE + endpoint, requestOptions);
+            
+            if (!response.ok && response.status !== 400 && response.status !== 401) {
+                throw new Error("Server Response Error");
+            }
+
+            let data = await response.json();
+            return data;
+        } catch (e) {
+            if (i === retries - 1) {
+                throw new Error(e.message || "API endpoint পাওয়া যায়নি।");
+            }
+            // Wait 2.5 seconds before retrying to give Render backend time to wake up
+            await new Promise(res => setTimeout(res, 2500));
+        }
     }
-    if(!response.ok){
-        throw new Error(data.message||data.error||"Server Error");
-    }
-    return data;
 }
 
-/* BACKEND STATUS */
+/* BACKEND STATUS CHECK */
 async function checkBackend(){
     const status=document.getElementById("serverStatus");
+    if(!status) return;
+
+    status.innerHTML = "🟡 Server Connecting...";
+    status.className = "server-status";
+
     try{
-        const data=await apiRequest("/api/status");
-        if(data.success){
+        const data=await apiRequest("/api/status", {}, 4);
+        if(data && data.success){
             status.innerHTML="🟢 Backend Online";
             status.className="server-status online";
         }else{
@@ -992,7 +1004,7 @@ async function checkBackend(){
             status.className="server-status offline";
         }
     }catch(error){
-        status.innerHTML="🔴 Backend Offline";
+        status.innerHTML="🔴 Server Waking Up... Refresh Soon";
         status.className="server-status offline";
     }
 }
@@ -1000,7 +1012,7 @@ async function checkBackend(){
 /* PRODUCTS LOAD */
 async function loadProducts(){
     try{
-        const data=await apiRequest("/api/products");
+        const data=await apiRequest("/api/products", {}, 3);
         products=(data.products||[]).map(p=>({
             id:p.id,
             name:p.name,
@@ -1077,7 +1089,7 @@ async function requestOTP(){
         const data=await apiRequest("/api/auth/request-otp",{
             method:"POST",
             body:JSON.stringify({name,phone})
-        });
+        }, 2);
         document.getElementById("registerBox").style.display="none";
         document.getElementById("otpBox").style.display="block";
         document.getElementById("authTitle").innerText="📲 OTP Verification";
@@ -1102,7 +1114,7 @@ async function verifyOTP(){
                 password:pendingRegistration.password,
                 otp:otp
             })
-        });
+        }, 2);
         currentUser={
             id:data.user?.id||"",
             name:data.user?.name||pendingRegistration.name,
@@ -1130,7 +1142,7 @@ async function loginUser(){
         const data=await apiRequest("/api/auth/login",{
             method:"POST",
             body:JSON.stringify({phone,password})
-        });
+        }, 2);
         currentUser={
             id:data.user?.id||"",
             name:data.user?.name||"User",
@@ -1217,7 +1229,7 @@ async function addSellerProduct(){
                 stock:stock,
                 deliveryCharge:deliveryCharge
             })
-        });
+        }, 2);
         closeModal("sellerModal");
         showToast("Product Add হয়েছে ✓");
         await loadProducts();
@@ -1639,7 +1651,7 @@ async function placeOrder(){
                 items:cart.map(item=>({ productId:item.id, quantity:Number(item.qty) })),
                 paymentMethod:"CASH_ON_DELIVERY"
             })
-        });
+        }, 2);
 
         const order=data.order;
         cart=[];
@@ -1682,7 +1694,7 @@ async function openOrders(){
     openModal("ordersModal");
 
     try{
-        const data=await apiRequest("/api/orders/customer/"+encodeURIComponent(currentUser.phone));
+        const data=await apiRequest("/api/orders/customer/"+encodeURIComponent(currentUser.phone), {}, 2);
         const backendOrders=data.orders||[];
 
         if(backendOrders.length===0){
