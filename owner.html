@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhaka Bazar Owner Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f3;
+            color: #222;
+        }
+
+        .header {
+            background: #087f4f;
+            color: white;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .logout {
+            background: white;
+            color: #087f4f;
+            border: 0;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .login {
+            max-width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .login h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #087f4f;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .login button {
+            width: 100%;
+            padding: 13px;
+            background: #087f4f;
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #d00;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card .icon {
+            font-size: 30px;
+        }
+
+        .card h3 {
+            margin-top: 10px;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .card .number {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .section {
+            background: white;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .refresh {
+            background: #087f4f;
+            color: white;
+            border: 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================================= -->
+    <!-- LOGIN -->
+    <!-- ================================= -->
+    <div id="loginBox" class="login">
+        <h2>🔐 Owner Login</h2>
+        <input id="ownerId" type="text" placeholder="Owner ID">
+        <input id="ownerPassword" type="password" placeholder="Owner Password">
+        <button onclick="login()">Login</button>
+        <div id="loginError" class="error"></div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- DASHBOARD -->
+    <!-- ================================= -->
+    <div id="dashboard" class="dashboard">
+        <div class="header">
+            <h2>🛍️ Dhaka Bazar Owner</h2>
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="container">
+            <h2>📊 Owner Dashboard</h2>
+            <p style="margin-top:5px;color:#666">শুধু Owner এই Dashboard দেখতে পারবেন</p>
+
+            <div class="grid">
+                <!-- USERS -->
+                <div class="card">
+                    <div class="icon">👥</div>
+                    <h3>Total App Users</h3>
+                    <div id="totalUsers" class="number">0</div>
+                </div>
+
+                <!-- BUYERS -->
+                <div class="card">
+                    <div class="icon">🛒</div>
+                    <h3>Buyers</h3>
+                    <div id="buyers" class="number">0</div>
+                </div>
+
+                <!-- SELLERS -->
+                <div class="card">
+                    <div class="icon">🏪</div>
+                    <h3>Sellers</h3>
+                    <div id="sellers" class="number">0</div>
+                </div>
+
+                <!-- PRODUCTS -->
+                <div class="card">
+                    <div class="icon">📦</div>
+                    <h3>Products</h3>
+                    <div id="products" class="number">0</div>
+                </div>
+
+                <!-- ORDERS -->
+                <div class="card">
+                    <div class="icon">🧾</div>
+                    <h3>Total Orders</h3>
+                    <div id="orders" class="number">0</div>
+                </div>
+
+                <!-- PENDING -->
+                <div class="card">
+                    <div class="icon">⏳</div>
+                    <h3>Pending Orders</h3>
+                    <div id="pending" class="number">0</div>
+                </div>
+
+                <!-- DELIVERED -->
+                <div class="card">
+                    <div class="icon">✅</div>
+                    <h3>Delivered</h3>
+                    <div id="delivered" class="number">0</div>
+                </div>
+
+                <!-- CANCELLED -->
+                <div class="card">
+                    <div class="icon">❌</div>
+                    <h3>Cancelled</h3>
+                    <div id="cancelled" class="number">0</div>
+                </div>
+
+                <!-- SALES -->
+                <div class="card">
+                    <div class="icon">💰</div>
+                    <h3>Total Sales</h3>
+                    <div id="sales" class="number">৳0</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📈 Business Summary</h2>
+                <p id="updated" style="margin-top:10px;color:#666">Loading...</p>
+                <button class="refresh" onclick="loadDashboard()">🔄 Refresh Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = window.location.origin;
+        let ownerToken = localStorage.getItem("dhaka_owner_token");
+
+        async function login() {
+            const ownerId = document.getElementById("ownerId").value.trim();
+            const password = document.getElementById("ownerPassword").value;
+            const error = document.getElementById("loginError");
+
+            error.innerText = "";
+
+            if (!ownerId || !password) {
+                error.innerText = "Owner ID এবং Password দিন।";
+                return;
+            }
+
+            try {
+                const response = await fetch(API + "/api/owner/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ ownerId, password })
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    error.innerText = data.message || "Login failed.";
+                    return;
+                }
+
+                ownerToken = data.token;
+                localStorage.setItem("dhaka_owner_token", ownerToken);
+                showDashboard();
+
+            } catch (err) {
+                document.getElementById("loginError").innerText = "Server connection error.";
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            if (!ownerToken) return;
+
+            try {
+                const response = await fetch(API + "/api/owner/dashboard", {
+                    headers: {
+                        "Authorization": "Bearer " + ownerToken
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                if (!data.success) {
+                    alert(data.message);
+                    return;
+                }
+
+                const d = data.dashboard;
+
+                document.getElementById("totalUsers").innerText = d.users.total;
+                document.getElementById("buyers").innerText = d.users.buyers;
+                document.getElementById("sellers").innerText = d.users.sellers;
+                document.getElementById("products").innerText = d.products.total;
+                document.getElementById("orders").innerText = d.orders.total;
+                document.getElementById("pending").innerText = d.orders.pending;
+                document.getElementById("delivered").innerText = d.orders.delivered;
+                document.getElementById("cancelled").innerText = d.orders.cancelled;
+                document.getElementById("sales").innerText = "৳" + Number(d.sales.total).toLocaleString();
+
+                document.getElementById("updated").innerText =
+                    "Last updated: " + (data.generatedAt ? new Date(data.generatedAt).toLocaleString() : new Date().toLocaleString());
+
+            } catch (err) {
+                alert("Dashboard data load হয়নি।");
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(API + "/api/owner/logout", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + ownerToken
+                    }
+                });
+            } catch (e) { }
+
+            localStorage.removeItem("dhaka_owner_token");
+            ownerToken = null;
+            location.reload();
+        }
+
+        // Auto login check
+        if (ownerToken) {
+            showDashboard();
+        }
+    </script>
+</body>
+
+</html>
