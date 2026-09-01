@@ -52,8 +52,23 @@ header{
     gap:12px;
 }
 
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.app-logo-img{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--primary);
+}
+
 .logo{
-    font-size:21px;
+    font-size:20px;
     font-weight:800;
     color:var(--primary);
     white-space:nowrap;
@@ -193,7 +208,9 @@ header{
     background:#f0fdf4;
     border-radius:50%;
     font-size:22px;
+    overflow:hidden;
 }
+.category-icon img{ width:100%; height:100%; object-fit:cover; }
 
 .category p{ font-size:13px; font-weight:700; }
 
@@ -343,7 +360,13 @@ header{
 
 <header>
     <div class="topbar">
-        <div class="logo">🛒 ঢাকা বাজার <span>Dhaka Bazar</span></div>
+        <div class="logo-area" onclick="openOwnerDashboard()">
+            <div id="headerLogoContainer">
+                <img src="" class="app-logo-img" id="appLogoDisplay" style="display:none">
+                <div class="app-logo-img" id="appLogoFallback" style="display:flex;align-items:center;justify-content:center;background:#0b8f55;color:white;font-weight:bold;">🛒</div>
+            </div>
+            <div class="logo"><span id="appNameDisplay">ঢাকা বাজার</span> <span>Dhaka Bazar</span></div>
+        </div>
         <div class="search">
             <input id="searchInput" type="text" placeholder="পণ্য খুঁজুন..." oninput="searchProducts()">
             <button onclick="searchProducts()">🔍</button>
@@ -429,19 +452,36 @@ header{
 <div class="modal" id="ownerDashboardModal">
     <div class="modal-box" style="max-width:700px;">
         <div class="modal-header">
-            <h3>👑 Owner Panel & Manager</h3>
+            <h3>👑 Owner Panel & App Image Hub</h3>
             <button class="close" onclick="closeModal('ownerDashboardModal')">×</button>
         </div>
         
         <div class="admin-tabs">
-            <button class="admin-tab-btn active" onclick="switchAdminTab('addDirect', event)">➕ সরাসরি আইটেম যোগ</button>
+            <button class="admin-tab-btn active" onclick="switchAdminTab('appSettings', event)">⚙️ অ্যাপ লোগো ও ছবি</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('addDirect', event)">➕ সরাসরি আইটেম যোগ</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('categories', event)">📁 ক্যাটাগরি ম্যানেজমেন্ট</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('users', event)">👥 Users & Sellers</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('products', event)">📦 All Products</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('orders', event)">📜 All Orders</button>
         </div>
 
-        <div id="adminTabAddDirect">
+        <div id="adminTabAppSettings">
+            <h4 style="margin-bottom:10px;">অ্যাপসের লোগো ও ব্র্যান্ডিং পরিবর্তন</h4>
+            <div class="form-group">
+                <label>অ্যাপসের নাম</label>
+                <input id="settingAppName" placeholder="ঢাকা বাজার">
+            </div>
+            <div class="form-group">
+                <label>নতুন অ্যাপ লোগো ছবি (গ্যালারি থেকে)</label>
+                <input type="file" id="settingAppLogoFile" accept="image/*">
+            </div>
+            <button class="primary-btn" style="background:#0b8f55;margin-bottom:15px;" onclick="saveAppSettings()">লোগো ও নাম সেভ করুন</button>
+
+            <h4 style="margin-bottom:10px;">ক্যাটাগরি ছবি/আইকন পরিবর্তন</h4>
+            <div id="adminCategoryLogoList"></div>
+        </div>
+
+        <div id="adminTabAddDirect" style="display:none;">
             <h4 style="margin-bottom:10px;">অ্যাপসে সরাসরি পণ্য / ফিচার অ্যাড করুন</h4>
             <div class="form-group">
                 <label>পণ্য/আইটেমের নাম</label>
@@ -477,7 +517,7 @@ header{
                 <input id="newCatKey" placeholder="যেমন: sports">
             </div>
             <div class="form-group">
-                <label>ইমোজি আইকন</label>
+                <label>ইমোজি আইকন বা টেক্সট</label>
                 <input id="newCatIcon" placeholder="যেমন: ⚽">
             </div>
             <button class="primary-btn" style="margin-bottom:15px;" onclick="addNewCategoryByOwner()">+ নতুন ক্যাটাগরি যোগ করুন</button>
@@ -499,6 +539,22 @@ header{
             <h4>সকল অর্ডারের তালিকা</h4>
             <div id="adminOrdersList" style="margin-top:10px;"></div>
         </div>
+    </div>
+</div>
+
+<!-- EDIT CATEGORY IMAGE MODAL -->
+<div class="modal" id="editCatImageModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>🖼️ ক্যাটাগরি ছবি পরিবর্তন</h3>
+            <button class="close" onclick="closeModal('editCatImageModal')">×</button>
+        </div>
+        <input type="hidden" id="editCatKeyTarget">
+        <div class="form-group">
+            <label>নতুন ছবি আপলোড করুন</label>
+            <input type="file" id="catImageFile" accept="image/*">
+        </div>
+        <button class="primary-btn" onclick="saveCategoryCustomImage()">ছবি সেভ করুন</button>
     </div>
 </div>
 
@@ -682,13 +738,18 @@ header{
 const OWNER_UID_SECRET = "2629574242";
 const OWNER_PASS_SECRET = "DhakaBazar@2026#Owner";
 
+let appSettings = JSON.parse(localStorage.getItem("dhakaAppSettings")) || {
+    name: "ঢাকা বাজার",
+    logo: null
+};
+
 let categories = JSON.parse(localStorage.getItem("dhakaCategories")) || [
-    { key: "grocery", name: "মুদিখানা", icon: "🥬" },
-    { key: "food", name: "খাবার", icon: "🍔" },
-    { key: "fashion", name: "ফ্যাশন", icon: "👕" },
-    { key: "electronics", name: "ইলেকট্রনিক্স", icon: "📱" },
-    { key: "home", name: "হোম", icon: "🏠" },
-    { key: "beauty", name: "বিউটি", icon: "🧴" }
+    { key: "grocery", name: "মুদিখানা", icon: "🥬", image: null },
+    { key: "food", name: "খাবার", icon: "🍔", image: null },
+    { key: "fashion", name: "ফ্যাশন", icon: "👕", image: null },
+    { key: "electronics", name: "ইলেকট্রনিক্স", icon: "📱", image: null },
+    { key: "home", name: "হোম", icon: "🏠", image: null },
+    { key: "beauty", name: "বিউটি", icon: "🧴", image: null }
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts")) || [
@@ -702,6 +763,7 @@ let usersList = JSON.parse(localStorage.getItem("dhakaUsersList")) || [];
 let currentUser = JSON.parse(localStorage.getItem("dhakaUser")) || null;
 
 document.addEventListener("DOMContentLoaded", () => {
+    applyAppSettings();
     renderCategories();
     updateCart();
     updateProfileBtnHeader();
@@ -722,6 +784,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+function applyAppSettings(){
+    document.getElementById("appNameDisplay").innerText = appSettings.name;
+    const imgEl = document.getElementById("appLogoDisplay");
+    const fallbackEl = document.getElementById("appLogoFallback");
+
+    if(appSettings.logo){
+        imgEl.src = appSettings.logo;
+        imgEl.style.display = "block";
+        fallbackEl.style.display = "none";
+    } else {
+        imgEl.style.display = "none";
+        fallbackEl.style.display = "flex";
+    }
+}
+
 function renderCategories(){
     const container = document.getElementById("categoriesContainer");
     const sellerCatSelect = document.getElementById("sellerProductCategory");
@@ -730,7 +807,9 @@ function renderCategories(){
     if(container){
         container.innerHTML = categories.map(c => `
             <div class="category" onclick="filterCategory('${c.key}')">
-                <div class="category-icon">${c.icon}</div>
+                <div class="category-icon">
+                    ${c.image ? `<img src="${c.image}">` : `<span>${c.icon}</span>`}
+                </div>
                 <p>${escapeHTML(c.name)}</p>
             </div>
         `).join('');
@@ -775,6 +854,20 @@ function convertFileToBase64(file){
             };
         };
     });
+}
+
+async function saveAppSettings(){
+    const name = document.getElementById("settingAppName").value.trim();
+    if(name) appSettings.name = name;
+
+    const fileInput = document.getElementById("settingAppLogoFile");
+    if(fileInput.files && fileInput.files[0]){
+        appSettings.logo = await convertFileToBase64(fileInput.files[0]);
+    }
+
+    localStorage.setItem("dhakaAppSettings", JSON.stringify(appSettings));
+    applyAppSettings();
+    showToast("অ্যাপ লোগো ও নাম আপডেট হয়েছে ✓");
 }
 
 async function saveUserProfilePhoto(){
@@ -883,27 +976,33 @@ function updateProfile(){
             <p>📱 ${escapeHTML(currentUser.phone)}</p>
             <p>🏷️ Type: <b>${currentUser.role.toUpperCase()}</b></p>
         </div>
-        ${currentUser.role === 'owner' ? `<button class="primary-btn" style="background:#1f2937;margin-bottom:8px" onclick="closeModal('profileModal');openOwnerDashboard()">👑 Owner Control Panel</button>` : ''}
+        ${currentUser.role === 'owner' ? `<button class="primary-btn" style="background:#1f2937;margin-bottom:8px" onclick="closeModal('profileModal');openOwnerDashboard()">👑 Owner Control & Image Hub</button>` : ''}
         ${currentUser.role === 'seller' || currentUser.role === 'owner' ? `<button class="primary-btn" onclick="closeModal('profileModal');openSeller()">🏪 Product Add করুন</button>` : ''}
         <button class="secondary-btn" onclick="logoutUser()">🚪 Logout</button>
     `;
 }
 
 function openOwnerDashboard(){
-    if(!currentUser || currentUser.role !== "owner") return;
+    if(!currentUser || currentUser.role !== "owner") {
+        showOwnerLogin();
+        return;
+    }
     openModal("ownerDashboardModal");
+    document.getElementById("settingAppName").value = appSettings.name;
     loadAdminData();
 }
 
 function switchAdminTab(tab, evt){
     document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("adminTabAppSettings").style.display = "none";
     document.getElementById("adminTabAddDirect").style.display = "none";
     document.getElementById("adminTabCategories").style.display = "none";
     document.getElementById("adminTabUsers").style.display = "none";
     document.getElementById("adminTabProducts").style.display = "none";
     document.getElementById("adminTabOrders").style.display = "none";
 
-    if(tab==='addDirect'){ document.getElementById("adminTabAddDirect").style.display="block"; }
+    if(tab==='appSettings'){ document.getElementById("adminTabAppSettings").style.display="block"; }
+    else if(tab==='addDirect'){ document.getElementById("adminTabAddDirect").style.display="block"; }
     else if(tab==='categories'){ document.getElementById("adminTabCategories").style.display="block"; }
     else if(tab==='users'){ document.getElementById("adminTabUsers").style.display="block"; }
     else if(tab==='products'){ document.getElementById("adminTabProducts").style.display="block"; }
@@ -951,7 +1050,7 @@ function addNewCategoryByOwner(){
 
     if(!name || !key){ showToast("ক্যাটাগরির নাম ও আইডেন্টিফায়ার দিন"); return; }
 
-    categories.push({ key, name, icon });
+    categories.push({ key, name, icon, image: null });
     localStorage.setItem("dhakaCategories", JSON.stringify(categories));
     renderCategories();
     loadAdminData();
@@ -969,6 +1068,16 @@ function deleteCategoryByOwner(index){
 }
 
 function loadAdminData(){
+    const catLogoBox = document.getElementById("adminCategoryLogoList");
+    if(catLogoBox){
+        catLogoBox.innerHTML = categories.map((c, i) => `
+            <div class="admin-card" style="display:flex;justify-content:space-between;align-items:center;">
+                <div><strong>${escapeHTML(c.name)}</strong></div>
+                <button class="edit-btn" style="max-width:120px;" onclick="openEditCatImage('${c.key}')">🖼️ ছবি পরিবর্তন</button>
+            </div>
+        `).join('');
+    }
+
     const catBox = document.getElementById("adminCategoryList");
     if(catBox){
         catBox.innerHTML = categories.map((c, i) => `
@@ -1016,6 +1125,31 @@ function loadAdminData(){
                 💰 Total: ৳${o.grandTotal}
             </div>
         `).join('') || "<div class='empty'>অর্ডার নেই।</div>";
+    }
+}
+
+function openEditCatImage(key){
+    document.getElementById("editCatKeyTarget").value = key;
+    document.getElementById("catImageFile").value = "";
+    openModal("editCatImageModal");
+}
+
+async function saveCategoryCustomImage(){
+    const key = document.getElementById("editCatKeyTarget").value;
+    const fileInput = document.getElementById("catImageFile");
+    if(!fileInput.files || !fileInput.files[0]){
+        showToast("একটি ছবি সিলেক্ট করুন");
+        return;
+    }
+
+    const base64Img = await convertFileToBase64(fileInput.files[0]);
+    const cat = categories.find(c => c.key === key);
+    if(cat){
+        cat.image = base64Img;
+        localStorage.setItem("dhakaCategories", JSON.stringify(categories));
+        renderCategories();
+        closeModal("editCatImageModal");
+        showToast("ক্যাটাগরি ছবি আপডেট হয়েছে ✓");
     }
 }
 
@@ -1266,7 +1400,7 @@ function showOwnerLogin(){ openModal("authModal"); document.getElementById("logi
 function openProfile(){ updateProfile(); openModal("profileModal"); }
 function openSeller(){ if(!currentUser){ showLogin(); return; } openModal("sellerModal"); }
 function logoutUser(){ currentUser=null; localStorage.removeItem("dhakaUser"); updateProfileBtnHeader(); closeModal("profileModal"); renderProducts(); showToast("Logout হয়েছে"); }
-function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
+function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("sails"),3000); }
 function escapeHTML(str){ return String(str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 function openCart(){ updateCart(); openModal("cartModal"); }
 function scrollToProducts(){ document.getElementById("productSection").scrollIntoView({behavior:"smooth"}); }
