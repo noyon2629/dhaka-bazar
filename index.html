@@ -126,6 +126,16 @@ header{
     font-size:18px;
 }
 
+.owner-btn-head{
+    background:#333;
+    color:#fff;
+    border:0;
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
 .install-btn{
     border:0;
     background:var(--primary);
@@ -607,6 +617,17 @@ header{
     margin-top:9px;
 }
 
+.owner-btn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    background:#1f2937;
+    color:white;
+    font-weight:700;
+    margin-top:9px;
+}
+
 .switch-text{
     text-align:center;
     font-size:13px;
@@ -633,17 +654,6 @@ header{
     color:var(--primary);
     font-weight:700;
     text-decoration:none;
-}
-
-.otp-box{
-    text-align:center;
-}
-
-.otp-box input{
-    text-align:center;
-    letter-spacing:7px;
-    font-size:22px;
-    font-weight:800;
 }
 
 .account-card{
@@ -877,6 +887,12 @@ oninput="searchProducts()">
 <div class="header-actions">
 
 <button
+class="owner-btn-head"
+onclick="showOwnerLogin()">
+👑 Owner
+</button>
+
+<button
 class="icon-btn"
 onclick="openProfile()">
 👤
@@ -1019,7 +1035,7 @@ Backend Checking...
 
 <p>
 পণ্য হাতে পাওয়ার পর টাকা পরিশোধ করুন।
-অগ্রিম টাকা দেওয়ার প্রয়োজন নেই।
+অগ্রিম টাকা দেওয়ার প্রয়োজন নেই।
 </p>
 
 </div>
@@ -1038,7 +1054,7 @@ Backend Checking...
 <div class="feature">
 <div class="feature-icon">💵</div>
 <h3>Cash on Delivery</h3>
-<p>পণ্য হাতে পাওয়ার সময় Cash Payment করুন।</p>
+<p>পণ্য হাতে পাওয়ার সময় Cash Payment করুন।</p>
 </div>
 
 <div class="feature">
@@ -1155,6 +1171,10 @@ placeholder="আপনার Password">
 🔑 Login করুন
 </button>
 
+<button class="owner-btn" onclick="showOwnerLogin()">
+👑 Owner Login
+</button>
+
 <div class="switch-text">
 
 Account নেই?
@@ -1168,7 +1188,7 @@ Register করুন
 </div>
 
 
-<!-- REGISTER -->
+<!-- REGISTER (Direct Registration for All) -->
 
 <div id="registerBox" style="display:none">
 
@@ -1217,8 +1237,8 @@ placeholder="Password আবার লিখুন">
 
 </div>
 
-<button class="primary-btn" onclick="requestOTP()">
-📲 OTP পাঠান
+<button class="primary-btn" onclick="registerUserDirect()">
+📝 Registration করুন
 </button>
 
 <div class="switch-text">
@@ -1234,37 +1254,42 @@ Login করুন
 </div>
 
 
-<!-- OTP -->
+<!-- OWNER LOGIN -->
 
-<div id="otpBox" style="display:none">
-
-<div class="otp-box">
-
-<p style="color:#666;font-size:13px;margin-bottom:15px">
-
-আপনার মোবাইল নম্বরে OTP পাঠানো হয়েছে।
-
-</p>
+<div id="ownerBox" style="display:none">
 
 <div class="form-group">
 
-<label>OTP Code</label>
+<label>Owner Secret UID</label>
 
 <input
-id="registerOTP"
+id="ownerUID"
 type="text"
-inputmode="numeric"
-maxlength="6"
-placeholder="••••••">
+placeholder="গোপন UID দিন">
 
 </div>
 
-<button class="primary-btn" onclick="verifyOTP()">
-✅ OTP Verify করে Register
+<div class="form-group">
+
+<label>Owner Password</label>
+
+<input
+id="ownerPassword"
+type="password"
+placeholder="গোপন Password">
+
+</div>
+
+<button class="primary-btn" style="background:#1f2937" onclick="loginOwner()">
+👑 Owner হিসেবে Login
 </button>
 
-<button class="secondary-btn" onclick="requestOTP()">
-🔄 OTP আবার পাঠান
+<div class="switch-text">
+
+ইউজার হিসেবে লগইন করতে চান?
+
+<button onclick="showLogin()">
+Customer Login
 </button>
 
 </div>
@@ -1378,7 +1403,7 @@ WhatsApp:
 <option>উত্তরা</option>
 <option>ধানমন্ডি</option>
 <option>মোহাম্মদপুর</option>
-<option>যাত্রাবাড়ী</option>
+<option>যাত্রাবাড়ী</option>
 
 </select>
 
@@ -1581,7 +1606,7 @@ Delivery Information
 </div>
 
 <div style="font-size:11px;margin-top:7px">
-পণ্য হাতে নিয়ে দেখে তারপর টাকা পরিশোধ করবেন।
+পণ্য হাতে নিয়ে দেখে তারপর টাকা পরিশোধ করবেন।
 </div>
 
 </div>
@@ -1674,8 +1699,11 @@ onclick="closeModal('successModal')">
    COMPLETE FRONTEND
    ===================================================== */
 
-const API_BASE =
-"https://dhaka-bazar-1.onrender.com";
+const API_BASE = "https://dhaka-bazar-1.onrender.com";
+
+// STRICT OWNER CREDENTIALS
+const OWNER_UID_SECRET = "2629574242";
+const OWNER_PASS_SECRET = "DhakaBazar@2026#Owner";
 
 
 /* ================= DATA ================= */
@@ -1706,8 +1734,6 @@ localStorage.getItem("dhakaAddress")
 ||"";
 
 let deferredPrompt=null;
-
-let pendingRegistration=null;
 
 
 /* ================= SERVICE WORKER ================= */
@@ -1865,7 +1891,7 @@ data=await response.json();
 }catch(e){
 
 throw new Error(
-"Server থেকে সঠিক response পাওয়া যায়নি"
+"Server থেকে সঠিক response পাওয়া যায়নি"
 );
 
 }
@@ -2045,7 +2071,7 @@ document.getElementById("loginBox").style.display=
 document.getElementById("registerBox").style.display=
 "none";
 
-document.getElementById("otpBox").style.display=
+document.getElementById("ownerBox").style.display=
 "none";
 
 openModal("authModal");
@@ -2064,7 +2090,7 @@ document.getElementById("loginBox").style.display=
 document.getElementById("registerBox").style.display=
 "block";
 
-document.getElementById("otpBox").style.display=
+document.getElementById("ownerBox").style.display=
 "none";
 
 openModal("authModal");
@@ -2072,9 +2098,28 @@ openModal("authModal");
 }
 
 
-/* ================= REGISTER OTP ================= */
+function showOwnerLogin(){
 
-async function requestOTP(){
+document.getElementById("authTitle").innerText=
+"👑 Owner Login";
+
+document.getElementById("loginBox").style.display=
+"none";
+
+document.getElementById("registerBox").style.display=
+"none";
+
+document.getElementById("ownerBox").style.display=
+"block";
+
+openModal("authModal");
+
+}
+
+
+/* ================= DIRECT REGISTRATION (FOR CUSTOMERS) ================= */
+
+async function registerUserDirect(){
 
 const name=
 document
@@ -2126,159 +2171,55 @@ return;
 }
 
 
-pendingRegistration={
+try{
+
+showToast("Registration হচ্ছে...");
+
+const data=
+await apiRequest(
+"/api/auth/register",
+{
+
+method:"POST",
+
+body:JSON.stringify({
 name,
 phone,
 password
-};
-
-
-try{
-
-showToast("OTP পাঠানো হচ্ছে...");
-
-
-const data=
-await apiRequest(
-"/api/auth/request-otp",
-{
-
-method:"POST",
-
-body:JSON.stringify({
-name,
-phone
 })
 
 });
-
-
-document.getElementById("registerBox")
-.style.display="none";
-
-document.getElementById("otpBox")
-.style.display="block";
-
-document.getElementById("authTitle")
-.innerText=
-"📲 OTP Verification";
-
-showToast(
-data.message||
-"OTP পাঠানো হয়েছে ✓"
-);
-
-}catch(error){
-
-showToast(
-error.message||
-"OTP পাঠানো যায়নি"
-);
-
-}
-
-}
-
-
-/* ================= VERIFY OTP ================= */
-
-async function verifyOTP(){
-
-if(!pendingRegistration){
-
-showToast(
-"Registration তথ্য পাওয়া যায়নি"
-);
-
-return;
-
-}
-
-const otp=
-document
-.getElementById("registerOTP")
-.value.trim();
-
-if(otp.length<4){
-
-showToast(
-"সঠিক OTP দিন"
-);
-
-return;
-
-}
-
-
-try{
-
-showToast(
-"OTP Verify হচ্ছে..."
-);
-
-
-const data=
-await apiRequest(
-"/api/auth/verify-otp",
-{
-
-method:"POST",
-
-body:JSON.stringify({
-
-name:
-pendingRegistration.name,
-
-phone:
-pendingRegistration.phone,
-
-password:
-pendingRegistration.password,
-
-otp:otp
-
-})
-
-});
-
 
 currentUser={
 
-id:
-data.user?.id||"",
+id:data.user?.id||"",
 
-name:
-data.user?.name||
-pendingRegistration.name,
+name:data.user?.name||name,
 
-phone:
-data.user?.phone||
-pendingRegistration.phone
+phone:data.user?.phone||phone,
+
+role:"customer"
 
 };
-
 
 localStorage.setItem(
 "dhakaUser",
 JSON.stringify(currentUser)
 );
 
-
-pendingRegistration=null;
-
 closeModal("authModal");
 
 updateProfile();
 
 showToast(
-"Registration সফল হয়েছে ✓"
+"Registration ও Login সফল হয়েছে ✓"
 );
 
 }catch(error){
 
 showToast(
 error.message||
-"OTP সঠিক নয়"
+"Registration করা যায়নি"
 );
 
 }
@@ -2286,7 +2227,7 @@ error.message||
 }
 
 
-/* ================= LOGIN ================= */
+/* ================= CUSTOMER LOGIN ================= */
 
 async function loginUser(){
 
@@ -2342,7 +2283,9 @@ id:data.user?.id||"",
 
 name:data.user?.name||"User",
 
-phone:data.user?.phone||phone
+phone:data.user?.phone||phone,
+
+role:"customer"
 
 };
 
@@ -2367,6 +2310,72 @@ showToast(
 error.message||
 "Login করা যায়নি"
 );
+
+}
+
+}
+
+
+/* ================= OWNER LOGIN (STRICT MATCH) ================= */
+
+async function loginOwner(){
+
+const uid=
+document
+.getElementById("ownerUID")
+.value.trim();
+
+const password=
+document
+.getElementById("ownerPassword")
+.value;
+
+
+if(!uid){
+
+showToast("Owner Secret UID দিন");
+return;
+
+}
+
+if(!password){
+
+showToast("Owner Password দিন");
+return;
+
+}
+
+// Strict Verification
+if(uid === OWNER_UID_SECRET && password === OWNER_PASS_SECRET){
+
+currentUser={
+
+id: "OWNER_2629574242",
+
+name: "Dhaka Bazar Owner",
+
+phone: OWNER_UID_SECRET,
+
+role: "owner"
+
+};
+
+localStorage.setItem(
+"dhakaUser",
+JSON.stringify(currentUser)
+);
+
+closeModal("authModal");
+
+updateProfile();
+
+showToast(
+"Owner Login সফল হয়েছে 👑"
+);
+
+} else {
+
+showToast("ভুল UID অথবা Password! ওনার একাউন্ট লগইন ব্যর্থ।");
 
 }
 
@@ -2414,12 +2423,14 @@ return;
 }
 
 
+const isOwner=currentUser.role==="owner";
+
 box.innerHTML=`
 
 <div class="account-card">
 
 <h3>
-👤 ${escapeHTML(currentUser.name)}
+${isOwner?"👑 Owner Panel":"👤 "+escapeHTML(currentUser.name)}
 </h3>
 
 <p style="margin-top:8px;color:#666">
@@ -2427,7 +2438,7 @@ box.innerHTML=`
 </p>
 
 <p style="margin-top:8px;color:#666">
-🟢 Account Active
+🟢 Account Status: Active ${isOwner?"(Owner Mode)":""}
 </p>
 
 </div>
@@ -2436,7 +2447,7 @@ box.innerHTML=`
 class="primary-btn"
 onclick="closeModal('profileModal');openSeller()">
 
-🏪 Product Sell করুন
+🏪 Product Sell / Add করুন
 
 </button>
 
