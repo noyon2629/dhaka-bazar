@@ -1,1380 +1,264 @@
-// ============================================
-// DHAKA BAZAR - BACKEND API
-// COD + SELLER DELIVERY CHARGE
-// Version: 3.0
-// ============================================
-
 const express = require("express");
 const cors = require("cors");
+const crypto = require("crypto");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
+app.use(express.static(__dirname));
 
 // ============================================
-// MIDDLEWARE
+// IN-MEMORY DATABASE (TEMPORARY DATA)
 // ============================================
+let users = [];
+let products = [];
+let orders = [];
 
-app.use(cors({
-    origin: "*"
-}));
+// Owner Session Memory Storage
+const ownerSessions = new Map();
 
-app.use(express.json({ limit: "10mb" }));
+// Environment Variables or Default Values
+const OWNER_ID = process.env.OWNER_ID || "2629574242";
+const OWNER_PASSWORD = process.env.OWNER_PASSWORD || "DhakaBazar@2026#Owner";
 
-// ============================================
-// TEMPORARY DATABASE
-// ============================================
-
-const users = [];
-const products = [];
-const orders = [];
-
-// ============================================
-// HELPER
-// ============================================
-
-function createId(prefix) {
-    return prefix + "-" + Date.now() + "-" +
-        Math.floor(Math.random() * 10000);
+// Helper function to sanitize text
+function cleanText(text) {
+    return text ? String(text).trim() : "";
 }
 
-function cleanText(value) {
-    if (value === undefined || value === null) {
-        return "";
+// Helper function to generate IDs
+function createId(prefix) {
+    return prefix + "_" + Math.floor(100000 + Math.random() * 900000);
+}
+
+// ============================================
+// OWNER AUTH MIDDLEWARE
+// ============================================
+function ownerAuth(req, res, next) {
+    const auth = req.headers.authorization || "";
+
+    if (!auth.startsWith("Bearer ")) {
+        return res.status(401).json({
+            success: false,
+            message: "Owner login required."
+        });
     }
 
-    return String(value).trim();
-}
+    const token = auth.replace("Bearer ", "").trim();
+    const session = ownerSessions.get(token);
 
-function validPrice(value) {
-    const price = Number(value);
+    if (!session) {
+        return res.status(401).json({
+            success: false,
+            message: "Invalid or expired owner session."
+        });
+    }
 
-    return Number.isFinite(price) && price > 0;
-}
-
-function validDeliveryCharge(value) {
-    const charge = Number(value);
-
-    return Number.isFinite(charge) && charge >= 0;
+    req.owner = session;
+    next();
 }
 
 // ============================================
-// HOME
+// OWNER API ROUTES
 // ============================================
 
-app.get("/", (req, res) => {
+// Owner Login
+app.post("/api/owner/login", (req, res) => {
+    const ownerId = cleanText(req.body.ownerId);
+    const password = cleanText(req.body.password);
+
+    if (!OWNER_PASSWORD) {
+        return res.status(500).json({
+            success: false,
+            message: "OWNER_PASSWORD Render Environment-এ সেট করা হয়নি।"
+        });
+    }
+
+    if (ownerId !== OWNER_ID || password !== OWNER_PASSWORD) {
+        return res.status(401).json({
+            success: false,
+            message: "Owner ID অথবা Password ভুল।"
+        });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    ownerSessions.set(token, {
+        ownerId,
+        loginAt: new Date().toISOString()
+    });
 
     res.json({
         success: true,
-        app: "Dhaka Bazar",
-        version: "3.0",
-        payment: "CASH_ON_DELIVERY_ONLY",
-        message: "Dhaka Bazar Backend is running!"
+        message: "Owner Login Successful.",
+        token,
+        owner: {
+            id: ownerId,
+            role: "OWNER"
+        }
     });
-
 });
 
-// ============================================
-// SERVER STATUS
-// ============================================
+// Owner Logout
+app.post("/api/owner/logout", ownerAuth, (req, res) => {
+    const auth = req.headers.authorization || "";
+    const token = auth.replace("Bearer ", "").trim();
 
-app.get("/api/status", (req, res) => {
+    ownerSessions.delete(token);
 
     res.json({
         success: true,
-        status: "online",
-        paymentMethod: "COD",
-        serverTime: new Date().toISOString()
+        message: "Owner logout successful."
+    });
+});
+
+// Owner Dashboard Summary Data
+app.get("/api/owner/dashboard", ownerAuth, (req, res) => {
+    // USERS
+    const totalUsers = users.length;
+    const buyerCount = users.filter(user => user.role === "CUSTOMER").length;
+    const sellerCount = users.filter(user => user.role === "SELLER").length;
+
+    // PRODUCTS
+    const totalProducts = products.length;
+    const activeProducts = products.filter(product => product.status === "ACTIVE").length;
+
+    // ORDERS
+    const totalOrders = orders.length;
+    const deliveredOrders = orders.filter(order => order.status === "DELIVERED").length;
+    const cancelledOrders = orders.filter(order => order.status === "CANCELLED").length;
+    const pendingOrders = orders.filter(order =>
+        ["ORDER_CONFIRMED", "PROCESSING", "PACKED", "OUT_FOR_DELIVERY"].includes(order.status)
+    ).length;
+
+    // SALES
+    let totalSales = 0;
+    let deliveredSales = 0;
+
+    orders.forEach(order => {
+        const amount = Number(order.total) || 0;
+        if (order.status !== "CANCELLED") {
+            totalSales += amount;
+        }
+        if (order.status === "DELIVERED") {
+            deliveredSales += amount;
+        }
     });
 
+    res.json({
+        success: true,
+        owner: {
+            id: req.owner.ownerId,
+            role: "OWNER"
+        },
+        dashboard: {
+            users: {
+                total: totalUsers,
+                buyers: buyerCount,
+                sellers: sellerCount
+            },
+            products: {
+                total: totalProducts,
+                active: activeProducts
+            },
+            orders: {
+                total: totalOrders,
+                pending: pendingOrders,
+                delivered: deliveredOrders,
+                cancelled: cancelledOrders
+            },
+            sales: {
+                total: totalSales,
+                delivered: deliveredSales
+            }
+        },
+        generatedAt: new Date().toISOString()
+    });
+});
+
+// Owner Data List Fetch APIs
+app.get("/api/owner/users", ownerAuth, (req, res) => {
+    res.json({
+        success: true,
+        count: users.length,
+        users: users.map(u => ({
+            id: u.id,
+            name: u.name,
+            phone: u.phone,
+            role: u.role,
+            createdAt: u.createdAt
+        }))
+    });
+});
+
+app.get("/api/owner/products", ownerAuth, (req, res) => {
+    res.json({ success: true, count: products.length, products });
+});
+
+app.get("/api/owner/orders", ownerAuth, (req, res) => {
+    res.json({ success: true, count: orders.length, orders });
 });
 
 // ============================================
-// USER CREATE / LOGIN
+// APP BUSINESS API ROUTES
 // ============================================
 
-app.post("/api/users", (req, res) => {
-
+// Seller Registration Endpoint
+app.post("/api/sellers", (req, res) => {
     const name = cleanText(req.body.name);
     const phone = cleanText(req.body.phone);
 
     if (!name || !phone) {
-
         return res.status(400).json({
             success: false,
-            message: "নাম এবং মোবাইল নম্বর প্রয়োজন।"
+            message: "Seller name এবং phone প্রয়োজন।"
         });
-
     }
 
-    let user = users.find(
-        item => item.phone === phone
-    );
+    const existing = users.find(user => user.phone === phone);
 
-    if (user) {
-
-        user.name = name;
-
-        return res.json({
-            success: true,
-            message: "Account found.",
-            user
+    if (existing) {
+        if (existing.role === "SELLER") {
+            return res.json({
+                success: true,
+                message: "Seller account already exists.",
+                user: existing
+            });
+        }
+        return res.status(409).json({
+            success: false,
+            message: "এই phone number দিয়ে Customer account আছে।"
         });
-
     }
 
-    user = {
-
-        id: createId("USER"),
-
+    const seller = {
+        id: createId("SELLER"),
         name,
-
         phone,
-
-        role: "CUSTOMER",
-
-        createdAt:
-            new Date().toISOString()
-
+        role: "SELLER",
+        createdAt: new Date().toISOString()
     };
 
-    users.push(user);
+    users.push(seller);
 
     res.status(201).json({
-
         success: true,
-
-        message: "Account created successfully.",
-
-        user
-
+        message: "Seller account created successfully.",
+        user: seller
     });
-
 });
 
-// ============================================
-// GET USER
-// ============================================
-
-app.get("/api/users/:phone", (req, res) => {
-
-    const phone =
-        cleanText(req.params.phone);
-
-    const user =
-        users.find(
-            item => item.phone === phone
-        );
-
-    if (!user) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message: "User পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    res.json({
-
-        success: true,
-
-        user
-
-    });
-
-});
-
-// ============================================
-// ADD PRODUCT - SELLER
-// ============================================
-
-app.post("/api/products", (req, res) => {
-
-    const sellerId =
-        cleanText(req.body.sellerId);
-
-    const sellerName =
-        cleanText(req.body.sellerName);
-
-    const name =
-        cleanText(req.body.name);
-
-    const description =
-        cleanText(req.body.description);
-
-    const category =
-        cleanText(req.body.category) || "other";
-
-    const image =
-        cleanText(req.body.image);
-
-    const icon =
-        cleanText(req.body.icon) || "📦";
-
-    const price =
-        Number(req.body.price);
-
-    const deliveryCharge =
-        Number(req.body.deliveryCharge);
-
-    const stock =
-        req.body.stock === undefined
-            ? 999999
-            : Number(req.body.stock);
-
-    // ----------------------------
-
-    if (!sellerId) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: "Seller ID প্রয়োজন।"
-
-        });
-
-    }
-
-    if (!name) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: "Product Name দিন।"
-
-        });
-
-    }
-
-    if (!validPrice(price)) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: "সঠিক Product Price দিন।"
-
-        });
-
-    }
-
-    if (!validDeliveryCharge(deliveryCharge)) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "সঠিক Delivery Charge দিন।"
-
-        });
-
-    }
-
-    if (
-        !Number.isInteger(stock) ||
-        stock < 0
-    ) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: "সঠিক Stock দিন।"
-
-        });
-
-    }
-
-    // ----------------------------
-
-    const product = {
-
-        id: createId("PRODUCT"),
-
-        sellerId,
-
-        sellerName:
-            sellerName || "Seller",
-
-        name,
-
-        description,
-
-        price,
-
-        deliveryCharge,
-
-        category,
-
-        image,
-
-        icon,
-
-        stock,
-
-        status: "ACTIVE",
-
-        paymentMethod:
-            "CASH_ON_DELIVERY",
-
-        createdAt:
-            new Date().toISOString(),
-
-        updatedAt:
-            new Date().toISOString()
-
-    };
-
-    products.push(product);
-
-    res.status(201).json({
-
-        success: true,
-
-        message:
-            "Product সফলভাবে Add হয়েছে।",
-
-        product
-
-    });
-
-});
-
-// ============================================
-// GET ALL ACTIVE PRODUCTS
-// ============================================
-
-app.get("/api/products", (req, res) => {
-
-    const activeProducts =
-        products.filter(
-            product =>
-                product.status === "ACTIVE"
-        );
-
-    res.json({
-
-        success: true,
-
-        count: activeProducts.length,
-
-        products: activeProducts
-
-    });
-
-});
-
-// ============================================
-// GET SINGLE PRODUCT
-// ============================================
-
-app.get("/api/products/:id", (req, res) => {
-
-    const product =
-        products.find(
-            item =>
-                item.id === req.params.id
-        );
-
-    if (!product) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message:
-                "Product পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    res.json({
-
-        success: true,
-
-        product
-
-    });
-
-});
-
-// ============================================
-// GET SELLER PRODUCTS
-// ============================================
-
-app.get(
-    "/api/seller/:sellerId/products",
-    (req, res) => {
-
-        const sellerProducts =
-            products.filter(
-                product =>
-                    product.sellerId ===
-                    req.params.sellerId
-            );
-
-        res.json({
-
-            success: true,
-
-            count: sellerProducts.length,
-
-            products: sellerProducts
-
-        });
-
-    }
-);
-
-// ============================================
-// UPDATE PRODUCT
-// ============================================
-
-app.put("/api/products/:id", (req, res) => {
-
-    const product =
-        products.find(
-            item =>
-                item.id === req.params.id
-        );
-
-    if (!product) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message:
-                "Product পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    const {
-        name,
-        description,
-        price,
-        deliveryCharge,
-        category,
-        image,
-        icon,
-        stock,
-        status
-    } = req.body;
-
-    // ----------------------------
-
-    if (name !== undefined) {
-
-        const newName =
-            cleanText(name);
-
-        if (!newName) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "Product Name খালি রাখা যাবে না।"
-
-            });
-
-        }
-
-        product.name = newName;
-
-    }
-
-    // ----------------------------
-
-    if (description !== undefined) {
-
-        product.description =
-            cleanText(description);
-
-    }
-
-    // ----------------------------
-
-    if (price !== undefined) {
-
-        const newPrice =
-            Number(price);
-
-        if (!validPrice(newPrice)) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "সঠিক Product Price দিন।"
-
-            });
-
-        }
-
-        product.price = newPrice;
-
-    }
-
-    // ----------------------------
-
-    if (deliveryCharge !== undefined) {
-
-        const newCharge =
-            Number(deliveryCharge);
-
-        if (
-            !validDeliveryCharge(
-                newCharge
-            )
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "সঠিক Delivery Charge দিন।"
-
-            });
-
-        }
-
-        product.deliveryCharge =
-            newCharge;
-
-    }
-
-    // ----------------------------
-
-    if (category !== undefined) {
-
-        product.category =
-            cleanText(category) ||
-            "other";
-
-    }
-
-    // ----------------------------
-
-    if (image !== undefined) {
-
-        product.image =
-            cleanText(image);
-
-    }
-
-    // ----------------------------
-
-    if (icon !== undefined) {
-
-        product.icon =
-            cleanText(icon) || "📦";
-
-    }
-
-    // ----------------------------
-
-    if (stock !== undefined) {
-
-        const newStock =
-            Number(stock);
-
-        if (
-            !Number.isInteger(newStock) ||
-            newStock < 0
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "সঠিক Stock দিন।"
-
-            });
-
-        }
-
-        product.stock = newStock;
-
-    }
-
-    // ----------------------------
-
-    if (status !== undefined) {
-
-        if (
-            !["ACTIVE", "INACTIVE"]
-                .includes(status)
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "Invalid product status."
-
-            });
-
-        }
-
-        product.status = status;
-
-    }
-
-    product.updatedAt =
-        new Date().toISOString();
-
-    res.json({
-
-        success: true,
-
-        message:
-            "Product successfully updated.",
-
-        product
-
-    });
-
-});
-
-// ============================================
-// DELETE PRODUCT
-// ============================================
-
-app.delete("/api/products/:id", (req, res) => {
-
-    const index =
-        products.findIndex(
-            product =>
-                product.id === req.params.id
-        );
-
-    if (index === -1) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message:
-                "Product পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    const deletedProduct =
-        products.splice(index, 1)[0];
-
-    res.json({
-
-        success: true,
-
-        message:
-            "Product Delete হয়েছে।",
-
-        product: deletedProduct
-
-    });
-
-});
-
-// ============================================
-// CREATE COD ORDER
-// ============================================
-
-app.post("/api/orders", (req, res) => {
-
-    const customerName =
-        cleanText(req.body.customerName);
-
-    const phone =
-        cleanText(req.body.phone);
-
-    const deliveryAddress =
-        cleanText(req.body.deliveryAddress);
-
-    const area =
-        cleanText(req.body.area);
-
-    const items =
-        req.body.items;
-
-    // ========================================
-    // COD ONLY
-    // ========================================
-
-    const paymentMethod =
-        "CASH_ON_DELIVERY";
-
-    // ========================================
-
-    if (!customerName) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Customer Name প্রয়োজন।"
-
-        });
-
-    }
-
-    if (!phone) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Customer Phone প্রয়োজন।"
-
-        });
-
-    }
-
-    if (!area) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Delivery Area প্রয়োজন।"
-
-        });
-
-    }
-
-    if (!deliveryAddress) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Delivery Address প্রয়োজন।"
-
-        });
-
-    }
-
-    if (
-        !Array.isArray(items) ||
-        items.length === 0
-    ) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Order items প্রয়োজন।"
-
-        });
-
-    }
-
-    // ========================================
-    // CALCULATE ORDER
-    // ========================================
-
-    let productTotal = 0;
-
-    let deliveryTotal = 0;
-
-    const orderItems = [];
-
-    // ========================================
-
-    for (const item of items) {
-
-        const productId =
-            cleanText(
-                item.productId ||
-                item.id
-            );
-
-        const quantity =
-            Number(
-                item.quantity ||
-                item.qty ||
-                1
-            );
-
-        // ----------------------------
-
-        if (!productId) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "Product ID প্রয়োজন।"
-
-            });
-
-        }
-
-        // ----------------------------
-
-        if (
-            !Number.isInteger(quantity) ||
-            quantity <= 0
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "সঠিক Product quantity দিন।"
-
-            });
-
-        }
-
-        // ----------------------------
-
-        const product =
-            products.find(
-                product =>
-                    product.id ===
-                    productId
-            );
-
-        // ----------------------------
-
-        if (!product) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "একটি Product পাওয়া যায়নি।"
-
-            });
-
-        }
-
-        // ----------------------------
-
-        if (
-            product.status !==
-            "ACTIVE"
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    `${product.name} এখন Available নয়।`
-
-            });
-
-        }
-
-        // ----------------------------
-
-        if (
-            product.stock <
-            quantity
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    `${product.name} এর পর্যাপ্ত Stock নেই।`
-
-            });
-
-        }
-
-        // ----------------------------
-
-        const itemTotal =
-            product.price *
-            quantity;
-
-        // ----------------------------
-        // Seller Delivery Charge
-        // এক Product-এর একই seller-এর
-        // delivery charge একবার গণনা হবে
-        // ----------------------------
-
-        const sellerAlreadyAdded =
-            orderItems.some(
-                item =>
-                    item.sellerId ===
-                    product.sellerId
-            );
-
-        let sellerDelivery = 0;
-
-        if (!sellerAlreadyAdded) {
-
-            sellerDelivery =
-                Number(
-                    product.deliveryCharge
-                ) || 0;
-
-            deliveryTotal +=
-                sellerDelivery;
-
-        }
-
-        // ----------------------------
-
-        productTotal +=
-            itemTotal;
-
-        // ----------------------------
-
-        orderItems.push({
-
-            productId:
-                product.id,
-
-            name:
-                product.name,
-
-            sellerId:
-                product.sellerId,
-
-            sellerName:
-                product.sellerName,
-
-            price:
-                product.price,
-
-            quantity,
-
-            itemTotal,
-
-            deliveryCharge:
-                sellerDelivery
-
-        });
-
-        // ----------------------------
-        // Reduce stock
-        // ----------------------------
-
-        product.stock -= quantity;
-
-    }
-
-    // ========================================
-    // FINAL TOTAL
-    // ========================================
-
-    const grandTotal =
-        productTotal +
-        deliveryTotal;
-
-    // ========================================
-    // CREATE ORDER
-    // ========================================
-
-    const order = {
-
-        id:
-            createId("DB"),
-
-        customerName,
-
-        phone,
-
-        area,
-
-        deliveryAddress,
-
-        items:
-            orderItems,
-
-        productTotal,
-
-        deliveryTotal,
-
-        total:
-            grandTotal,
-
-        paymentMethod,
-
-        status:
-            "ORDER_CONFIRMED",
-
-        createdAt:
-            new Date().toISOString(),
-
-        updatedAt:
-            new Date().toISOString()
-
-    };
-
-    orders.unshift(order);
-
-    // ========================================
-
-    res.status(201).json({
-
-        success: true,
-
-        message:
-            "Cash on Delivery Order সফলভাবে Confirm হয়েছে।",
-
-        order
-
-    });
-
-});
-
-// ============================================
-// GET ALL ORDERS
-// ============================================
-
-app.get("/api/orders", (req, res) => {
-
-    res.json({
-
-        success: true,
-
-        count: orders.length,
-
-        orders
-
-    });
-
-});
-
-// ============================================
-// CUSTOMER ORDERS
-// ============================================
-
-app.get(
-    "/api/orders/customer/:phone",
-    (req, res) => {
-
-        const phone =
-            cleanText(req.params.phone);
-
-        const customerOrders =
-            orders.filter(
-                order =>
-                    order.phone === phone
-            );
-
-        res.json({
-
-            success: true,
-
-            count:
-                customerOrders.length,
-
-            orders:
-                customerOrders
-
-        });
-
-    }
-);
-
-// ============================================
-// SINGLE ORDER
-// ============================================
-
-app.get("/api/orders/:id", (req, res) => {
-
-    const order =
-        orders.find(
-            item =>
-                item.id ===
-                req.params.id
-        );
-
-    if (!order) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message:
-                "Order পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    res.json({
-
-        success: true,
-
-        order
-
-    });
-
-});
-
-// ============================================
-// UPDATE ORDER STATUS
-// ============================================
-
-app.put("/api/orders/:id/status", (req, res) => {
-
-    const order =
-        orders.find(
-            item =>
-                item.id ===
-                req.params.id
-        );
-
-    if (!order) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message:
-                "Order পাওয়া যায়নি।"
-
-        });
-
-    }
-
-    const status =
-        cleanText(req.body.status);
-
-    const allowedStatuses = [
-
-        "ORDER_CONFIRMED",
-
-        "PROCESSING",
-
-        "PACKED",
-
-        "OUT_FOR_DELIVERY",
-
-        "DELIVERED",
-
-        "CANCELLED"
-
-    ];
-
-    if (
-        !allowedStatuses
-            .includes(status)
-    ) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message:
-                "Invalid order status."
-
-        });
-
-    }
-
-    order.status = status;
-
-    order.updatedAt =
-        new Date().toISOString();
-
-    res.json({
-
-        success: true,
-
-        message:
-            "Order status updated.",
-
-        order
-
-    });
-
-});
-
-// ============================================
-// SELLER ORDERS
-// ============================================
-
-app.get(
-    "/api/seller/:sellerId/orders",
-    (req, res) => {
-
-        const sellerId =
-            cleanText(
-                req.params.sellerId
-            );
-
-        const sellerOrders =
-            orders.filter(
-                order =>
-                    order.items.some(
-                        item =>
-                            item.sellerId ===
-                            sellerId
-                    )
-            );
-
-        res.json({
-
-            success: true,
-
-            count:
-                sellerOrders.length,
-
-            orders:
-                sellerOrders
-
-        });
-
-    }
-);
-
-// ============================================
-// ADMIN SUMMARY
-// ============================================
-
-app.get("/api/admin/summary", (req, res) => {
-
-    const totalProducts =
-        products.length;
-
-    const activeProducts =
-        products.filter(
-            product =>
-                product.status ===
-                "ACTIVE"
-        ).length;
-
-    const totalOrders =
-        orders.length;
-
-    const confirmedOrders =
-        orders.filter(
-            order =>
-                order.status ===
-                "ORDER_CONFIRMED"
-        ).length;
-
-    const deliveredOrders =
-        orders.filter(
-            order =>
-                order.status ===
-                "DELIVERED"
-        ).length;
-
-    let totalSales = 0;
-
-    orders.forEach(order => {
-
-        if (
-            order.status !==
-            "CANCELLED"
-        ) {
-
-            totalSales +=
-                Number(order.total) || 0;
-
-        }
-
-    });
-
-    res.json({
-
-        success: true,
-
-        summary: {
-
-            users:
-                users.length,
-
-            products:
-                totalProducts,
-
-            activeProducts,
-
-            orders:
-                totalOrders,
-
-            confirmedOrders,
-
-            deliveredOrders,
-
-            totalSales
-
-        }
-
-    });
-
-});
-
-// ============================================
-// 404
-// ============================================
-
+// Default 404 Route
 app.use((req, res) => {
-
     res.status(404).json({
-
         success: false,
-
-        message:
-            "API endpoint পাওয়া যায়নি।"
-
+        message: "API Route not found."
     });
-
 });
 
-// ============================================
-// ERROR HANDLER
-// ============================================
-
-app.use((err, req, res, next) => {
-
-    console.error(err);
-
-    res.status(500).json({
-
-        success: false,
-
-        message:
-            "Server error হয়েছে।"
-
-    });
-
-});
-
-// ============================================
-// START SERVER
-// ============================================
-
+// Server Listen
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-
-    console.log(
-        `Dhaka Bazar Backend running on port ${PORT}`
-    );
-
+    console.log(`Server running on port ${PORT}`);
 });
