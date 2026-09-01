@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
+const path = require("path");
 
 const app = express();
 
@@ -18,7 +19,7 @@ let orders = [];
 // Owner Session Memory Storage
 const ownerSessions = new Map();
 
-// Environment Variables or Default Values
+// Environment Variables or Default Credentials
 const OWNER_ID = process.env.OWNER_ID || "2629574242";
 const OWNER_PASSWORD = process.env.OWNER_PASSWORD || "DhakaBazar@2026#Owner";
 
@@ -63,7 +64,7 @@ function ownerAuth(req, res, next) {
 // OWNER API ROUTES
 // ============================================
 
-// Owner Login
+// Owner Login API
 app.post("/api/owner/login", (req, res) => {
     const ownerId = cleanText(req.body.ownerId);
     const password = cleanText(req.body.password);
@@ -100,7 +101,7 @@ app.post("/api/owner/login", (req, res) => {
     });
 });
 
-// Owner Logout
+// Owner Logout API
 app.post("/api/owner/logout", ownerAuth, (req, res) => {
     const auth = req.headers.authorization || "";
     const token = auth.replace("Bearer ", "").trim();
@@ -113,7 +114,7 @@ app.post("/api/owner/logout", ownerAuth, (req, res) => {
     });
 });
 
-// Owner Dashboard Summary Data
+// Owner Dashboard Summary Data API
 app.get("/api/owner/dashboard", ownerAuth, (req, res) => {
     // USERS
     const totalUsers = users.length;
@@ -177,7 +178,7 @@ app.get("/api/owner/dashboard", ownerAuth, (req, res) => {
     });
 });
 
-// Owner Data List Fetch APIs
+// Owner List Fetch APIs
 app.get("/api/owner/users", ownerAuth, (req, res) => {
     res.json({
         success: true,
@@ -250,12 +251,17 @@ app.post("/api/sellers", (req, res) => {
 });
 
 // ============================================
-// ROOT & DASHBOARD ROUTE
+// PAGE ROUTES
 // ============================================
 
-// সরাসরি ডোমেইনে ঢুকলেই owner.html ওপেন হবে
+// Owner Dashboard Page Route (/owner)
+app.get("/owner", (req, res) => {
+    res.sendFile(path.join(__dirname, "owner.html"));
+});
+
+// Main App Route (/)
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/owner.html");
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Default 404 Route
