@@ -167,7 +167,7 @@ header{
 .section-title h2{ font-size:20px; }
 .section-title button{ border:0; background:none; color:var(--primary); font-weight:700; }
 
-/* CATEGories */
+/* CATEGORIES */
 .categories{
     display:grid;
     grid-template-columns:repeat(6,1fr);
@@ -741,7 +741,7 @@ function renderCategories(){
     if(ownerCatSelect) ownerCatSelect.innerHTML = optionsHTML;
 }
 
-/* SMART IMAGE COMPRESSOR & BASE64 CONVERTER (Prevents Storage Size Issues) */
+/* SMART IMAGE COMPRESSOR & BASE64 CONVERTER */
 function convertFileToBase64(file){
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -753,7 +753,7 @@ function convertFileToBase64(file){
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                const max_size = 500; // Resize to max 500px to avoid localstorage quota error
+                const max_size = 500;
 
                 if (width > height) {
                     if (width > max_size) {
@@ -1266,7 +1266,7 @@ function showOwnerLogin(){ openModal("authModal"); document.getElementById("logi
 function openProfile(){ updateProfile(); openModal("profileModal"); }
 function openSeller(){ if(!currentUser){ showLogin(); return; } openModal("sellerModal"); }
 function logoutUser(){ currentUser=null; localStorage.removeItem("dhakaUser"); updateProfileBtnHeader(); closeModal("profileModal"); renderProducts(); showToast("Logout হয়েছে"); }
-function showToast(msg){ const t =Document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
+function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
 function escapeHTML(str){ return String(str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 function openCart(){ updateCart(); openModal("cartModal"); }
 function scrollToProducts(){ document.getElementById("productSection").scrollIntoView({behavior:"smooth"}); }
