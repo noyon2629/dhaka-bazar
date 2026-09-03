@@ -608,6 +608,23 @@ button{
     padding:20px;
     color:#777;
 }
+.admin-list-box{
+    max-height:220px;
+    overflow-y:auto;
+    background:#f9f9f9;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:12px;
+    border:1px solid #ddd;
+}
+.admin-item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:6px 0;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+}
 @media(min-width:700px){
     body{
         max-width:700px;
@@ -742,7 +759,7 @@ button{
         <div class="feature"><div class="feature-icon">🏠</div><div>Home Screen-এ App Icon</div></div>
         <div class="feature"><div class="feature-icon">🛍️</div><div>সহজ Online Shopping</div></div>
         <button id="realInstallBtn" class="primary-btn" onclick="installApp()">📲 Install App</button>
-        <button id="manualInstallBtn" class="secondary-btn" onclick="showManualInstall()" style="display:none;">📱 Install করার নিয়ম</button>
+        <button id="manualInstallBtn" class="secondary-btn" onclick="showManualInstall()">📱 Install করার নিয়ম</button>
         <button id="openInstalledBtn" class="primary-btn" style="display:none;" onclick="openInstalledApp()">🚀 Open App</button>
         <button class="secondary-btn" onclick="closeModal('installModal')">পরে করব</button>
     </div>
@@ -898,15 +915,19 @@ button{
             </div>
         </div>
         <div id="adminStatus" class="admin-status">✅ Owner Logged in Successfully</div>
+        
         <div class="admin-menu">
-            <button onclick="adminAction('users')">👤 User Management</button>
-            <button onclick="adminAction('sellers')">🏪 Seller Management</button>
-            <button onclick="adminAction('products')">📦 Product Management</button>
-            <button onclick="adminAction('orders')">🛒 Order Management</button>
-            <button onclick="adminAction('sales')">💰 Sales & Commission</button>
+            <button onclick="adminAction('users')">👤 User Management (ইউজার লিস্ট)</button>
+            <button onclick="adminAction('sellers')">🏪 Seller Management (সেলার লিস্ট)</button>
+            <button onclick="adminAction('products')">📦 Product Management (প্রোডাক্ট ডিলিট/ম্যানেজ)</button>
+            <button onclick="adminAction('orders')">🛒 Order Management (অর্ডার লিস্ট)</button>
+            <button onclick="adminAction('sales')">💰 Sales & Commission (টোটাল সেলস হিসাব)</button>
         </div>
-        <button class="primary-btn" onclick="loadAdminDashboard()">🔄 Refresh Dashboard</button>
-        <button class="secondary-btn" onclick="ownerLogout()">🔒 Logout Owner</button>
+
+        <div id="adminDynamicContent" style="margin-top:15px; display:none;"></div>
+
+        <button class="primary-btn" onclick="loadAdminDashboard()" style="margin-top:10px;">🔄 Refresh Dashboard</button>
+        <button class="secondary-btn" onclick="ownerLogout()" style="background:#ffeaea; color:red; margin-top:8px;">🔒 Logout Owner</button>
     </div>
 </div>
 
@@ -930,6 +951,7 @@ let products = JSON.parse(localStorage.getItem("dhakaProducts") || JSON.stringif
 let cart = JSON.parse(localStorage.getItem("dhakaCart") || "[]");
 let favorites = JSON.parse(localStorage.getItem("dhakaFavorites") || "[]");
 let registeredUsers = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+let ordersList = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
 let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
 let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
 
@@ -980,7 +1002,6 @@ function toggleFavorite(id){
 
 function addToCart(id){
     const currentUserPhone = localStorage.getItem("dhakaUserPhone");
-    // চেক করা হচ্ছে সেলার নিজে কিনতে পারবে কি না
     if(currentUserPhone){
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         let me = users.find(u => u.phone === currentUserPhone);
@@ -1157,7 +1178,7 @@ function registerUser(){
         return;
     }
 
-    const newUser = { name, phone, password, isSeller };
+    const newUser = { name, phone, password, isSeller, date: new Date().toLocaleDateString() };
     users.push(newUser);
     localStorage.setItem("dhakaUsersList", JSON.stringify(users));
 
@@ -1195,12 +1216,9 @@ function loginUser(){
 
 function openSellerDashboard(user){
     document.getElementById("sellerInfoBox").textContent = `সেলার নাম: ${user.name} (${user.phone})`;
-    
-    // সেলারের পণ্যের হিসাব
     let myProds = products.filter(p => p.seller === user.phone);
     document.getElementById("sellerStatProducts").textContent = myProds.length;
-    document.getElementById("sellerStatOrders").textContent = 0; // স্যাম্পল অর্ডার কাউন্ট
-
+    document.getElementById("sellerStatOrders").textContent = 0;
     document.getElementById("sellerModal").classList.add("show");
 }
 
@@ -1266,6 +1284,17 @@ function checkout(){
     totalOrdersCount++;
     totalSalesAmount += cartTotalAmt;
 
+    let newOrder = {
+        id: "ORD-" + Date.now().toString().slice(-6),
+        userPhone: phone,
+        userName: me ? me.name : "Customer",
+        amount: cartTotalAmt,
+        itemsCount: cart.length,
+        date: new Date().toLocaleString()
+    };
+    ordersList.push(newOrder);
+
+    localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
     localStorage.setItem("dhakaTotalOrders", totalOrdersCount);
     localStorage.setItem("dhakaTotalSales", totalSalesAmount);
 
@@ -1342,6 +1371,7 @@ async function installApp(){
             await deferredPrompt.userChoice;
             deferredPrompt = null;
             updateInstallButtons();
+            closeModal("installModal");
             return;
         }catch(error){
             console.log(error);
@@ -1436,8 +1466,8 @@ function openAdminDashboard(){
 
 function loadAdminDashboard(){
     let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
-    let totalUsersCount = users.filter(u => !u.isSeller).length + 1; // কাস্টমার সংখ্যা
-    let totalSellersCount = users.filter(u => u.isSeller).length; // সেলার সংখ্যা
+    let totalUsersCount = users.filter(u => !u.isSeller).length;
+    let totalSellersCount = users.filter(u => u.isSeller).length;
 
     document.getElementById("statUsers").textContent = totalUsersCount;
     document.getElementById("statSellers").textContent = totalSellersCount;
@@ -1449,17 +1479,80 @@ function loadAdminDashboard(){
     document.getElementById("adminLoading").style.display = "none";
     document.getElementById("adminStats").style.display = "grid";
     document.getElementById("adminStatus").textContent = `✅ Owner Dashboard Active • মোট ইউজার: ${totalUsersCount}, সেলার: ${totalSellersCount}`;
+    document.getElementById("adminDynamicContent").style.display = "none";
 }
 
 function adminAction(type){
-    const names = {
-        users: "User Management",
-        sellers: "Seller Management",
-        products: "Product Management",
-        orders: "Order Management",
-        sales: "Sales & Commission"
-    };
-    alert(names[type] + " মডিউল সফলভাবে ওপেন হয়েছে।");
+    let contentBox = document.getElementById("adminDynamicContent");
+    contentBox.style.display = "block";
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+
+    if(type === 'users'){
+        let html = `<h4 style="margin-bottom:6px;">👤 User Management (${users.filter(u=>!u.isSeller).length})</h4><div class="admin-list-box">`;
+        let normalUsers = users.filter(u => !u.isSeller);
+        if(normalUsers.length === 0) html += `<div style="text-align:center; color:#777; padding:10px;">কোনো ইউজার নেই</div>`;
+        normalUsers.forEach(u => {
+            html += `<div class="admin-item-row"><span><b>${u.name}</b> (${u.phone})</span> <button onclick="deleteUser('${u.phone}')" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'sellers'){
+        let html = `<h4 style="margin-bottom:6px;">🏪 Seller Management (${users.filter(u=>u.isSeller).length})</h4><div class="admin-list-box">`;
+        let sellers = users.filter(u => u.isSeller);
+        if(sellers.length === 0) html += `<div style="text-align:center; color:#777; padding:10px;">কোনো সেলার নেই</div>`;
+        sellers.forEach(s => {
+            html += `<div class="admin-item-row"><span><b>${s.name}</b> (${s.phone})</span> <button onclick="deleteUser('${s.phone}')" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'products'){
+        let html = `<h4 style="margin-bottom:6px;">📦 Product Management (${products.length})</h4><div class="admin-list-box">`;
+        products.forEach(p => {
+            html += `<div class="admin-item-row"><span>${p.image} <b>${p.name}</b> - ৳${p.price}</span> <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'orders'){
+        let html = `<h4 style="margin-bottom:6px;">🛒 Order Management (${ordersList.length})</h4><div class="admin-list-box">`;
+        if(ordersList.length === 0) html += `<div style="text-align:center; color:#777; padding:10px;">কোনো অর্ডার নেই</div>`;
+        ordersList.slice().reverse().forEach(o => {
+            html += `<div class="admin-item-row"><span><b>${o.id}</b> | ${o.userName} (${o.userPhone}) | <b style="color:#0b8f55;">৳${o.amount}</b></span> <span style="font-size:11px; color:#777;">${o.date}</span></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'sales'){
+        contentBox.innerHTML = `
+            <h4 style="margin-bottom:6px;">💰 Sales & Revenue Details</h4>
+            <div style="background:#eaf7f1; padding:12px; border-radius:10px; color:#0b8f55; font-weight:700;">
+                <div>মোট সফল অর্ডার: ${totalOrdersCount} টি</div>
+                <div style="margin-top:5px; font-size:18px;">মোট বিক্রির পরিমাণ: ৳${totalSalesAmount}</div>
+            </div>
+        `;
+    }
+}
+
+function deleteUser(phone){
+    if(confirm("이 ব্যবহারকারীকে ডিলিট করতে চান?")) {
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        users = users.filter(u => u.phone !== phone);
+        localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+        adminAction('users');
+        loadAdminDashboard();
+    }
+}
+
+function adminDeleteProduct(id){
+    if(confirm("এই পণ্যটি ডিলিট করতে চান?")) {
+        products = products.filter(p => p.id !== id);
+        localStorage.setItem("dhakaProducts", JSON.stringify(products));
+        renderProducts(products);
+        adminAction('products');
+        loadAdminDashboard();
+    }
 }
 
 function ownerLogout(){
