@@ -1,17 +1,17 @@
 {
-  "name": "Dhaka Bazar - ঢাকা বাজার",
-  "short_name": "Dhaka Bazar",
-  "description": "Dhaka Bazar - Online Shopping with Cash on Delivery",
-  "start_url": "./index.html",
-  "scope": "./",
+  "name": "Dhaka Bazar",
+  "short_name": "DhakaBazar",
+  "start_url": "/dhaka-bazar/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f4f7f5",
-  "theme_color": "#0b8f55",
-  "lang": "bn",
-  "dir": "ltr",
-  "categories": [
-    "shopping",
-    "business"
+  "background_color": "#ffffff",
+  "theme_color": "#198754",
+  "description": "Dhaka Bazar online shopping application.",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
