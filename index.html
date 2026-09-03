@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Dhaka Bazar - ঢাকা বাজার</title>
 
@@ -13,15 +13,12 @@
 
 <meta name="theme-color" content="#0b8f55">
 
-<!-- PWA MANIFEST -->
 <link rel="manifest" href="./manifest.json">
 
-<!-- APP / WEBSITE ICON -->
 <link rel="icon" type="image/png" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-512.png">
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -35,7 +32,9 @@ body{
     padding-bottom:80px;
 }
 
-/* ================= HEADER ================= */
+button{
+    cursor:pointer;
+}
 
 .header{
     position:sticky;
@@ -78,10 +77,6 @@ body{
     object-fit:cover;
 }
 
-.logo-fallback{
-    font-size:27px;
-}
-
 .brand-name{
     font-size:20px;
     font-weight:800;
@@ -99,11 +94,8 @@ body{
     padding:9px 13px;
     border-radius:22px;
     font-weight:800;
-    cursor:pointer;
     box-shadow:0 3px 10px rgba(0,0,0,.18);
 }
-
-/* ================= SEARCH ================= */
 
 .search-box{
     margin-top:12px;
@@ -116,7 +108,6 @@ body{
 
 .search-box span{
     font-size:19px;
-    color:#777;
 }
 
 .search-box input{
@@ -126,8 +117,6 @@ body{
     padding:12px 8px;
     font-size:14px;
 }
-
-/* ================= LOCATION ================= */
 
 .location-bar{
     margin:10px;
@@ -167,8 +156,6 @@ body{
     font-weight:700;
 }
 
-/* ================= INSTALL CARD ================= */
-
 .install-card{
     margin:10px;
     padding:17px;
@@ -188,6 +175,10 @@ body{
     border-radius:15px;
     overflow:hidden;
     flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
 }
 
 .install-card-logo img{
@@ -220,8 +211,6 @@ body{
     font-weight:800;
 }
 
-/* ================= SECTION ================= */
-
 .section{
     padding:8px 10px;
 }
@@ -241,8 +230,6 @@ body{
     color:#0b8f55;
     font-size:12px;
 }
-
-/* ================= CATEGORY ================= */
 
 .categories{
     display:flex;
@@ -272,8 +259,6 @@ body{
     font-size:11px;
     margin-top:4px;
 }
-
-/* ================= PRODUCTS ================= */
 
 .products{
     display:grid;
@@ -325,14 +310,29 @@ body{
     font-weight:700;
 }
 
+.favorite-btn{
+    position:absolute;
+    right:8px;
+    top:8px;
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:50%;
+    background:white;
+    font-size:19px;
+    box-shadow:0 2px 7px rgba(0,0,0,.15);
+}
+
+.product-image-wrap{
+    position:relative;
+}
+
 .no-product{
     display:none;
     text-align:center;
     color:#777;
     padding:35px;
 }
-
-/* ================= BOTTOM NAV ================= */
 
 .bottom-nav{
     position:fixed;
@@ -366,8 +366,6 @@ body{
     margin-bottom:2px;
 }
 
-/* ================= FLOAT CART ================= */
-
 .cart-floating{
     position:fixed;
     right:17px;
@@ -399,8 +397,6 @@ body{
     font-weight:bold;
 }
 
-/* ================= MODAL ================= */
-
 .modal-bg{
     position:fixed;
     inset:0;
@@ -417,7 +413,9 @@ body{
 
 .modal{
     width:100%;
-    max-width:500px;
+    max-width:520px;
+    max-height:92vh;
+    overflow:auto;
     background:white;
     border-radius:22px 22px 0 0;
     padding:22px;
@@ -425,15 +423,9 @@ body{
 }
 
 @keyframes slideUp{
-    from{
-        transform:translateY(100%);
-    }
-    to{
-        transform:translateY(0);
-    }
+    from{transform:translateY(100%);}
+    to{transform:translateY(0);}
 }
-
-/* ================= INSTALL MODAL ================= */
 
 .install-logo{
     width:90px;
@@ -442,6 +434,10 @@ body{
     border-radius:22px;
     overflow:hidden;
     box-shadow:0 5px 18px rgba(0,0,0,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:55px;
 }
 
 .install-logo img{
@@ -498,8 +494,6 @@ body{
     margin-top:9px;
 }
 
-/* ================= CART ================= */
-
 .cart-list{
     max-height:300px;
     overflow:auto;
@@ -538,6 +532,22 @@ body{
     font-size:12px;
 }
 
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.qty-btn{
+    border:none;
+    width:28px;
+    height:28px;
+    border-radius:7px;
+    background:#eaf7f1;
+    color:#0b8f55;
+    font-weight:bold;
+}
+
 .remove-btn{
     border:none;
     background:#ffeaea;
@@ -553,8 +563,6 @@ body{
     font-weight:800;
     margin:15px 0;
 }
-
-/* ================= ACCOUNT ================= */
 
 .account-logo{
     width:75px;
@@ -591,7 +599,100 @@ body{
     outline:none;
 }
 
-/* ================= DESKTOP ================= */
+.owner-box{
+    margin-top:18px;
+    border-top:1px solid #eee;
+    padding-top:15px;
+}
+
+.owner-btn{
+    width:100%;
+    border:none;
+    background:#222;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    font-weight:800;
+}
+
+.admin-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.admin-header h2{
+    font-size:20px;
+}
+
+.close-x{
+    border:none;
+    background:#eee;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    font-size:20px;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.stat-card{
+    padding:15px;
+    border-radius:14px;
+    background:#f4f7f5;
+    border-left:4px solid #0b8f55;
+}
+
+.stat-icon{
+    font-size:25px;
+}
+
+.stat-title{
+    font-size:12px;
+    color:#777;
+    margin-top:5px;
+}
+
+.stat-value{
+    font-size:23px;
+    font-weight:800;
+    margin-top:3px;
+}
+
+.admin-menu{
+    margin-top:15px;
+}
+
+.admin-menu button{
+    width:100%;
+    padding:13px;
+    border:none;
+    background:#f4f7f5;
+    margin-bottom:8px;
+    border-radius:10px;
+    text-align:left;
+    font-weight:700;
+}
+
+.admin-status{
+    margin-top:12px;
+    padding:10px;
+    border-radius:10px;
+    background:#eaf7f1;
+    color:#0b8f55;
+    font-size:12px;
+}
+
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
 
 @media(min-width:700px){
 
@@ -611,15 +712,11 @@ body{
         width:700px;
         transform:translateX(-50%);
     }
-
 }
-
 </style>
 </head>
 
 <body>
-
-<!-- ================= HEADER ================= -->
 
 <header class="header">
 
@@ -631,44 +728,23 @@ body{
 
                 <img
                     src="./logo.png"
-                    alt="Dhaka Bazar Logo"
-                    onerror="
-                    this.style.display='none';
-                    document.getElementById('logoFallback').style.display='block';
-                    "
+                    alt="Dhaka Bazar"
+                    onerror="this.style.display='none';this.parentElement.innerHTML='🛒';"
                 >
-
-                <div
-                    id="logoFallback"
-                    class="logo-fallback"
-                    style="display:none;"
-                >
-                    🛒
-                </div>
 
             </div>
 
             <div>
-
-                <div class="brand-name">
-                    ঢাকা বাজার
-                </div>
-
-                <div class="brand-sub">
-                    Dhaka Bazar • Online Shopping
-                </div>
-
+                <div class="brand-name">ঢাকা বাজার</div>
+                <div class="brand-sub">Dhaka Bazar • Online Shopping</div>
             </div>
 
         </div>
 
-        <!-- TOP INSTALL -->
-
         <button
             id="topInstallBtn"
             class="install-top-btn"
-            onclick="handleInstallButton()"
-        >
+            onclick="handleInstallButton()">
             📲 Install
         </button>
 
@@ -682,21 +758,16 @@ body{
             id="searchInput"
             type="search"
             placeholder="পণ্য খুঁজুন..."
-            oninput="searchProducts()"
-        >
+            oninput="searchProducts()">
 
     </div>
 
 </header>
 
 
-<!-- ================= LOCATION ================= -->
-
 <div class="location-bar">
 
-    <div class="location-icon">
-        📍
-    </div>
+    <div class="location-icon">📍</div>
 
     <div class="location-text">
 
@@ -706,8 +777,7 @@ body{
 
         <div
             class="location-name"
-            id="locationName"
-        >
+            id="locationName">
             আপনার লোকেশন সেট করুন
         </div>
 
@@ -715,43 +785,29 @@ body{
 
     <button
         class="location-set"
-        onclick="setLocation()"
-    >
+        onclick="setLocation()">
         সেট
     </button>
 
 </div>
 
 
-<!-- ================= INSTALL CARD ================= -->
-
 <section
     class="install-card"
-    id="installCard"
->
+    id="installCard">
 
     <div class="install-card-logo">
 
         <img
             src="./logo.png"
             alt="Dhaka Bazar"
-            onerror="
-            this.style.display='none';
-            this.parentElement.innerHTML='🛒';
-            this.parentElement.style.fontSize='35px';
-            this.parentElement.style.display='flex';
-            this.parentElement.style.alignItems='center';
-            this.parentElement.style.justifyContent='center';
-            "
-        >
+            onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
 
     </div>
 
     <div class="install-card-content">
 
-        <h2>
-            Dhaka Bazar App
-        </h2>
+        <h2>Dhaka Bazar App</h2>
 
         <p>
             ফোনে App-এর মতো ব্যবহার করতে Install করুন।
@@ -766,68 +822,41 @@ body{
 </section>
 
 
-<!-- ================= CATEGORY ================= -->
-
 <section class="section">
 
     <div class="section-title">
-
-        <h2>
-            ক্যাটাগরি
-        </h2>
-
-        <span>
-            সব দেখুন
-        </span>
-
+        <h2>ক্যাটাগরি</h2>
+        <span>সব দেখুন</span>
     </div>
 
     <div class="categories">
 
-        <div
-            class="category"
-            onclick="filterCategory('all')"
-        >
+        <div class="category" onclick="filterCategory('all')">
             <div class="category-icon">🛍️</div>
             <div class="category-name">সব</div>
         </div>
 
-        <div
-            class="category"
-            onclick="filterCategory('food')"
-        >
+        <div class="category" onclick="filterCategory('food')">
             <div class="category-icon">🍔</div>
             <div class="category-name">খাবার</div>
         </div>
 
-        <div
-            class="category"
-            onclick="filterCategory('grocery')"
-        >
+        <div class="category" onclick="filterCategory('grocery')">
             <div class="category-icon">🥦</div>
             <div class="category-name">মুদি</div>
         </div>
 
-        <div
-            class="category"
-            onclick="filterCategory('fish')"
-        >
+        <div class="category" onclick="filterCategory('fish')">
             <div class="category-icon">🐟</div>
             <div class="category-name">মাছ</div>
         </div>
 
-        <div
-            class="category"
-            onclick="filterCategory('clothes')"
-        >
+        <div class="category" onclick="filterCategory('clothes')">
             <div class="category-icon">👕</div>
             <div class="category-name">পোশাক</div>
         </div>
 
-        <div
-            class="category"
-            onclick="filterCategory('electronics')"
-        >
+        <div class="category" onclick="filterCategory('electronics')">
             <div class="category-icon">📱</div>
             <div class="category-name">ইলেকট্রনিক্স</div>
         </div>
@@ -837,87 +866,71 @@ body{
 </section>
 
 
-<!-- ================= PRODUCTS ================= -->
-
 <section class="section">
 
     <div class="section-title">
 
-        <h2>
-            জনপ্রিয় পণ্য
-        </h2>
+        <h2>জনপ্রিয় পণ্য</h2>
 
-        <span>
-            Dhaka Bazar
-        </span>
+        <span>Dhaka Bazar</span>
 
     </div>
 
     <div
         class="products"
-        id="productsContainer"
-    ></div>
+        id="productsContainer">
+    </div>
 
     <div
         id="noProduct"
-        class="no-product"
-    >
+        class="no-product">
         😔 কোনো পণ্য পাওয়া যায়নি
     </div>
 
 </section>
 
 
-<!-- ================= CART FLOAT ================= -->
-
 <button
     class="cart-floating"
-    onclick="openCart()"
->
+    onclick="openCart()">
+
     🛒
 
     <span
         id="cartCount"
-        class="cart-count"
-    >
+        class="cart-count">
         0
     </span>
 
 </button>
 
 
-<!-- ================= BOTTOM NAV ================= -->
-
 <nav class="bottom-nav">
 
     <button
         class="nav-item active"
-        onclick="goHome(this)"
-    >
+        onclick="goHome(this)">
         <span class="nav-icon">🏠</span>
         Home
     </button>
 
     <button
         class="nav-item"
-        onclick="scrollProducts(this)"
-    >
+        onclick="scrollProducts(this)">
         <span class="nav-icon">🛍️</span>
         Products
     </button>
 
     <button
         class="nav-item"
-        onclick="openCart()"
-    >
+        onclick="openCart()">
         <span class="nav-icon">🛒</span>
         Cart
     </button>
 
     <button
         class="nav-item"
-        onclick="openAccount()"
-    >
+        onclick="openAccount()">
         <span class="nav-icon">👤</span>
         Account
     </button>
@@ -925,12 +938,11 @@ body{
 </nav>
 
 
-<!-- ================= INSTALL MODAL ================= -->
+<!-- INSTALL MODAL -->
 
 <div
     id="installModal"
-    class="modal-bg"
->
+    class="modal-bg">
 
     <div class="modal install-modal">
 
@@ -939,21 +951,11 @@ body{
             <img
                 src="./logo.png"
                 alt="Dhaka Bazar"
-                onerror="
-                this.style.display='none';
-                this.parentElement.innerHTML='🛒';
-                this.parentElement.style.fontSize='55px';
-                this.parentElement.style.display='flex';
-                this.parentElement.style.alignItems='center';
-                this.parentElement.style.justifyContent='center';
-                "
-            >
+                onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
 
         </div>
 
-        <h2>
-            Dhaka Bazar
-        </h2>
+        <h2>Dhaka Bazar</h2>
 
         <div class="install-sub">
             আপনার ফোনে App-এর মতো ব্যবহার করুন
@@ -982,24 +984,29 @@ body{
         <button
             id="realInstallBtn"
             class="primary-btn"
-            onclick="installApp()"
-        >
+            onclick="installApp()">
             📲 Install App
+        </button>
+
+        <button
+            id="manualInstallBtn"
+            class="secondary-btn"
+            onclick="showManualInstall()"
+            style="display:none;">
+            📱 Install করার নিয়ম
         </button>
 
         <button
             id="openInstalledBtn"
             class="primary-btn"
             style="display:none;"
-            onclick="openInstalledApp()"
-        >
+            onclick="openInstalledApp()">
             🚀 Open App
         </button>
 
         <button
             class="secondary-btn"
-            onclick="closeModal('installModal')"
-        >
+            onclick="closeModal('installModal')">
             পরে করব
         </button>
 
@@ -1008,29 +1015,24 @@ body{
 </div>
 
 
-<!-- ================= CART MODAL ================= -->
+<!-- CART MODAL -->
 
 <div
     id="cartModal"
-    class="modal-bg"
->
+    class="modal-bg">
 
     <div class="modal">
 
-        <h2>
-            🛒 আপনার Cart
-        </h2>
+        <h2>🛒 আপনার Cart</h2>
 
         <div
             id="cartList"
-            class="cart-list"
-        ></div>
+            class="cart-list">
+        </div>
 
         <div class="cart-total">
 
-            <span>
-                মোট
-            </span>
+            <span>মোট</span>
 
             <span id="cartTotal">
                 ৳0
@@ -1040,15 +1042,13 @@ body{
 
         <button
             class="primary-btn"
-            onclick="checkout()"
-        >
+            onclick="checkout()">
             অর্ডার করুন
         </button>
 
         <button
             class="secondary-btn"
-            onclick="closeModal('cartModal')"
-        >
+            onclick="closeModal('cartModal')">
             বন্ধ করুন
         </button>
 
@@ -1057,12 +1057,11 @@ body{
 </div>
 
 
-<!-- ================= ACCOUNT MODAL ================= -->
+<!-- ACCOUNT MODAL -->
 
 <div
     id="accountModal"
-    class="modal-bg"
->
+    class="modal-bg">
 
     <div class="modal">
 
@@ -1071,7 +1070,7 @@ body{
             <img
                 src="./logo.png"
                 alt="Dhaka Bazar"
-            >
+                onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
 
         </div>
 
@@ -1087,28 +1086,217 @@ body{
             id="phoneInput"
             class="input"
             type="tel"
-            placeholder="মোবাইল নাম্বার"
-        >
+            placeholder="মোবাইল নাম্বার">
 
         <input
             id="passwordInput"
             class="input"
             type="password"
-            placeholder="পাসওয়ার্ড"
-        >
+            placeholder="পাসওয়ার্ড">
 
         <button
             class="primary-btn"
-            onclick="loginUser()"
-        >
+            onclick="loginUser()">
             Login
+        </button>
+
+        <div class="owner-box">
+
+            <button
+                class="owner-btn"
+                onclick="openOwnerLogin()">
+                🔐 Owner / Admin Login
+            </button>
+
+        </div>
+
+        <button
+            class="secondary-btn"
+            onclick="closeModal('accountModal')">
+            বন্ধ করুন
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- OWNER LOGIN -->
+
+<div
+    id="ownerLoginModal"
+    class="modal-bg">
+
+    <div class="modal">
+
+        <h2>🔐 Owner Login</h2>
+
+        <p style="color:#777;font-size:13px;margin:7px 0 17px;">
+            Dhaka Bazar Owner Dashboard
+        </p>
+
+        <input
+            id="ownerUsername"
+            class="input"
+            type="text"
+            placeholder="Owner Username">
+
+        <input
+            id="ownerPassword"
+            class="input"
+            type="password"
+            placeholder="Owner Password">
+
+        <button
+            class="primary-btn"
+            onclick="ownerLogin()">
+            🔐 Login
         </button>
 
         <button
             class="secondary-btn"
-            onclick="closeModal('accountModal')"
-        >
+            onclick="closeModal('ownerLoginModal')">
             বন্ধ করুন
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- OWNER DASHBOARD -->
+
+<div
+    id="adminModal"
+    class="modal-bg">
+
+    <div class="modal">
+
+        <div class="admin-header">
+
+            <h2>📊 Owner Dashboard</h2>
+
+            <button
+                class="close-x"
+                onclick="closeModal('adminModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="adminLoading"
+            class="loading">
+            Dashboard data loading...
+        </div>
+
+        <div
+            id="adminStats"
+            class="stats-grid"
+            style="display:none;">
+
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-title">Total Users</div>
+                <div
+                    id="statUsers"
+                    class="stat-value">
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🏪</div>
+                <div class="stat-title">Total Sellers</div>
+                <div
+                    id="statSellers"
+                    class="stat-value">
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-title">Total Products</div>
+                <div
+                    id="statProducts"
+                    class="stat-value">
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-title">Total Orders</div>
+                <div
+                    id="statOrders"
+                    class="stat-value">
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-title">Total Sales</div>
+                <div
+                    id="statSales"
+                    class="stat-value">
+                    ৳0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-title">Favorites</div>
+                <div
+                    id="statFavorites"
+                    class="stat-value">
+                    0
+                </div>
+            </div>
+
+        </div>
+
+        <div
+            id="adminStatus"
+            class="admin-status">
+            Backend connection checking...
+        </div>
+
+        <div class="admin-menu">
+
+            <button onclick="adminAction('users')">
+                👤 User Management
+            </button>
+
+            <button onclick="adminAction('sellers')">
+                🏪 Seller Management
+            </button>
+
+            <button onclick="adminAction('products')">
+                📦 Product Management
+            </button>
+
+            <button onclick="adminAction('orders')">
+                🛒 Order Management
+            </button>
+
+            <button onclick="adminAction('sales')">
+                💰 Sales & Commission
+            </button>
+
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="loadAdminDashboard()">
+            🔄 Refresh Dashboard
+        </button>
+
+        <button
+            class="secondary-btn"
+            onclick="ownerLogout()">
+            🔒 Logout Owner
         </button>
 
     </div>
@@ -1201,6 +1389,15 @@ let cart = JSON.parse(
 
 
 /* ==========================================
+   FAVORITES
+========================================== */
+
+let favorites = JSON.parse(
+    localStorage.getItem("dhakaFavorites") || "[]"
+);
+
+
+/* ==========================================
    RENDER PRODUCTS
 ========================================== */
 
@@ -1214,7 +1411,7 @@ function renderProducts(list){
 
     container.innerHTML = "";
 
-    if(list.length === 0){
+    if(!list.length){
 
         noProduct.style.display = "block";
 
@@ -1226,12 +1423,25 @@ function renderProducts(list){
 
     list.forEach(product => {
 
+        const isFav =
+            favorites.includes(product.id);
+
         container.innerHTML += `
 
             <div class="product">
 
-                <div class="product-image">
-                    ${product.image}
+                <div class="product-image-wrap">
+
+                    <div class="product-image">
+                        ${product.image}
+                    </div>
+
+                    <button
+                        class="favorite-btn"
+                        onclick="toggleFavorite(${product.id})">
+                        ${isFav ? "❤️" : "🤍"}
+                    </button>
+
                 </div>
 
                 <div class="product-info">
@@ -1246,8 +1456,7 @@ function renderProducts(list){
 
                     <button
                         class="add-cart"
-                        onclick="addToCart(${product.id})"
-                    >
+                        onclick="addToCart(${product.id})">
                         🛒 Add to Cart
                     </button>
 
@@ -1258,6 +1467,33 @@ function renderProducts(list){
         `;
 
     });
+
+}
+
+
+/* ==========================================
+   FAVORITE
+========================================== */
+
+function toggleFavorite(id){
+
+    if(favorites.includes(id)){
+
+        favorites =
+            favorites.filter(x => x !== id);
+
+    }else{
+
+        favorites.push(id);
+
+    }
+
+    localStorage.setItem(
+        "dhakaFavorites",
+        JSON.stringify(favorites)
+    );
+
+    renderProducts(products);
 
 }
 
@@ -1290,7 +1526,6 @@ function addToCart(id){
     }
 
     saveCart();
-
     updateCartCount();
 
 }
@@ -1360,8 +1595,7 @@ function renderCart(){
             <div style="
                 text-align:center;
                 padding:30px;
-                color:#777;
-            ">
+                color:#777;">
                 🛒 আপনার Cart খালি
             </div>
         `;
@@ -1393,15 +1627,32 @@ function renderCart(){
                     </div>
 
                     <div class="cart-price">
-                        ৳${item.price} × ${item.qty}
+                        ৳${item.price}
                     </div>
+
+                </div>
+
+                <div class="qty-box">
+
+                    <button
+                        class="qty-btn"
+                        onclick="changeQty(${item.id},-1)">
+                        −
+                    </button>
+
+                    <b>${item.qty}</b>
+
+                    <button
+                        class="qty-btn"
+                        onclick="changeQty(${item.id},1)">
+                        +
+                    </button>
 
                 </div>
 
                 <button
                     class="remove-btn"
-                    onclick="removeFromCart(${item.id})"
-                >
+                    onclick="removeFromCart(${item.id})">
                     ×
                 </button>
 
@@ -1416,15 +1667,36 @@ function renderCart(){
 }
 
 
+function changeQty(id,change){
+
+    const item =
+        cart.find(x => x.id === id);
+
+    if(!item) return;
+
+    item.qty += change;
+
+    if(item.qty <= 0){
+
+        cart =
+            cart.filter(x => x.id !== id);
+
+    }
+
+    saveCart();
+    updateCartCount();
+    renderCart();
+
+}
+
+
 function removeFromCart(id){
 
     cart =
         cart.filter(item => item.id !== id);
 
     saveCart();
-
     updateCartCount();
-
     renderCart();
 
 }
@@ -1531,7 +1803,7 @@ function loadLocation(){
 
 
 /* ==========================================
-   ACCOUNT
+   USER ACCOUNT
 ========================================== */
 
 function openAccount(){
@@ -1543,31 +1815,96 @@ function openAccount(){
 }
 
 
-function loginUser(){
+async function loginUser(){
 
     const phone =
-        document.getElementById(
-            "phoneInput"
-        ).value.trim();
+        document
+        .getElementById("phoneInput")
+        .value.trim();
+
+    const password =
+        document
+        .getElementById("passwordInput")
+        .value;
 
     if(!phone){
 
-        alert(
-            "মোবাইল নাম্বার দিন।"
-        );
+        alert("মোবাইল নাম্বার দিন।");
 
         return;
 
     }
+
+    /*
+      Backend থাকলে real login করার চেষ্টা করবে।
+    */
+
+    try{
+
+        const response =
+            await fetch("/api/login",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+                    phone,
+                    password
+                })
+
+            });
+
+        if(response.ok){
+
+            const data =
+                await response.json();
+
+            localStorage.setItem(
+                "dhakaUserPhone",
+                phone
+            );
+
+            if(data.token){
+
+                localStorage.setItem(
+                    "dhakaToken",
+                    data.token
+                );
+
+            }
+
+            alert("Login সফল হয়েছে ✅");
+
+            closeModal("accountModal");
+
+            return;
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Backend login unavailable",
+            error
+        );
+
+    }
+
+    /*
+      Backend না থাকলেও account phone
+      localStorage-এ রাখা থাকবে।
+    */
 
     localStorage.setItem(
         "dhakaUserPhone",
         phone
     );
 
-    alert(
-        "Login সফল হয়েছে ✅"
-    );
+    alert("Account তথ্য সংরক্ষণ হয়েছে ✅");
 
     closeModal("accountModal");
 
@@ -1582,16 +1919,32 @@ function checkout(){
 
     if(cart.length === 0){
 
-        alert(
-            "আপনার Cart খালি।"
+        alert("আপনার Cart খালি।");
+
+        return;
+
+    }
+
+    const phone =
+        localStorage.getItem(
+            "dhakaUserPhone"
         );
+
+    if(!phone){
+
+        alert(
+            "অর্ডার করার আগে Account Login করুন।"
+        );
+
+        closeModal("cartModal");
+        openAccount();
 
         return;
 
     }
 
     alert(
-        "Checkout system এখানে যুক্ত করা যাবে।"
+        "অর্ডার Checkout করার জন্য আপনার Backend Order API যুক্ত করতে হবে।"
     );
 
 }
@@ -1635,9 +1988,7 @@ function setActive(button){
         );
 
     if(button){
-
         button.classList.add("active");
-
     }
 
 }
@@ -1649,9 +2000,12 @@ function setActive(button){
 
 function closeModal(id){
 
-    document
-        .getElementById(id)
-        .classList.remove("show");
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+        modal.classList.remove("show");
+    }
 
 }
 
@@ -1664,7 +2018,8 @@ let deferredPrompt = null;
 
 
 /*
-   Android/Chrome Install Prompt
+  Android Chrome যখন Install Prompt
+  দেওয়ার জন্য প্রস্তুত হবে।
 */
 
 window.addEventListener(
@@ -1675,11 +2030,25 @@ window.addEventListener(
 
         deferredPrompt = event;
 
-        console.log(
-            "Dhaka Bazar Install Prompt Ready"
-        );
+        updateInstallButtons();
+
+    }
+);
+
+
+/*
+  PWA install হলে।
+*/
+
+window.addEventListener(
+    "appinstalled",
+    () => {
+
+        deferredPrompt = null;
 
         updateInstallButtons();
+
+        closeModal("installModal");
 
     }
 );
@@ -1701,14 +2070,14 @@ function openInstallModal(){
 
 
 /* ==========================================
-   TOP INSTALL BUTTON
+   TOP INSTALL
 ========================================== */
 
 function handleInstallButton(){
 
-    if(
-        isInstalled()
-    ){
+    if(isInstalled()){
+
+        closeModal("installModal");
 
         alert(
             "Dhaka Bazar App ইতিমধ্যে Install করা আছে।"
@@ -1729,29 +2098,105 @@ function handleInstallButton(){
 
 async function installApp(){
 
-    if(!deferredPrompt){
+    /*
+      Already installed
+    */
+
+    if(isInstalled()){
+
+        openInstalledApp();
+
+        return;
+
+    }
+
+
+    /*
+      Real browser prompt available
+    */
+
+    if(deferredPrompt){
+
+        try{
+
+            deferredPrompt.prompt();
+
+            const result =
+                await deferredPrompt.userChoice;
+
+            console.log(
+                "Install:",
+                result.outcome
+            );
+
+            deferredPrompt = null;
+
+            updateInstallButtons();
+
+            return;
+
+        }catch(error){
+
+            console.log(
+                "Install prompt error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+      Prompt unavailable হলে আর
+      আগের মতো বিরক্তিকর alert নয়।
+      Manual installation instructions দেখাবে।
+    */
+
+    showManualInstall();
+
+}
+
+
+/* ==========================================
+   MANUAL INSTALL HELP
+========================================== */
+
+function showManualInstall(){
+
+    const isIOS =
+        /iPhone|iPad|iPod/i.test(
+            navigator.userAgent
+        );
+
+    const isAndroid =
+        /Android/i.test(
+            navigator.userAgent
+        );
+
+    if(isIOS){
 
         alert(
-            "এই ব্রাউজারে এখন সরাসরি Install Prompt পাওয়া যাচ্ছে না। ব্রাউজারের Menu থেকে 'Install App' অথবা 'Add to Home screen' নির্বাচন করুন।"
+            "iPhone/iPad: Browser-এর Share Menu খুলে 'Add to Home Screen' নির্বাচন করুন।"
         );
 
         return;
 
     }
 
-    deferredPrompt.prompt();
+    if(isAndroid){
 
-    const result =
-        await deferredPrompt.userChoice;
+        alert(
+            "Android: Browser-এর Menu (⋮) খুলুন → 'Install app' অথবা 'Add to Home screen' নির্বাচন করুন।"
+        );
 
-    console.log(
-        "Install result:",
-        result.outcome
+        return;
+
+    }
+
+    alert(
+        "Browser-এর Menu খুলে 'Install App' অথবা 'Add to Home Screen' নির্বাচন করুন।"
     );
-
-    deferredPrompt = null;
-
-    updateInstallButtons();
 
 }
 
@@ -1766,6 +2211,11 @@ function isInstalled(){
         window.matchMedia(
             "(display-mode: standalone)"
         ).matches ||
+
+        window.matchMedia(
+            "(display-mode: fullscreen)"
+        ).matches ||
+
         window.navigator.standalone === true
     );
 
@@ -1788,6 +2238,11 @@ function updateInstallButtons(){
             "realInstallBtn"
         );
 
+    const manualButton =
+        document.getElementById(
+            "manualInstallBtn"
+        );
+
     const openButton =
         document.getElementById(
             "openInstalledBtn"
@@ -1805,6 +2260,9 @@ function updateInstallButtons(){
             "🚀 Open App";
 
         installButton.style.display =
+            "none";
+
+        manualButton.style.display =
             "none";
 
         openButton.style.display =
@@ -1828,8 +2286,24 @@ function updateInstallButtons(){
     installButton.style.display =
         "block";
 
+    /*
+      Manual button সবসময় থাকবে।
+      কিন্তু Real prompt থাকলে প্রথমে
+      Real Install button ব্যবহার হবে।
+    */
+
+    manualButton.style.display =
+        "block";
+
     openButton.style.display =
         "none";
+
+    if(installCard){
+
+        installCard.style.display =
+            "flex";
+
+    }
 
 }
 
@@ -1840,9 +2314,7 @@ function updateInstallButtons(){
 
 function openInstalledApp(){
 
-    closeModal(
-        "installModal"
-    );
+    closeModal("installModal");
 
     window.scrollTo({
         top:0,
@@ -1853,23 +2325,357 @@ function openInstalledApp(){
 
 
 /* ==========================================
-   APP INSTALLED
+   OWNER LOGIN
 ========================================== */
 
-window.addEventListener(
-    "appinstalled",
-    () => {
+function openOwnerLogin(){
 
-        deferredPrompt = null;
+    closeModal("accountModal");
 
-        updateInstallButtons();
+    document
+        .getElementById("ownerLoginModal")
+        .classList.add("show");
+
+}
+
+
+async function ownerLogin(){
+
+    const username =
+        document
+        .getElementById("ownerUsername")
+        .value.trim();
+
+    const password =
+        document
+        .getElementById("ownerPassword")
+        .value;
+
+    if(!username || !password){
 
         alert(
-            "🎉 Dhaka Bazar App সফলভাবে Install হয়েছে!"
+            "Owner username এবং password দিন।"
+        );
+
+        return;
+
+    }
+
+
+    /*
+      Real backend owner login.
+    */
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/owner/login",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        username,
+                        password
+                    })
+                }
+            );
+
+
+        if(response.ok){
+
+            const data =
+                await response.json();
+
+            localStorage.setItem(
+                "dhakaOwnerLoggedIn",
+                "true"
+            );
+
+            if(data.token){
+
+                localStorage.setItem(
+                    "dhakaOwnerToken",
+                    data.token
+                );
+
+            }
+
+            closeModal(
+                "ownerLoginModal"
+            );
+
+            openAdminDashboard();
+
+            return;
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Owner API unavailable:",
+            error
         );
 
     }
-);
+
+
+    /*
+      Backend না থাকলে সরাসরি Dashboard
+      খুলবে না। নিরাপত্তার জন্য।
+    */
+
+    alert(
+        "Owner Login Server-এর সাথে সংযোগ পাওয়া যাচ্ছে না। Backend API চালু আছে কিনা দেখুন।"
+    );
+
+}
+
+
+/* ==========================================
+   ADMIN DASHBOARD
+========================================== */
+
+function openAdminDashboard(){
+
+    if(
+        localStorage.getItem(
+            "dhakaOwnerLoggedIn"
+        ) !== "true"
+    ){
+
+        openOwnerLogin();
+
+        return;
+
+    }
+
+    document
+        .getElementById("adminModal")
+        .classList.add("show");
+
+    loadAdminDashboard();
+
+}
+
+
+async function loadAdminDashboard(){
+
+    const loading =
+        document.getElementById(
+            "adminLoading"
+        );
+
+    const stats =
+        document.getElementById(
+            "adminStats"
+        );
+
+    const status =
+        document.getElementById(
+            "adminStatus"
+        );
+
+    loading.style.display =
+        "block";
+
+    stats.style.display =
+        "none";
+
+    status.textContent =
+        "Backend connection checking...";
+
+
+    const token =
+        localStorage.getItem(
+            "dhakaOwnerToken"
+        );
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/admin/stats",
+                {
+                    headers:
+                        token
+                        ? {
+                            "Authorization":
+                            "Bearer " + token
+                          }
+                        : {}
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Dashboard API error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+          Backend-এর বিভিন্ন নামের stats
+          support করবে।
+        */
+
+        const users =
+            data.users ??
+            data.totalUsers ??
+            data.userCount ??
+            0;
+
+        const sellers =
+            data.sellers ??
+            data.totalSellers ??
+            data.sellerCount ??
+            0;
+
+        const productCount =
+            data.products ??
+            data.totalProducts ??
+            data.productCount ??
+            0;
+
+        const orders =
+            data.orders ??
+            data.totalOrders ??
+            data.orderCount ??
+            0;
+
+        const sales =
+            data.sales ??
+            data.totalSales ??
+            data.totalRevenue ??
+            0;
+
+        const fav =
+            data.favorites ??
+            data.totalFavorites ??
+            0;
+
+
+        document.getElementById(
+            "statUsers"
+        ).textContent = users;
+
+        document.getElementById(
+            "statSellers"
+        ).textContent = sellers;
+
+        document.getElementById(
+            "statProducts"
+        ).textContent = productCount;
+
+        document.getElementById(
+            "statOrders"
+        ).textContent = orders;
+
+        document.getElementById(
+            "statSales"
+        ).textContent =
+            "৳" + Number(sales).toLocaleString();
+
+        document.getElementById(
+            "statFavorites"
+        ).textContent = fav;
+
+
+        loading.style.display =
+            "none";
+
+        stats.style.display =
+            "grid";
+
+        status.textContent =
+            "✅ Backend connected • Dashboard updated";
+
+    }catch(error){
+
+        console.log(
+            "Admin dashboard error:",
+            error
+        );
+
+        loading.textContent =
+            "Dashboard data পাওয়া যাচ্ছে না।";
+
+        status.textContent =
+            "❌ Backend API পাওয়া যাচ্ছে না।";
+
+    }
+
+}
+
+
+/* ==========================================
+   ADMIN MENU
+========================================== */
+
+function adminAction(type){
+
+    const names = {
+
+        users:
+            "User Management",
+
+        sellers:
+            "Seller Management",
+
+        products:
+            "Product Management",
+
+        orders:
+            "Order Management",
+
+        sales:
+            "Sales & Commission"
+
+    };
+
+    alert(
+        names[type] +
+        " API/backend module-এ সংযুক্ত করতে হবে।"
+    );
+
+}
+
+
+/* ==========================================
+   OWNER LOGOUT
+========================================== */
+
+function ownerLogout(){
+
+    localStorage.removeItem(
+        "dhakaOwnerLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "dhakaOwnerToken"
+    );
+
+    closeModal("adminModal");
+
+    alert(
+        "Owner Logout হয়েছে।"
+    );
+
+}
 
 
 /* ==========================================
@@ -1890,7 +2696,7 @@ if(
                     registration => {
 
                         console.log(
-                            "Service Worker Registered",
+                            "Service Worker Registered:",
                             registration.scope
                         );
 
@@ -1914,7 +2720,7 @@ if(
 
 
 /* ==========================================
-   CLOSE MODAL ON BACKGROUND
+   CLOSE MODALS BY BACKGROUND
 ========================================== */
 
 document
@@ -1953,8 +2759,14 @@ loadLocation();
 
 setTimeout(
     updateInstallButtons,
-    1000
+    500
 );
+
+
+/*
+  Browser যদি পরে install prompt দেয়,
+  তখন button automatically update হবে।
+*/
 
 </script>
 
