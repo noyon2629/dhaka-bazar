@@ -227,6 +227,9 @@ button{
     overflow:hidden;
     box-shadow:0 2px 8px rgba(0,0,0,.07);
     position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
 }
 .product-image{
     height:140px;
@@ -250,11 +253,41 @@ button{
     font-weight:700;
     min-height:35px;
 }
+.product-details-text{
+    font-size:12px;
+    color:#555;
+    margin-top:4px;
+    min-height:30px;
+    line-height:1.3;
+}
 .product-price{
     color:#0b8f55;
     font-size:16px;
     font-weight:800;
     margin-top:5px;
+}
+.product-actions-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 10px;
+    background:#f9fbf9;
+    border-top:1px solid #edf2ef;
+    gap:6px;
+}
+.copy-link-btn, .rating-btn-box{
+    background:none;
+    border:none;
+    font-size:13px;
+    color:#555;
+    display:flex;
+    align-items:center;
+    gap:3px;
+    font-weight:600;
+}
+.rating-stars{
+    color:#f39c12;
+    font-size:12px;
 }
 .add-cart{
     width:100%;
@@ -524,6 +557,16 @@ button{
     border-radius:10px;
     margin-bottom:10px;
     outline:none;
+}
+.textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:10px;
+    outline:none;
+    resize:vertical;
+    min-height:70px;
 }
 .checkbox-group{
     display:flex;
@@ -813,7 +856,7 @@ button{
         <!-- REGISTRATION FORM -->
         <div id="registerFormSection" style="display:none;">
             <input id="regNameInput" class="input" type="text" placeholder="আপনার নাম">
-            <input id="regPhoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
+            <input id="regPhoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার (১টি নাম্বারে ১টি অ্যাকাউন্ট)">
             <input id="regPasswordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
             <input id="regConfirmPasswordInput" class="input" type="password" placeholder="কনফার্ম পাসওয়ার্ড">
             <label class="checkbox-group">
@@ -862,8 +905,9 @@ button{
             <div id="sellerOrdersListContent" class="admin-list-box" style="max-height:160px;"></div>
         </div>
 
-        <h3 style="font-size:16px; margin-bottom:8px;">নতুন পণ্য যোগ করুন</h3>
+        <h3 style="font-size:16px; margin-bottom:8px;">নতুন পণ্য যোগ করুন (সুন্দর ডিটেলসসহ)</h3>
         <input id="newProdName" class="input" type="text" placeholder="পণ্যের নাম">
+        <textarea id="newProdDesc" class="textarea" placeholder="পণ্যের বিস্তারিত বিবরণ (যেমন: উপাদান, ওজন, মান ইত্যাদি)..."></textarea>
         <input id="newProdPrice" class="input" type="number" placeholder="দাম (টাকা)">
         <select id="newProdCat" class="input">
             <option value="food">খাবার</option>
@@ -977,14 +1021,14 @@ button{
 ========================================== */
 
 let defaultProducts = [
-    { id:1, name:"কাচ্চি বিরিয়ানি", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin" },
-    { id:2, name:"দেশি রুই মাছ", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin" },
-    { id:3, name:"ফ্রেশ সবজি", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin" },
-    { id:4, name:"চিকেন বার্গার", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin" },
-    { id:5, name:"টি-শার্ট", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin" },
-    { id:6, name:"স্মার্টফোন", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin" },
-    { id:7, name:"চাল ৫ কেজি", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin" },
-    { id:8, name:"ইলিশ মাছ", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin" }
+    { id:1, name:"কাচ্চি বিরিয়ানি", details:"সুগন্ধি বাসমতি চাল ও খাসির মাংসের সুস্বাদু ঐতিহ্যবাহী কাচ্চি বিরিয়ানি।", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin", rating:4.8, reviewsCount:15 },
+    { id:2, name:"দেশি রুই মাছ", details:"পদ্মার তাজা ও সুস্বাদু দেশি রুই মাছ, ওজন প্রায় ১ কেজি।", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin", rating:4.5, reviewsCount:10 },
+    { id:3, name:"ফ্রেশ সবজি", details:"সরাসরি ক্ষেত থেকে সংগৃহীত বিষমুক্ত টাটকা শাকসবজির সমাহার।", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:22 },
+    { id:4, name:"চিকেন বারگر", details:" juicy চিকেন প্যাটি ও স্পেশাল সস দিয়ে তৈরি সুস্বাদু বার্গার।", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin", rating:4.6, reviewsCount:18 },
+    { id:5, name:"টি-শার্ট", details:"১০০% সুতি আরামদায়ক প্রিমিয়াম কোয়ালিটি ক্যাজুয়াল টি-শার্ট।", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin", rating:4.4, reviewsCount:9 },
+    { id:6, name:"স্মার্টফোন", details:"হাই পারফরম্যান্স ক্যামেরা ও দীর্ঘস্থায়ী ব্যাটারিযুক্ত আধুনিক স্মার্টফোন।", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin", rating:4.9, reviewsCount:30 },
+    { id:7, name:"চাল ৫ কেজি", details:"সেরা মানের সুস্বাদু মিনিকেট চাল, ৫ কেজির সাশ্রয়ী প্যাক।", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:25 },
+    { id:8, name:"ইলিশ মাছ", details:"পদ্মার সুস্বাদু ও রূপালি তাজা বড় সাইজের ইলিশ মাছ।", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin", rating:5.0, reviewsCount:40 }
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts") || JSON.stringify(defaultProducts));
@@ -1017,6 +1061,10 @@ function renderProducts(list){
             ? `<img src="${product.image}" alt="${product.name}">` 
             : product.image;
 
+        let ratingVal = product.rating || 4.5;
+        let reviewsCount = product.reviewsCount || 10;
+        let prodDetails = product.details || "উন্নত মানের এবং সাশ্রয়ী মূল্যের চমৎকার পণ্য।";
+
         container.innerHTML += `
             <div class="product">
                 <div class="product-image-wrap">
@@ -1027,7 +1075,19 @@ function renderProducts(list){
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
+                    <div class="product-details-text">${prodDetails}</div>
                     <div class="product-price">৳${product.price}</div>
+                </div>
+                <div class="product-actions-bar">
+                    <button class="copy-link-btn" onclick="copyProductLink(${product.id}, '${product.name}')">
+                        🔗 কপি লিঙ্ক
+                    </button>
+                    <div class="rating-btn-box" onclick="rateProduct(${product.id})" title="রেটিং দিন">
+                        <span class="rating-stars">⭐ ${ratingVal}</span>
+                        <span style="font-size:10px; color:#777;">(${reviewsCount})</span>
+                    </div>
+                </div>
+                <div style="padding:0 10px 10px 10px;">
                     <button class="add-cart" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
                 </div>
             </div>
@@ -1043,6 +1103,37 @@ function toggleFavorite(id){
     }
     localStorage.setItem("dhakaFavorites", JSON.stringify(favorites));
     renderProducts(products);
+}
+
+function copyProductLink(id, name){
+    const dummyUrl = window.location.origin + window.location.pathname + "#product-" + id;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(dummyUrl).then(() => {
+            alert(`"${name}" প্রোডাক্টের লিঙ্ক সফলভাবে কপি করা হয়েছে! ✅`);
+        }).catch(() => {
+            prompt("এই লিঙ্কটি কপি করুন:", dummyUrl);
+        });
+    } else {
+        prompt("এই লিঙ্কটি কপি করুন:", dummyUrl);
+    }
+}
+
+function rateProduct(id){
+    let product = products.find(p => p.id === id);
+    if(!product) return;
+    let userRating = prompt("এই পণ্য সম্পর্কে আপনার রেটিং দিন (১ থেকে ৫ এর মধ্যে):", "5");
+    if(userRating !== null){
+        let val = parseFloat(userRating);
+        if(!isNaN(val) && val >= 1 && val <= 5){
+            product.rating = ((product.rating * product.reviewsCount + val) / (product.reviewsCount + 1)).toFixed(1);
+            product.reviewsCount++;
+            localStorage.setItem("dhakaProducts", JSON.stringify(products));
+            renderProducts(products);
+            alert("আপনার মূল্যবান রেটিংয়ের জন্য ধন্যবাদ! ⭐");
+        } else {
+            alert("দয়া করে ১ থেকে ৫ এর মধ্যে সঠিক সংখ্যা লিখুন।");
+        }
+    }
 }
 
 function addToCart(id){
@@ -1137,7 +1228,7 @@ function removeFromCart(id){
 
 function searchProducts(){
     const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
-    const result = products.filter(product => product.name.toLowerCase().includes(keyword));
+    const result = products.filter(product => product.name.toLowerCase().includes(keyword) || (product.details && product.details.toLowerCase().includes(keyword)));
     renderProducts(result);
 }
 
@@ -1202,7 +1293,7 @@ function toggleAuthMode(mode){
         loginSec.style.display = "none";
         regSec.style.display = "block";
         title.textContent = "Create Account";
-        sub.textContent = "নতুন অ্যাকাউন্ট তৈরি করুন";
+        sub.textContent = "নতুন অ্যাকাউন্ট তৈরি করুন (প্রতি নাম্বারে ১টি অ্যাকাউন্ট)";
     } else {
         loginSec.style.display = "block";
         regSec.style.display = "none";
@@ -1229,7 +1320,7 @@ function registerUser(){
 
     let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
     if(users.some(u => u.phone === phone)){
-        alert("এই নাম্বারে ইতিমধ্যে একটি অ্যাকাউন্ট আছে!");
+        alert("এই মোবাইল নাম্বারে ইতিমধ্যে একটি অ্যাকাউন্ট রেজিস্টার্ড রয়েছে! একটি নাম্বার দিয়ে একটিই অ্যাকাউন্ট খোলা যাবে।");
         return;
     }
 
@@ -1326,44 +1417,49 @@ function requestVerification(phone){
 function addNewProductBySeller(){
     const activePhone = localStorage.getItem("dhakaUserPhone");
     const name = document.getElementById("newProdName").value.trim();
+    const details = document.getElementById("newProdDesc").value.trim();
     const price = parseInt(document.getElementById("newProdPrice").value);
     const category = document.getElementById("newProdCat").value;
     const emoji = document.getElementById("newProdEmoji").value.trim() || "📦";
     const fileInput = document.getElementById("newProdImageFile");
 
-    if(!name || !price){
-        alert("পণ্যের নাম ও দাম লিখুন।");
+    if(!name || !price || !details){
+        alert("পণ্যের নাম, সুন্দর বিবরণ এবং দাম অবশ্যই দিতে হবে।");
         return;
     }
 
     if(fileInput.files && fileInput.files[0]){
         const reader = new FileReader();
         reader.onload = function(e){
-            saveNewProduct(name, price, category, e.target.result, true, activePhone);
+            saveNewProduct(name, details, price, category, e.target.result, true, activePhone);
         };
         reader.readAsDataURL(fileInput.files[0]);
     } else {
-        saveNewProduct(name, price, category, emoji, false, activePhone);
+        saveNewProduct(name, details, price, category, emoji, false, activePhone);
     }
 }
 
-function saveNewProduct(name, price, category, image, isCustomImg, seller){
+function saveNewProduct(name, details, price, category, image, isCustomImg, seller){
     const newProduct = {
         id: Date.now(),
         name,
+        details,
         price,
         category,
         image,
         isCustomImg,
-        seller
+        seller,
+        rating: 5.0,
+        reviewsCount: 1
     };
 
     products.push(newProduct);
     localStorage.setItem("dhakaProducts", JSON.stringify(products));
     renderProducts(products);
 
-    alert("পণ্য সফলভাবে পোস্ট করা হয়েছে! ✅");
+    alert("পণ্য সুন্দর বিবরণসহ সফলভাবে পোস্ট করা হয়েছে! ✅");
     document.getElementById("newProdName").value = "";
+    document.getElementById("newProdDesc").value = "";
     document.getElementById("newProdPrice").value = "";
     document.getElementById("newProdEmoji").value = "";
     document.getElementById("newProdImageFile").value = "";
@@ -1721,17 +1817,14 @@ function adminClickNow(sellerPhone){
     let s = users.find(u => u.phone === sellerPhone);
     let sName = s ? s.name : sellerPhone;
 
-    // Simulate clicking notice & copy action tracking
     let paymentNumber = "01954799646";
     
-    // Copy to clipboard action simulator
     if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(paymentNumber);
     }
 
     alert(`[সেলার নোটিশ]: ২৪ ঘণ্টার মধ্যে ${paymentNumber} নাম্বারে ১০০ টাকা সেন্ড মানি করে হোয়াটসঅ্যাপে স্ক্রিনশট দিন।\n\n(সেলার "${sName}"-এর জন্য নাম্বারটি কপি করা হয়েছে এবং অ্যাডমিন প্যানেলে ভেরিফাই বাটন সক্রিয় করা হলো!)`);
 
-    // Store admin state that number is copied and verify button is ready
     localStorage.setItem("dhakaReadyToVerify_" + sellerPhone, "true");
     adminAction('sellers');
 }
@@ -1743,7 +1836,6 @@ function verifySeller(phone){
         users[userIndex].verified = true;
         localStorage.setItem("dhakaUsersList", JSON.stringify(users));
 
-        // Remove from verification requests
         verificationRequests = verificationRequests.filter(p => p !== phone);
         localStorage.setItem("dhakaVerificationRequests", JSON.stringify(verificationRequests));
         localStorage.removeItem("dhakaReadyToVerify_" + phone);
