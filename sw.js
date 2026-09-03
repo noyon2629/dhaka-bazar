@@ -3,7 +3,10 @@ const CACHE_NAME = "dhaka-bazar-v1";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./style.css",
+  "./script.js",
+  "./assets/logo.png"
 ];
 
 self.addEventListener("install", event => {
