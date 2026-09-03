@@ -61,8 +61,8 @@ header{
 }
 
 .app-logo-img{
-    width:40px;
-    height:40px;
+    width:42px;
+    height:42px;
     border-radius:50%;
     object-fit:cover;
     border:2px solid var(--primary);
@@ -318,6 +318,39 @@ header{
     font-weight:bold;
 }
 
+/* REFERRAL SECTION */
+.referral-box{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    margin-top:30px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
+}
+.referral-flex{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+.referral-input{
+    flex:1;
+    padding:11px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    outline:none;
+    background:#f8faf9;
+    font-size:13px;
+}
+.copy-btn{
+    background:var(--primary);
+    color:white;
+    border:0;
+    padding:0 20px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
 /* BOTTOM NAV */
 .bottom-nav{ position:fixed; bottom:0; left:0; right:0; background:white; border-top:1px solid var(--border); z-index:800; }
 .nav-inner{ max-width:600px; margin:auto; display:grid; grid-template-columns:repeat(5,1fr); }
@@ -376,7 +409,7 @@ header{
         <div class="logo-area" onclick="openOwnerDashboard()">
             <div id="headerLogoContainer">
                 <img src="" class="app-logo-img" id="appLogoDisplay" style="display:none">
-                <div class="app-logo-img" id="appLogoFallback" style="display:flex;align-items:center;justify-content:center;background:#0b8f55;color:white;font-weight:bold;">🛒</div>
+                <div class="app-logo-img" id="appLogoFallback" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b8f55,#055331);color:white;font-size:20px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">🛍️</div>
             </div>
             <div class="logo"><span id="appNameDisplay">ঢাকা বাজার</span> <span>Dhaka Bazar</span></div>
         </div>
@@ -418,6 +451,16 @@ header{
     </div>
 
     <section class="products" id="products"></section>
+
+    <!-- REFERRAL PROGRAM SECTION -->
+    <section class="referral-box">
+        <h3 style="font-size:18px;margin-bottom:6px;color:var(--primary);">বন্ধুকে রেফার করুন, উপহার জিতুন! 🎁</h3>
+        <p style="font-size:13px;color:var(--muted);">আপনার রেফারেল লিংকটি শেয়ার করুন এবং বন্ধু প্রথম অর্ডার করলেই পেয়ে যান আকর্ষণীয় ক্যাশব্যাক বোনাস।</p>
+        <div class="referral-flex">
+            <input type="text" id="referralLink" class="referral-input" readonly value="https://dhakabazar.com/signup?ref=DBUSER123">
+            <button class="copy-btn" onclick="copyReferralLink()">কপি করুন</button>
+        </div>
+    </section>
 </main>
 
 <div class="cart-floating">
@@ -1423,6 +1466,14 @@ function shareProduct(id, name) {
             showToast("লিঙ্ক কপি করা হয়েছে! 📋");
         });
     }
+}
+
+function copyReferralLink() {
+    const copyText = document.getElementById("referralLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    showToast("রেফারেল লিঙ্ক সফলভাবে কপি করা হয়েছে! 📋");
 }
 
 function filterCategory(cat){
