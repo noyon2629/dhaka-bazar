@@ -23,6 +23,7 @@
     --muted:#6b7280;
     --border:#e5e7eb;
     --danger:#e53935;
+    --warning:#f59e0b;
 }
 
 body{
@@ -182,7 +183,7 @@ header{
 .section-title h2{ font-size:20px; }
 .section-title button{ border:0; background:none; color:var(--primary); font-weight:700; }
 
-/* CATEGORIES */
+/* CATEGories */
 .categories{
     display:grid;
     grid-template-columns:repeat(6,1fr);
@@ -275,6 +276,18 @@ header{
     font-weight:700;
     font-size:13px;
     white-space:nowrap;
+}
+
+.review-action-btn{
+    width:100%;
+    margin-top:8px;
+    background:#f3f4f6;
+    border:1px solid var(--border);
+    padding:6px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:bold;
+    color:#4b5563;
 }
 
 .admin-action-btns{
@@ -445,6 +458,37 @@ header{
             <input type="file" id="userAvatarFile" accept="image/*">
         </div>
         <button class="primary-btn" onclick="saveUserProfilePhoto()">ছবি সেভ করুন</button>
+    </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="modal" id="reviewModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>⭐ পণ্য রিভিউ ও রেটিং দিন</h3>
+            <button class="close" onclick="closeModal('reviewModal')">×</button>
+        </div>
+        <input type="hidden" id="reviewProductId">
+        <div class="form-group">
+            <label>রেটিং (১ থেকে ৫ স্টার)</label>
+            <select id="reviewRating">
+                <option value="5">⭐⭐⭐⭐⭐ (অসাধারণ)</option>
+                <option value="4">⭐⭐⭐⭐ (ভালো)</option>
+                <option value="3">⭐⭐⭐ (চলনসই)</option>
+                <option value="2">⭐⭐ (খারাপ)</option>
+                <option value="1">⭐ (খুবই খারাপ)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>আপনার মন্তব্য বা রিভিউ</label>
+            <textarea id="reviewComment" rows="3" placeholder="পণ্যটি কেমন লেগেছে লিখুন..."></textarea>
+        </div>
+        <button class="primary-btn" onclick="submitReview()">রিভিউ জমা দিন</button>
+        
+        <div style="margin-top:20px;">
+            <h4>সকল কাস্টমার রিভিউ:</h4>
+            <div id="productReviewsList" style="margin-top:10px;"></div>
+        </div>
     </div>
 </div>
 
@@ -753,8 +797,8 @@ let categories = JSON.parse(localStorage.getItem("dhakaCategories")) || [
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts")) || [
-    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, category: "grocery", icon: "🌾", seller: "Dhaka Bazar Owner", image: null },
-    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, category: "electronics", icon: "📱", seller: "Dhaka Bazar Owner", image: null }
+    { id: "1", name: "বাসমতি চাল", desc: "প্রিমিয়াম কোয়ালিটি ৫ কেজি", price: 450, category: "grocery", icon: "🌾", seller: "Dhaka Bazar Owner", image: null, reviews: [] },
+    { id: "2", name: "স্মার্টফোন", desc: "4GB RAM / 64GB ROM", price: 12500, category: "electronics", icon: "📱", seller: "Dhaka Bazar Owner", image: null, reviews: [] }
 ];
 
 let cart = JSON.parse(localStorage.getItem("dhakaCart")) || [];
@@ -820,7 +864,6 @@ function renderCategories(){
     if(ownerCatSelect) ownerCatSelect.innerHTML = optionsHTML;
 }
 
-/* SMART IMAGE COMPRESSOR & BASE64 CONVERTER */
 function convertFileToBase64(file){
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -927,7 +970,7 @@ function registerUser(){
     const password = document.getElementById("registerPassword").value;
 
     if(!name || phone.length < 10 || password.length < 6){
-        showToast("সকল তথ্য সঠিকভাবে প্রদান করুন");
+        showToast("সকল তথ্য সঠিকভাবে প্রদান করুন (ফোন অন্তত ১০ ও পাসওয়ার্ড ৬ অক্ষর)");
         return;
     }
 
@@ -1033,7 +1076,8 @@ async function saveOwnerDirectProduct(){
         category: cat,
         image: imageBase64,
         icon: "✨",
-        seller: "Owner (Dhaka Bazar)"
+        seller: "Owner (Dhaka Bazar)",
+        reviews: []
     };
 
     products.unshift(newProd);
@@ -1099,7 +1143,7 @@ function loadAdminData(){
                     <button class="delete-btn" onclick="deleteUserByOwner(${i})">🗑️ Delete User</button>
                 </div>
             </div>
-        `).join('') || "<div class='empty'>ইউজার নেই।</div>";
+        `).join('') || "<div class='empty'>কোনো ইউজার নেই। আগে রেজিস্টার করুন।</div>";
     }
 
     const productsBox = document.getElementById("adminProductsList");
@@ -1248,7 +1292,8 @@ async function addSellerProduct(){
         category: document.getElementById("sellerProductCategory").value,
         image: imageBase64,
         icon: "📦",
-        seller: currentUser ? currentUser.name : "Unknown Seller"
+        seller: currentUser ? currentUser.name : "Unknown Seller",
+        reviews: []
     };
 
     products.unshift(newProduct);
@@ -1269,27 +1314,100 @@ function renderProducts(list = products){
 
     const isOwner = currentUser && currentUser.role === 'owner';
 
-    container.innerHTML = list.map(p => `
-        <div class="product">
-            <div class="product-img-container">
-                ${p.image ? `<img src="${p.image}">` : `<div class="fallback-icon">${p.icon || '📦'}</div>`}
-            </div>
-            <div class="product-info">
-                <div class="product-name">${escapeHTML(p.name)}</div>
-                <div class="product-desc">${escapeHTML(p.desc)}</div>
-                <div class="price">৳${p.price}</div>
-                <div class="product-bottom">
-                    <button class="add-btn" onclick="addToCart('${p.id}')">+ যোগ</button>
-                    <button class="share-btn" onclick="shareProduct('${p.id}', '${escapeHTML(p.name)}')">🔗 শেয়ার</button>
+    container.innerHTML = list.map(p => {
+        const reviews = p.reviews || [];
+        const avgRating = reviews.length > 0 ? (reviews.reduce((sum, r) => sum + Number(r.rating), 0) / reviews.length).toFixed(1) : 'নতুন';
+        
+        return `
+            <div class="product">
+                <div class="product-img-container">
+                    ${p.image ? `<img src="${p.image}">` : `<div class="fallback-icon">${p.icon || '📦'}</div>`}
                 </div>
-                ${isOwner ? `
-                <div class="admin-action-btns">
-                    <button class="edit-btn" onclick="openEditProduct('${p.id}')">✏️ Edit</button>
-                    <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete</button>
-                </div>` : ''}
+                <div class="product-info">
+                    <div class="product-name">${escapeHTML(p.name)}</div>
+                    <div class="product-desc">${escapeHTML(p.desc)}</div>
+                    <div style="font-size:12px;color:#d97706;margin-bottom:4px">⭐ রেটিং: <b>${avgRating}</b> (${reviews.length} রিভিউ)</div>
+                    <div class="price">৳${p.price}</div>
+                    
+                    <button class="review-action-btn" onclick="openReviewModal('${p.id}')">💬 রিভিউ ও মতামত (${reviews.length})</button>
+
+                    <div class="product-bottom">
+                        <button class="add-btn" onclick="addToCart('${p.id}')">+ যোগ</button>
+                        <button class="share-btn" onclick="shareProduct('${p.id}', '${escapeHTML(p.name)}')">🔗 শেয়ার</button>
+                    </div>
+                    ${isOwner ? `
+                    <div class="admin-action-btns">
+                        <button class="edit-btn" onclick="openEditProduct('${p.id}')">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete</button>
+                    </div>` : ''}
+                </div>
             </div>
+        `;
+    }).join('');
+}
+
+function openReviewModal(productId){
+    document.getElementById("reviewProductId").value = productId;
+    document.getElementById("reviewComment").value = "";
+    loadProductReviews(productId);
+    openModal("reviewModal");
+}
+
+function loadProductReviews(productId){
+    const p = products.find(prod => String(prod.id) === String(productId));
+    const listDiv = document.getElementById("productReviewsList");
+    if(!p) return;
+
+    const reviews = p.reviews || [];
+    if(reviews.length === 0){
+        listDiv.innerHTML = `<div style="font-size:13px;color:#777;text-align:center;padding:10px;">এখনো কোনো রিভিউ দেওয়া হয়নি। প্রথম রিভিউটি আপনি দিন!</div>`;
+        return;
+    }
+
+    listDiv.innerHTML = reviews.map(r => `
+        <div class="admin-card">
+            <div style="display:flex;justify-content:space-between">
+                <strong>${escapeHTML(r.userName)}</strong>
+                <span style="color:#f59e0b">${'⭐'.repeat(r.rating)}</span>
+            </div>
+            <p style="margin-top:4px;color:#333">${escapeHTML(r.comment)}</p>
+            <div style="font-size:10px;color:#888;margin-top:4px">${r.date}</div>
         </div>
     `).join('');
+}
+
+function submitReview(){
+    if(!currentUser){
+        showToast("রিভিউ দিতে হলে আগে লগইন করুন!");
+        closeModal("reviewModal");
+        showLogin();
+        return;
+    }
+
+    const productId = document.getElementById("reviewProductId").value;
+    const rating = Number(document.getElementById("reviewRating").value);
+    const comment = document.getElementById("reviewComment").value.trim();
+
+    if(!comment){
+        showToast("অনুগ্রহ করে কিছু মন্তব্য লিখুন");
+        return;
+    }
+
+    const p = products.find(prod => String(prod.id) === String(productId));
+    if(p){
+        if(!p.reviews) p.reviews = [];
+        p.reviews.unshift({
+            userName: currentUser.name,
+            rating,
+            comment,
+            date: new Date().toLocaleDateString('bn-BD')
+        });
+
+        localStorage.setItem("dhakaProducts", JSON.stringify(products));
+        renderProducts();
+        loadProductReviews(productId);
+        showToast("আপনার মূল্যবান রিভিউ যোগ হয়েছে ✓");
+    }
 }
 
 function shareProduct(id, name) {
@@ -1400,7 +1518,7 @@ function showOwnerLogin(){ openModal("authModal"); document.getElementById("logi
 function openProfile(){ updateProfile(); openModal("profileModal"); }
 function openSeller(){ if(!currentUser){ showLogin(); return; } openModal("sellerModal"); }
 function logoutUser(){ currentUser=null; localStorage.removeItem("dhakaUser"); updateProfileBtnHeader(); closeModal("profileModal"); renderProducts(); showToast("Logout হয়েছে"); }
-function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("sails"),3000); }
+function showToast(msg){ const t = document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
 function escapeHTML(str){ return String(str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 function openCart(){ updateCart(); openModal("cartModal"); }
 function scrollToProducts(){ document.getElementById("productSection").scrollIntoView({behavior:"smooth"}); }
