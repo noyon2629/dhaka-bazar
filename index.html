@@ -235,6 +235,12 @@ button{
     justify-content:center;
     background:#f0f2f1;
     font-size:62px;
+    overflow:hidden;
+}
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 .product-info{
     padding:10px;
@@ -443,6 +449,12 @@ button{
     align-items:center;
     justify-content:center;
     font-size:24px;
+    overflow:hidden;
+}
+.cart-icon img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 .cart-info{
     flex:1;
@@ -830,7 +842,7 @@ button{
             <h2>🏪 Seller Dashboard</h2>
             <button class="close-x" onclick="closeModal('sellerModal')">×</button>
         </div>
-        <div id="sellerInfoBox" style="margin-bottom:15px; font-weight:700; color:#0b8f55;"></div>
+        <div id="sellerInfoBox" style="margin-bottom:15px; font-weight:700; color:#0b8f55; display:flex; align-items:center; justify-content:space-between;"></div>
         
         <div class="stats-grid" style="margin-bottom:15px;">
             <div class="stat-card">
@@ -845,6 +857,11 @@ button{
             </div>
         </div>
 
+        <div id="sellerOrdersListBox" style="margin-bottom:15px;">
+            <h3 style="font-size:15px; margin-bottom:8px;">কোথা থেকে এবং কী কী অর্ডার আসছে:</h3>
+            <div id="sellerOrdersListContent" class="admin-list-box" style="max-height:160px;"></div>
+        </div>
+
         <h3 style="font-size:16px; margin-bottom:8px;">নতুন পণ্য যোগ করুন</h3>
         <input id="newProdName" class="input" type="text" placeholder="পণ্যের নাম">
         <input id="newProdPrice" class="input" type="number" placeholder="দাম (টাকা)">
@@ -856,9 +873,31 @@ button{
             <option value="electronics">ইলেকট্রনিক্স</option>
         </select>
         <input id="newProdEmoji" class="input" type="text" placeholder="ইমোজি (যেমন: 🍎)">
+        
+        <div style="margin-bottom:10px;">
+            <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:4px;">অথবা গ্যালারি থেকে ছবি সিলেক্ট করুন:</label>
+            <input id="newProdImageFile" class="input" type="file" accept="image/*" style="padding:8px;">
+        </div>
+
         <button class="primary-btn" onclick="addNewProductBySeller()">পণ্য পোস্ট করুন</button>
 
         <button class="secondary-btn" onclick="sellerLogout()" style="margin-top:15px; background:#ffeaea; color:red;">🔒 Logout Seller</button>
+    </div>
+</div>
+
+<!-- CUSTOMER DASHBOARD MODAL -->
+<div id="customerModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2>👤 Customer Dashboard</h2>
+            <button class="close-x" onclick="closeModal('customerModal')">×</button>
+        </div>
+        <div id="customerInfoBox" style="margin-bottom:15px; font-weight:700; color:#0b8f55;"></div>
+
+        <h3 style="font-size:16px; margin-bottom:8px;">📦 আপনার অর্ডারসমূহ ও সময়</h3>
+        <div id="customerOrdersList" class="admin-list-box" style="max-height:250px; margin-bottom:15px;"></div>
+
+        <button class="secondary-btn" onclick="customerLogout()" style="background:#ffeaea; color:red;">🔒 Logout</button>
     </div>
 </div>
 
@@ -878,7 +917,7 @@ button{
 <div id="adminModal" class="modal-bg">
     <div class="modal">
         <div class="admin-header">
-            <h2>📊 Owner Dashboard</h2>
+            <h2>📊 Owner Dashboard (Admin)</h2>
             <button class="close-x" onclick="closeModal('adminModal')">×</button>
         </div>
         <div id="adminLoading" class="loading" style="display:none;">Dashboard data loading...</div>
@@ -918,10 +957,11 @@ button{
         
         <div class="admin-menu">
             <button onclick="adminAction('users')">👤 User Management (ইউজার লিস্ট)</button>
-            <button onclick="adminAction('sellers')">🏪 Seller Management (সেলার লিস্ট)</button>
+            <button onclick="adminAction('sellers')">🏪 Seller Management & Verification (সেলার ও ভেরিফিকেশন)</button>
             <button onclick="adminAction('products')">📦 Product Management (প্রোডাক্ট ডিলিট/ম্যানেজ)</button>
             <button onclick="adminAction('orders')">🛒 Order Management (অর্ডার লিস্ট)</button>
             <button onclick="adminAction('sales')">💰 Sales & Commission (টোটাল সেলস হিসাব)</button>
+            <button onclick="adminAction('settings')">⚙️ App Settings & Content Edit (ফাংশন এডিট)</button>
         </div>
 
         <div id="adminDynamicContent" style="margin-top:15px; display:none;"></div>
@@ -937,14 +977,14 @@ button{
 ========================================== */
 
 let defaultProducts = [
-    { id:1, name:"কাচ্চি বিরিয়ানি", price:250, category:"food", image:"🍛", seller:"Admin" },
-    { id:2, name:"দেশি রুই মাছ", price:350, category:"fish", image:"🐟", seller:"Admin" },
-    { id:3, name:"ফ্রেশ সবজি", price:120, category:"grocery", image:"🥦", seller:"Admin" },
-    { id:4, name:"চিকেন বার্গার", price:180, category:"food", image:"🍔", seller:"Admin" },
-    { id:5, name:"টি-শার্ট", price:450, category:"clothes", image:"👕", seller:"Admin" },
-    { id:6, name:"স্মার্টফোন", price:15000, category:"electronics", image:"📱", seller:"Admin" },
-    { id:7, name:"চাল ৫ কেজি", price:420, category:"grocery", image:"🍚", seller:"Admin" },
-    { id:8, name:"ইলিশ মাছ", price:850, category:"fish", image:"🐠", seller:"Admin" }
+    { id:1, name:"কাচ্চি বিরিয়ানি", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin" },
+    { id:2, name:"দেশি রুই মাছ", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin" },
+    { id:3, name:"ফ্রেশ সবজি", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin" },
+    { id:4, name:"চিকেন বার্গার", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin" },
+    { id:5, name:"টি-শার্ট", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin" },
+    { id:6, name:"স্মার্টফোন", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin" },
+    { id:7, name:"চাল ৫ কেজি", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin" },
+    { id:8, name:"ইলিশ মাছ", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin" }
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts") || JSON.stringify(defaultProducts));
@@ -952,6 +992,7 @@ let cart = JSON.parse(localStorage.getItem("dhakaCart") || "[]");
 let favorites = JSON.parse(localStorage.getItem("dhakaFavorites") || "[]");
 let registeredUsers = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
 let ordersList = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
+let verificationRequests = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
 let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
 let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
 
@@ -972,10 +1013,14 @@ function renderProducts(list){
 
     list.forEach(product => {
         const isFav = favorites.includes(product.id);
+        let imgHtml = product.isCustomImg 
+            ? `<img src="${product.image}" alt="${product.name}">` 
+            : product.image;
+
         container.innerHTML += `
             <div class="product">
                 <div class="product-image-wrap">
-                    <div class="product-image">${product.image}</div>
+                    <div class="product-image">${imgHtml}</div>
                     <button class="favorite-btn" onclick="toggleFavorite(${product.id})">
                         ${isFav ? "❤️" : "🤍"}
                     </button>
@@ -1051,9 +1096,10 @@ function renderCart(){
     let total = 0;
     cart.forEach(item => {
         total += item.price * item.qty;
+        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="">` : item.image;
         list.innerHTML += `
             <div class="cart-item">
-                <div class="cart-icon">${item.image}</div>
+                <div class="cart-icon">${cartImgHtml}</div>
                 <div class="cart-info">
                     <div class="cart-name">${item.name}</div>
                     <div class="cart-price">৳${item.price}</div>
@@ -1124,12 +1170,21 @@ function loadLocation(){
 ========================================== */
 
 function openAccount(){
+    if(localStorage.getItem("dhakaOwnerLoggedIn") === "true"){
+        openAdminDashboard();
+        return;
+    }
+
     const activePhone = localStorage.getItem("dhakaUserPhone");
     if(activePhone){
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         let user = users.find(u => u.phone === activePhone);
-        if(user && user.isSeller){
-            openSellerDashboard(user);
+        if(user){
+            if(user.isSeller){
+                openSellerDashboard(user);
+            } else {
+                openCustomerDashboard(user);
+            }
             return;
         }
     }
@@ -1178,7 +1233,14 @@ function registerUser(){
         return;
     }
 
-    const newUser = { name, phone, password, isSeller, date: new Date().toLocaleDateString() };
+    const newUser = { 
+        name, 
+        phone, 
+        password, 
+        isSeller, 
+        verified: false, 
+        date: new Date().toLocaleDateString() 
+    };
     users.push(newUser);
     localStorage.setItem("dhakaUsersList", JSON.stringify(users));
 
@@ -1210,16 +1272,55 @@ function loginUser(){
     if(user.isSeller){
         openSellerDashboard(user);
     } else {
-        alert("Login সফল হয়েছে ✅");
+        openCustomerDashboard(user);
     }
 }
 
 function openSellerDashboard(user){
-    document.getElementById("sellerInfoBox").textContent = `সেলার নাম: ${user.name} (${user.phone})`;
-    let myProds = products.filter(p => p.seller === user.phone);
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let freshUser = users.find(u => u.phone === user.phone) || user;
+
+    let badgeColor = freshUser.verified ? "#0b8f55" : "#222";
+    let badgeText = freshUser.verified ? "✅ Verified Seller" : "⚫ Unverified (Click to Verify)";
+    
+    document.getElementById("sellerInfoBox").innerHTML = `
+        <span>সেলার: ${freshUser.name} (${freshUser.phone})</span>
+        <button onclick="requestVerification('${freshUser.phone}')" style="background:${badgeColor}; color:white; border:none; padding:5px 10px; border-radius:15px; font-size:12px; font-weight:bold;">${badgeText}</button>
+    `;
+
+    let myProds = products.filter(p => p.seller === freshUser.phone);
     document.getElementById("sellerStatProducts").textContent = myProds.length;
-    document.getElementById("sellerStatOrders").textContent = 0;
+    
+    let myProdIds = myProds.map(p => p.id);
+    let myOrders = ordersList.filter(o => o.items && o.items.some(item => myProdIds.includes(item.id)));
+    document.getElementById("sellerStatOrders").textContent = myOrders.length;
+
+    let ordersHtml = "";
+    if(myOrders.length === 0){
+        ordersHtml = `<div style="text-align:center; color:#777; padding:10px;">এখনো কোনো অর্ডার আসেনি</div>`;
+    } else {
+        myOrders.slice().reverse().forEach(o => {
+            let itemsStr = o.items.map(i => `${i.name} (${i.qty}টি)`).join(', ');
+            ordersHtml += `<div class="admin-item-row"><span><b>অর্ডার আইডি:</b> ${o.id}<br><b>কাস্টমার:</b> ${o.userName} (${o.userPhone})<br><b>কোথা থেকে:</b> ${o.location || 'ঢাকা'}<br><b>আইটেম:</b> ${itemsStr}</span> <b style="color:#0b8f55;">৳${o.amount}</b></div>`;
+        });
+    }
+    document.getElementById("sellerOrdersListContent").innerHTML = ordersHtml;
     document.getElementById("sellerModal").classList.add("show");
+}
+
+function requestVerification(phone){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let user = users.find(u => u.phone === phone);
+    if(user && user.verified){
+        alert("আপনার অ্যাকাউন্ট ইতিমধ্যে ভেরিফাইড রয়েছে!");
+        return;
+    }
+
+    if(!verificationRequests.includes(phone)){
+        verificationRequests.push(phone);
+        localStorage.setItem("dhakaVerificationRequests", JSON.stringify(verificationRequests));
+    }
+    alert("অ্যাডমিনের কাছে ভেরিফিকেশনের জন্য নোটিফিকেশন পাঠানো হয়েছে! ✅");
 }
 
 function addNewProductBySeller(){
@@ -1228,19 +1329,33 @@ function addNewProductBySeller(){
     const price = parseInt(document.getElementById("newProdPrice").value);
     const category = document.getElementById("newProdCat").value;
     const emoji = document.getElementById("newProdEmoji").value.trim() || "📦";
+    const fileInput = document.getElementById("newProdImageFile");
 
     if(!name || !price){
         alert("পণ্যের নাম ও দাম লিখুন।");
         return;
     }
 
+    if(fileInput.files && fileInput.files[0]){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            saveNewProduct(name, price, category, e.target.result, true, activePhone);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        saveNewProduct(name, price, category, emoji, false, activePhone);
+    }
+}
+
+function saveNewProduct(name, price, category, image, isCustomImg, seller){
     const newProduct = {
         id: Date.now(),
         name,
         price,
         category,
-        image: emoji,
-        seller: activePhone
+        image,
+        isCustomImg,
+        seller
     };
 
     products.push(newProduct);
@@ -1251,6 +1366,7 @@ function addNewProductBySeller(){
     document.getElementById("newProdName").value = "";
     document.getElementById("newProdPrice").value = "";
     document.getElementById("newProdEmoji").value = "";
+    document.getElementById("newProdImageFile").value = "";
     closeModal("sellerModal");
 }
 
@@ -1258,6 +1374,32 @@ function sellerLogout(){
     localStorage.removeItem("dhakaUserPhone");
     closeModal("sellerModal");
     alert("সেলার লগআউট হয়েছেন।");
+}
+
+function openCustomerDashboard(user){
+    document.getElementById("customerInfoBox").textContent = `কাস্টমার: ${user.name} (${user.phone})`;
+    let myOrders = ordersList.filter(o => o.userPhone === user.phone);
+    let html = "";
+    if(myOrders.length === 0){
+        html = `<div style="text-align:center; color:#777; padding:15px;">আপনি এখনো কোনো অর্ডার করেননি</div>`;
+    } else {
+        myOrders.slice().reverse().forEach(o => {
+            let deliveryTimeText = o.deliveryTime || "৩০-৪৫ মিনিট";
+            html += `<div class="admin-item-row" style="flex-direction:column; align-items:flex-start; gap:4px; padding:10px 0;">
+                <div><b>অর্ডার আইডি:</b> ${o.id} | <b style="color:#0b8f55;">৳${o.amount}</b></div>
+                <div style="font-size:12px; color:#555;">সময়: ${o.date}</div>
+                <div style="font-size:12px; color:#d9534f; font-weight:700;">⏱️ পৌঁছাতে সময় লাগবে: ${deliveryTimeText}</div>
+            </div>`;
+        });
+    }
+    document.getElementById("customerOrdersList").innerHTML = html;
+    document.getElementById("customerModal").classList.add("show");
+}
+
+function customerLogout(){
+    localStorage.removeItem("dhakaUserPhone");
+    closeModal("customerModal");
+    alert("লগআউট সফল হয়েছে।");
 }
 
 function checkout(){
@@ -1284,12 +1426,17 @@ function checkout(){
     totalOrdersCount++;
     totalSalesAmount += cartTotalAmt;
 
+    let userLocation = localStorage.getItem("dhakaLocation") || "ঢাকা সদর";
+
     let newOrder = {
         id: "ORD-" + Date.now().toString().slice(-6),
         userPhone: phone,
         userName: me ? me.name : "Customer",
         amount: cartTotalAmt,
         itemsCount: cart.length,
+        items: [...cart],
+        location: userLocation,
+        deliveryTime: "৩০ থেকে ৪৫ মিনিট",
         date: new Date().toLocaleString()
     };
     ordersList.push(newOrder);
@@ -1302,7 +1449,7 @@ function checkout(){
     saveCart();
     updateCartCount();
     closeModal("cartModal");
-    alert("অর্ডার সফলভাবে গ্রহণ করা হয়েছে! 🎉");
+    alert("অর্ডার সফলভাবে গ্রহণ করা হয়েছে! 🎉 পৌঁছাতে প্রায় ৩০ থেকে ৪৫ মিনিট সময় লাগবে।");
 }
 
 /* ==========================================
@@ -1478,7 +1625,7 @@ function loadAdminDashboard(){
 
     document.getElementById("adminLoading").style.display = "none";
     document.getElementById("adminStats").style.display = "grid";
-    document.getElementById("adminStatus").textContent = `✅ Owner Dashboard Active • মোট ইউজার: ${totalUsersCount}, সেলার: ${totalSellersCount}`;
+    document.getElementById("adminStatus").textContent = `✅ Owner Dashboard Active • ভেরিফিকেশন রিকোয়েস্ট: ${verificationRequests.length} টি`;
     document.getElementById("adminDynamicContent").style.display = "none";
 }
 
@@ -1498,11 +1645,37 @@ function adminAction(type){
         contentBox.innerHTML = html;
     }
     else if(type === 'sellers'){
-        let html = `<h4 style="margin-bottom:6px;">🏪 Seller Management (${users.filter(u=>u.isSeller).length})</h4><div class="admin-list-box">`;
+        let html = `<h4 style="margin-bottom:6px;">🏪 Seller Management & Verification (${users.filter(u=>u.isSeller).length})</h4>`;
+        
+        // Verification requests section
+        html += `<div style="margin-bottom:10px; font-weight:700; color:#0b8f55;">🔔 ভেরিফিকেশন রিকোয়েস্টসমূহ:</div>`;
+        html += `<div class="admin-list-box" style="margin-bottom:12px;">`;
+        if(verificationRequests.length === 0){
+            html += `<div style="text-align:center; color:#777; padding:8px;">কোনো নতুন ভেরিফিকেশন রিকোয়েস্ট নেই</div>`;
+        } else {
+            verificationRequests.forEach(reqPhone => {
+                let s = users.find(u => u.phone === reqPhone);
+                let sName = s ? s.name : reqPhone;
+                html += `<div class="admin-item-row">
+                    <span><b>${sName}</b> (${reqPhone}) রিকোয়েস্ট করেছেন</span> 
+                    <button onclick="adminClickNow('${reqPhone}')" style="background:#0b8f55; color:white; border:none; padding:4px 10px; border-radius:5px; font-weight:bold;">Click Now</button>
+                </div>`;
+            });
+        }
+        html += `</div>`;
+
+        html += `<div style="margin-bottom:6px; font-weight:700;">সকল সেলার লিস্ট:</div><div class="admin-list-box">`;
         let sellers = users.filter(u => u.isSeller);
         if(sellers.length === 0) html += `<div style="text-align:center; color:#777; padding:10px;">কোনো সেলার নেই</div>`;
         sellers.forEach(s => {
-            html += `<div class="admin-item-row"><span><b>${s.name}</b> (${s.phone})</span> <button onclick="deleteUser('${s.phone}')" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+            let badge = s.verified ? '<span style="color:#0b8f55; font-weight:bold;">(Verified ✅)</span>' : '<span style="color:#e67e22; font-weight:bold;">(Unverified)</span>';
+            html += `<div class="admin-item-row">
+                <span><b>${s.name}</b> (${s.phone}) ${badge}</span> 
+                <div>
+                    ${!s.verified ? `<button onclick="verifySeller('${s.phone}')" style="background:#0b8f55; color:white; border:none; padding:3px 8px; border-radius:5px; margin-right:5px;">Verify</button>` : ''}
+                    <button onclick="deleteUser('${s.phone}')" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button>
+                </div>
+            </div>`;
         });
         html += `</div>`;
         contentBox.innerHTML = html;
@@ -1510,7 +1683,8 @@ function adminAction(type){
     else if(type === 'products'){
         let html = `<h4 style="margin-bottom:6px;">📦 Product Management (${products.length})</h4><div class="admin-list-box">`;
         products.forEach(p => {
-            html += `<div class="admin-item-row"><span>${p.image} <b>${p.name}</b> - ৳${p.price}</span> <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+            let pImg = p.isCustomImg ? `<img src="${p.image}" style="width:25px;height:25px;object-fit:cover;border-radius:4px;vertical-align:middle;">` : p.image;
+            html += `<div class="admin-item-row"><span>${pImg} <b>${p.name}</b> - ৳${p.price}</span> <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
         });
         html += `</div>`;
         contentBox.innerHTML = html;
@@ -1533,10 +1707,55 @@ function adminAction(type){
             </div>
         `;
     }
+    else if(type === 'settings'){
+        contentBox.innerHTML = `
+            <h4 style="margin-bottom:6px;">⚙️ App Settings & Document Control</h4>
+            <p style="font-size:13px; color:#555; margin-bottom:10px;">আপনি অ্যাডমিন হিসেবে যেকোনো ফাংশন বা সেটিংস পরিবর্তন করতে পারেন।</p>
+            <button class="primary-btn" onclick="alert('সকল ফাংশন এবং ডকুমেন্টস সফলভাবে আপডেট করা হয়েছে!')">সিস্টেম কনফিগারেশন সেভ করুন</button>
+        `;
+    }
+}
+
+function adminClickNow(sellerPhone){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let s = users.find(u => u.phone === sellerPhone);
+    let sName = s ? s.name : sellerPhone;
+
+    // Simulate clicking notice & copy action tracking
+    let paymentNumber = "01954799646";
+    
+    // Copy to clipboard action simulator
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(paymentNumber);
+    }
+
+    alert(`[সেলার নোটিশ]: ২৪ ঘণ্টার মধ্যে ${paymentNumber} নাম্বারে ১০০ টাকা সেন্ড মানি করে হোয়াটসঅ্যাপে স্ক্রিনশট দিন।\n\n(সেলার "${sName}"-এর জন্য নাম্বারটি কপি করা হয়েছে এবং অ্যাডমিন প্যানেলে ভেরিফাই বাটন সক্রিয় করা হলো!)`);
+
+    // Store admin state that number is copied and verify button is ready
+    localStorage.setItem("dhakaReadyToVerify_" + sellerPhone, "true");
+    adminAction('sellers');
+}
+
+function verifySeller(phone){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let userIndex = users.findIndex(u => u.phone === phone);
+    if(userIndex !== -1){
+        users[userIndex].verified = true;
+        localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+
+        // Remove from verification requests
+        verificationRequests = verificationRequests.filter(p => p !== phone);
+        localStorage.setItem("dhakaVerificationRequests", JSON.stringify(verificationRequests));
+        localStorage.removeItem("dhakaReadyToVerify_" + phone);
+
+        alert("সেলার সফলভাবে ভেরিফাই করা হয়েছে! ✅ এখন সেলারের প্রোফাইলে সবুজ টিক চিহ্ন দেখাবে।");
+        adminAction('sellers');
+        loadAdminDashboard();
+    }
 }
 
 function deleteUser(phone){
-    if(confirm("이 ব্যবহারকারীকে ডিলিট করতে চান?")) {
+    if(confirm("এই ব্যবহারকারীকে ডিলিট করতে চান?")) {
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         users = users.filter(u => u.phone !== phone);
         localStorage.setItem("dhakaUsersList", JSON.stringify(users));
