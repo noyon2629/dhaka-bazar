@@ -278,7 +278,7 @@ button{
 .copy-link-btn, .rating-btn-box{
     background:none;
     border:none;
-    font-size:13px;
+    font-size:12px;
     color:#555;
     display:flex;
     align-items:center;
@@ -288,6 +288,16 @@ button{
 .rating-stars{
     color:#f39c12;
     font-size:12px;
+}
+.reviews-toggle-btn{
+    width:100%;
+    background:#eaf7f1;
+    color:#0b8f55;
+    border:none;
+    padding:6px;
+    font-size:12px;
+    font-weight:700;
+    border-top:1px dashed #d1ede1;
 }
 .add-cart{
     width:100%;
@@ -676,9 +686,10 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:6px 0;
+    padding:8px 0;
     border-bottom:1px solid #eee;
     font-size:13px;
+    gap:10px;
 }
 @media(min-width:700px){
     body{
@@ -728,6 +739,7 @@ button{
     <button class="location-set" onclick="setLocation()">সেট</button>
 </div>
 
+<!-- ইনস্টল কার্ডটি ব্রাউজারে দেখা যাবে, কিন্তু অ্যাপের ভেতর স্বয়ংক্রিয়ভাবে হাইড হয়ে যাবে -->
 <section class="install-card" id="installCard">
     <div class="install-card-logo">
         <img src="./logo.png" alt="Dhaka Bazar" onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
@@ -905,7 +917,7 @@ button{
             <div id="sellerOrdersListContent" class="admin-list-box" style="max-height:160px;"></div>
         </div>
 
-        <h3 style="font-size:16px; margin-bottom:8px;">নতুন পণ্য যোগ করুন (সুন্দর ডিটেলসসহ)</h3>
+        <h3 style="font-size:16px; margin-bottom:8px;">নতুন পণ্য যোগ করুন (গ্যালারি থেকে আসল ছবিসহ)</h3>
         <input id="newProdName" class="input" type="text" placeholder="পণ্যের নাম">
         <textarea id="newProdDesc" class="textarea" placeholder="পণ্যের বিস্তারিত বিবরণ (যেমন: উপাদান, ওজন, মান ইত্যাদি)..."></textarea>
         <input id="newProdPrice" class="input" type="number" placeholder="দাম (টাকা)">
@@ -916,11 +928,10 @@ button{
             <option value="clothes">পোশাক</option>
             <option value="electronics">ইলেকট্রনিক্স</option>
         </select>
-        <input id="newProdEmoji" class="input" type="text" placeholder="ইমোজি (যেমন: 🍎)">
         
-        <div style="margin-bottom:10px;">
-            <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:4px;">অথবা গ্যালারি থেকে ছবি সিলেক্ট করুন:</label>
-            <input id="newProdImageFile" class="input" type="file" accept="image/*" style="padding:8px;">
+        <div style="margin-bottom:12px;">
+            <label style="font-size:13px; font-weight:600; color:#0b8f55; display:block; margin-bottom:4px;">🖼️ গ্যালারি থেকে আসল ছবি সিলেক্ট করুন (বাধ্যতামূলক/প্রস্তাবিত):</label>
+            <input id="newProdImageFile" class="input" type="file" accept="image/*" style="padding:8px; background:#fff;">
         </div>
 
         <button class="primary-btn" onclick="addNewProductBySeller()">পণ্য পোস্ট করুন</button>
@@ -942,6 +953,30 @@ button{
         <div id="customerOrdersList" class="admin-list-box" style="max-height:250px; margin-bottom:15px;"></div>
 
         <button class="secondary-btn" onclick="customerLogout()" style="background:#ffeaea; color:red;">🔒 Logout</button>
+    </div>
+</div>
+
+<!-- REVIEWS & COMMENTS MODAL -->
+<div id="reviewsModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2 id="reviewModalTitle">⭐ পণ্যের রিভিউ ও কমেন্ট</h2>
+            <button class="close-x" onclick="closeModal('reviewsModal')">×</button>
+        </div>
+        <div id="reviewsListContent" class="admin-list-box" style="max-height:220px; margin-bottom:15px;"></div>
+        
+        <h3 style="font-size:15px; margin-bottom:8px;">আপনার মূল্যবান রিভিউ ও কমেন্ট দিন:</h3>
+        <div style="display:flex; gap:10px; margin-bottom:8px;">
+            <select id="userRatingSelect" class="input" style="margin-bottom:0; width:120px;">
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+            </select>
+        </div>
+        <textarea id="userReviewComment" class="textarea" placeholder="পণ্যটি সম্পর্কে সুন্দর একটি কমেন্ট বা রিভিউ লিখুন..."></textarea>
+        <button class="primary-btn" onclick="submitProductReview()">রিভিউ সাবমিট করুন</button>
     </div>
 </div>
 
@@ -1002,7 +1037,7 @@ button{
         <div class="admin-menu">
             <button onclick="adminAction('users')">👤 User Management (ইউজার লিস্ট)</button>
             <button onclick="adminAction('sellers')">🏪 Seller Management & Verification (সেলার ও ভেরিফিকেশন)</button>
-            <button onclick="adminAction('products')">📦 Product Management (প্রোডাক্ট ডিলিট/ম্যানেজ)</button>
+            <button onclick="adminAction('products')">📦 Product Management (প্রোডাক্ট ডিলিট/ম্যানেজ ও ছবি পরিবর্তন)</button>
             <button onclick="adminAction('orders')">🛒 Order Management (অর্ডার লিস্ট)</button>
             <button onclick="adminAction('sales')">💰 Sales & Commission (টোটাল সেলস হিসাব)</button>
             <button onclick="adminAction('settings')">⚙️ App Settings & Content Edit (ফাংশন এডিট)</button>
@@ -1021,14 +1056,14 @@ button{
 ========================================== */
 
 let defaultProducts = [
-    { id:1, name:"কাচ্চি বিরিয়ানি", details:"সুগন্ধি বাসমতি চাল ও খাসির মাংসের সুস্বাদু ঐতিহ্যবাহী কাচ্চি বিরিয়ানি।", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin", rating:4.8, reviewsCount:15 },
-    { id:2, name:"দেশি রুই মাছ", details:"পদ্মার তাজা ও সুস্বাদু দেশি রুই মাছ, ওজন প্রায় ১ কেজি।", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin", rating:4.5, reviewsCount:10 },
-    { id:3, name:"ফ্রেশ সবজি", details:"সরাসরি ক্ষেত থেকে সংগৃহীত বিষমুক্ত টাটকা শাকসবজির সমাহার।", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:22 },
-    { id:4, name:"চিকেন বারگر", details:" juicy চিকেন প্যাটি ও স্পেশাল সস দিয়ে তৈরি সুস্বাদু বার্গার।", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin", rating:4.6, reviewsCount:18 },
-    { id:5, name:"টি-শার্ট", details:"১০০% সুতি আরামদায়ক প্রিমিয়াম কোয়ালিটি ক্যাজুয়াল টি-শার্ট।", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin", rating:4.4, reviewsCount:9 },
-    { id:6, name:"স্মার্টফোন", details:"হাই পারফরম্যান্স ক্যামেরা ও দীর্ঘস্থায়ী ব্যাটারিযুক্ত আধুনিক স্মার্টফোন।", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin", rating:4.9, reviewsCount:30 },
-    { id:7, name:"চাল ৫ কেজি", details:"সেরা মানের সুস্বাদু মিনিকেট চাল, ৫ কেজির সাশ্রয়ী প্যাক।", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:25 },
-    { id:8, name:"ইলিশ মাছ", details:"পদ্মার সুস্বাদু ও রূপালি তাজা বড় সাইজের ইলিশ মাছ।", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin", rating:5.0, reviewsCount:40 }
+    { id:1, name:"কাচ্চি বিরিয়ানি", details:"সুগন্ধি বাসমতি চাল ও খাসির মাংসের সুস্বাদু ঐতিহ্যবাহী কাচ্চি বিরিয়ানি।", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin", rating:4.8, reviewsCount:15, reviews: [] },
+    { id:2, name:"দেশি রুই মাছ", details:"পদ্মার তাজা ও সুস্বাদু দেশি রুই মাছ, ওজন প্রায় ১ কেজি।", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin", rating:4.5, reviewsCount:10, reviews: [] },
+    { id:3, name:"ফ্রেশ সবজি", details:"সরাসরি ক্ষেত থেকে সংগৃহীত বিষমুক্ত টাটকা শাকসবজির সমাহার।", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:22, reviews: [] },
+    { id:4, name:"চিকেন বার্গার", details:"juicy চিকেন প্যাটি ও স্পেশাল সস দিয়ে তৈরি সুস্বাদু বার্গার।", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin", rating:4.6, reviewsCount:18, reviews: [] },
+    { id:5, name:"টি-শার্ট", details:"১০০% সুতি আরামদায়ক প্রিমিয়াম কোয়ালিটি ক্যাজুয়াল টি-শার্ট।", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin", rating:4.4, reviewsCount:9, reviews: [] },
+    { id:6, name:"স্মার্টফোন", details:"হাই পারফরম্যান্স ক্যামেরা ও দীর্ঘস্থায়ী ব্যাটারিযুক্ত আধুনিক স্মার্টফোন।", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin", rating:4.9, reviewsCount:30, reviews: [] },
+    { id:7, name:"চাল ৫ কেজি", details:"সেরা মানের সুস্বাদু মিনিকেট চাল, ৫ কেজির সাশ্রয়ী প্যাক।", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:25, reviews: [] },
+    { id:8, name:"ইলিশ মাছ", details:"পদ্মার সুস্বাদু ও রূপালি তাজা বড় সাইজের ইলিশ মাছ।", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin", rating:5.0, reviewsCount:40, reviews: [] }
 ];
 
 let products = JSON.parse(localStorage.getItem("dhakaProducts") || JSON.stringify(defaultProducts));
@@ -1059,10 +1094,10 @@ function renderProducts(list){
         const isFav = favorites.includes(product.id);
         let imgHtml = product.isCustomImg 
             ? `<img src="${product.image}" alt="${product.name}">` 
-            : product.image;
+            : `<div style="font-size:55px;">${product.image}</div>`;
 
         let ratingVal = product.rating || 4.5;
-        let reviewsCount = product.reviewsCount || 10;
+        let reviewsCount = product.reviewsCount || (product.reviews ? product.reviews.length : 10);
         let prodDetails = product.details || "উন্নত মানের এবং সাশ্রয়ী মূল্যের চমৎকার পণ্য।";
 
         container.innerHTML += `
@@ -1082,12 +1117,13 @@ function renderProducts(list){
                     <button class="copy-link-btn" onclick="copyProductLink(${product.id}, '${product.name}')">
                         🔗 কপি লিঙ্ক
                     </button>
-                    <div class="rating-btn-box" onclick="rateProduct(${product.id})" title="রেটিং দিন">
+                    <div class="rating-btn-box" onclick="openReviewsModal(${product.id})" title="রেটিং ও কমেন্ট দেখুন">
                         <span class="rating-stars">⭐ ${ratingVal}</span>
                         <span style="font-size:10px; color:#777;">(${reviewsCount})</span>
                     </div>
                 </div>
-                <div style="padding:0 10px 10px 10px;">
+                <button class="reviews-toggle-btn" onclick="openReviewsModal(${product.id})">💬 রিভিউ ও কমেন্ট দিন</button>
+                <div style="padding:8px 10px 10px 10px;">
                     <button class="add-cart" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
                 </div>
             </div>
@@ -1118,22 +1154,89 @@ function copyProductLink(id, name){
     }
 }
 
-function rateProduct(id){
+// রিভিউ এবং কমেন্ট মডাল হ্যান্ডেল করার ভেরিয়েবল ও ফাংশন
+let currentReviewProductId = null;
+
+function openReviewsModal(id){
     let product = products.find(p => p.id === id);
     if(!product) return;
-    let userRating = prompt("এই পণ্য সম্পর্কে আপনার রেটিং দিন (১ থেকে ৫ এর মধ্যে):", "5");
-    if(userRating !== null){
-        let val = parseFloat(userRating);
-        if(!isNaN(val) && val >= 1 && val <= 5){
-            product.rating = ((product.rating * product.reviewsCount + val) / (product.reviewsCount + 1)).toFixed(1);
-            product.reviewsCount++;
-            localStorage.setItem("dhakaProducts", JSON.stringify(products));
-            renderProducts(products);
-            alert("আপনার মূল্যবান রেটিংয়ের জন্য ধন্যবাদ! ⭐");
-        } else {
-            alert("দয়া করে ১ থেকে ৫ এর মধ্যে সঠিক সংখ্যা লিখুন।");
-        }
+    currentReviewProductId = id;
+
+    document.getElementById("reviewModalTitle").textContent = `⭐ ${product.name} - রিভিউ ও কমেন্ট`;
+    renderReviewsList(product);
+    document.getElementById("reviewsModal").classList.add("show");
+}
+
+function renderReviewsList(product){
+    const listContent = document.getElementById("reviewsListContent");
+    let reviews = product.reviews || [];
+
+    if(reviews.length === 0){
+        listContent.innerHTML = `<div style="text-align:center; color:#777; padding:15px;">এই পণ্যে এখনো কোনো কমেন্ট বা রিভিউ নেই। প্রথম রিভিউটি আপনি দিন!</div>`;
+        return;
     }
+
+    let html = "";
+    reviews.slice().reverse().forEach(rev => {
+        let stars = "⭐".repeat(rev.rating);
+        html += `
+            <div style="border-bottom:1px solid #eee; padding:8px 0;">
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:13px;">
+                    <span>👤 ${rev.userName}</span>
+                    <span style="color:#f39c12; font-size:12px;">${stars}</span>
+                </div>
+                <div style="font-size:13px; color:#333; margin-top:3px;">${rev.comment}</div>
+                <div style="font-size:10px; color:#888; margin-top:2px;">${rev.date}</div>
+            </div>
+        `;
+    });
+    listContent.innerHTML = html;
+}
+
+function submitProductReview(){
+    const phone = localStorage.getItem("dhakaUserPhone");
+    if(!phone){
+        alert("রিভিউ বা কমেন্ট করার জন্য অনুগ্রহ করে আগে Login করুন।");
+        closeModal("reviewsModal");
+        openAccount();
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let me = users.find(u => u.phone === phone);
+    let userName = me ? me.name : "গ্রাহক";
+
+    let ratingVal = parseInt(document.getElementById("userRatingSelect").value);
+    let commentText = document.getElementById("userReviewComment").value.trim();
+
+    if(!commentText){
+        alert("দয়া করে সুন্দর একটি কমেন্ট বা রিভিউ লিখুন।");
+        return;
+    }
+
+    let product = products.find(p => p.id === currentReviewProductId);
+    if(!product) return;
+
+    if(!product.reviews) product.reviews = [];
+
+    product.reviews.push({
+        userName,
+        rating: ratingVal,
+        comment: commentText,
+        date: new Date().toLocaleDateString()
+    });
+
+    // গড় রেটিং আপডেট করা
+    let totalScore = product.reviews.reduce((sum, r) => sum + r.rating, 0);
+    product.reviewsCount = product.reviews.length;
+    product.rating = (totalScore / product.reviewsCount).toFixed(1);
+
+    localStorage.setItem("dhakaProducts", JSON.stringify(products));
+    renderProducts(products);
+    renderReviewsList(product);
+
+    document.getElementById("userReviewComment").value = "";
+    alert("আপনার মূল্যবান রিভিউ ও কমেন্ট সফলভাবে যোগ হয়েছে! ধন্যবাদ। ⭐");
 }
 
 function addToCart(id){
@@ -1187,7 +1290,7 @@ function renderCart(){
     let total = 0;
     cart.forEach(item => {
         total += item.price * item.qty;
-        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="">` : item.image;
+        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="">` : `<div style="font-size:24px;">${item.image}</div>`;
         list.innerHTML += `
             <div class="cart-item">
                 <div class="cart-icon">${cartImgHtml}</div>
@@ -1420,7 +1523,6 @@ function addNewProductBySeller(){
     const details = document.getElementById("newProdDesc").value.trim();
     const price = parseInt(document.getElementById("newProdPrice").value);
     const category = document.getElementById("newProdCat").value;
-    const emoji = document.getElementById("newProdEmoji").value.trim() || "📦";
     const fileInput = document.getElementById("newProdImageFile");
 
     if(!name || !price || !details){
@@ -1428,15 +1530,16 @@ function addNewProductBySeller(){
         return;
     }
 
-    if(fileInput.files && fileInput.files[0]){
-        const reader = new FileReader();
-        reader.onload = function(e){
-            saveNewProduct(name, details, price, category, e.target.result, true, activePhone);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-    } else {
-        saveNewProduct(name, details, price, category, emoji, false, activePhone);
+    if(!fileInput.files || !fileInput.files[0]){
+        alert("সেলার হিসেবে পণ্যের আসল ছবি গ্যালারি থেকে সিলেক্ট করা বাধ্যতামূলক!");
+        return;
     }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        saveNewProduct(name, details, price, category, e.target.result, true, activePhone);
+    };
+    reader.readAsDataURL(fileInput.files[0]);
 }
 
 function saveNewProduct(name, details, price, category, image, isCustomImg, seller){
@@ -1450,18 +1553,18 @@ function saveNewProduct(name, details, price, category, image, isCustomImg, sell
         isCustomImg,
         seller,
         rating: 5.0,
-        reviewsCount: 1
+        reviewsCount: 1,
+        reviews: []
     };
 
     products.push(newProduct);
     localStorage.setItem("dhakaProducts", JSON.stringify(products));
     renderProducts(products);
 
-    alert("পণ্য সুন্দর বিবরণসহ সফলভাবে পোস্ট করা হয়েছে! ✅");
+    alert("পণ্য আসল ছবি ও বিবরণসহ সফলভাবে পোস্ট করা হয়েছে! ✅");
     document.getElementById("newProdName").value = "";
     document.getElementById("newProdDesc").value = "";
     document.getElementById("newProdPrice").value = "";
-    document.getElementById("newProdEmoji").value = "";
     document.getElementById("newProdImageFile").value = "";
     closeModal("sellerModal");
 }
@@ -1573,7 +1676,7 @@ function closeModal(id){
 }
 
 /* ==========================================
-   PWA INSTALL
+   PWA INSTALL & STANDALONE MODE LOGIC
 ========================================== */
 
 let deferredPrompt = null;
@@ -1647,24 +1750,16 @@ function isInstalled(){
 
 function updateInstallButtons(){
     const topButton = document.getElementById("topInstallBtn");
-    const installButton = document.getElementById("realInstallBtn");
-    const manualButton = document.getElementById("manualInstallBtn");
-    const openButton = document.getElementById("openInstalledBtn");
     const installCard = document.getElementById("installCard");
 
     if(isInstalled()){
-        topButton.textContent = "🚀 Open App";
-        installButton.style.display = "none";
-        manualButton.style.display = "none";
-        openButton.style.display = "block";
-        if(installCard){ installCard.style.display = "none"; }
+        if(topButton) topButton.style.display = "none";
+        if(installCard) installCard.style.display = "none";
         return;
     }
-    topButton.textContent = "📲 Install";
-    installButton.style.display = "block";
-    manualButton.style.display = "block";
-    openButton.style.display = "none";
-    if(installCard){ installCard.style.display = "flex"; }
+
+    if(topButton) topButton.style.display = "block";
+    if(installCard) installCard.style.display = "flex";
 }
 
 function openInstalledApp(){
@@ -1743,7 +1838,6 @@ function adminAction(type){
     else if(type === 'sellers'){
         let html = `<h4 style="margin-bottom:6px;">🏪 Seller Management & Verification (${users.filter(u=>u.isSeller).length})</h4>`;
         
-        // Verification requests section
         html += `<div style="margin-bottom:10px; font-weight:700; color:#0b8f55;">🔔 ভেরিফিকেশন রিকোয়েস্টসমূহ:</div>`;
         html += `<div class="admin-list-box" style="margin-bottom:12px;">`;
         if(verificationRequests.length === 0){
@@ -1777,10 +1871,26 @@ function adminAction(type){
         contentBox.innerHTML = html;
     }
     else if(type === 'products'){
-        let html = `<h4 style="margin-bottom:6px;">📦 Product Management (${products.length})</h4><div class="admin-list-box">`;
+        let html = `<h4 style="margin-bottom:6px;">📦 Product Management (${products.length})</h4>
+        <p style="font-size:12px; color:#555; margin-bottom:8px;">এখান থেকে যেকোনো পণ্যের ছবি পরিবর্তন কিংবা ডিলিট করতে পারবেন।</p>
+        <div class="admin-list-box">`;
+        
         products.forEach(p => {
-            let pImg = p.isCustomImg ? `<img src="${p.image}" style="width:25px;height:25px;object-fit:cover;border-radius:4px;vertical-align:middle;">` : p.image;
-            html += `<div class="admin-item-row"><span>${pImg} <b>${p.name}</b> - ৳${p.price}</span> <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:3px 8px; border-radius:5px;">ডিলিট</button></div>`;
+            let pImg = p.isCustomImg ? `<img src="${p.image}" style="width:35px;height:35px;object-fit:cover;border-radius:6px;vertical-align:middle;">` : `<span style="font-size:24px;vertical-align:middle;">${p.image}</span>`;
+            
+            html += `<div class="admin-item-row">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    ${pImg}
+                    <div>
+                        <b>${p.name}</b><br>
+                        <span style="color:#0b8f55; font-weight:bold;">৳${p.price}</span>
+                    </div>
+                </div>
+                <div style="display:flex; gap:5px;">
+                    <button onclick="adminChangeProductImage(${p.id})" style="background:#eaf7f1; color:#0b8f55; border:none; padding:5px 8px; border-radius:5px; font-weight:bold; font-size:11px;">🖼️ ছবি বদল</button>
+                    <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:5px 8px; border-radius:5px; font-weight:bold; font-size:11px;">🗑️ ডিলিট</button>
+                </div>
+            </div>`;
         });
         html += `</div>`;
         contentBox.innerHTML = html;
@@ -1810,6 +1920,31 @@ function adminAction(type){
             <button class="primary-btn" onclick="alert('সকল ফাংশন এবং ডকুমেন্টস সফলভাবে আপডেট করা হয়েছে!')">সিস্টেম কনফিগারেশন সেভ করুন</button>
         `;
     }
+}
+
+function adminChangeProductImage(id){
+    let product = products.find(p => p.id === id);
+    if(!product) return;
+
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = e => {
+        let file = e.target.files[0];
+        if(file){
+            let reader = new FileReader();
+            reader.onload = event => {
+                product.image = event.target.result;
+                product.isCustomImg = true;
+                localStorage.setItem("dhakaProducts", JSON.stringify(products));
+                renderProducts(products);
+                adminAction('products');
+                alert("পণ্যের ছবি সফলভাবে পরিবর্তন করা হয়েছে! ✅");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
 }
 
 function adminClickNow(sellerPhone){
@@ -1857,7 +1992,7 @@ function deleteUser(phone){
 }
 
 function adminDeleteProduct(id){
-    if(confirm("এই পণ্যটি ডিলিট করতে চান?")) {
+    if(confirm("এই পণ্যটি সম্পূর্ণ ডিলিট করতে চান?")) {
         products = products.filter(p => p.id !== id);
         localStorage.setItem("dhakaProducts", JSON.stringify(products));
         renderProducts(products);
