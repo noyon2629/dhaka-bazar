@@ -1,23 +1,25 @@
 {
-  "name": "Dhaka Bazar",
-  "short_name": "DhakaBazar",
-  "start_url": "/",
+  "name": "Dhaka Bazar - ঢাকা বাজার",
+  "short_name": "Dhaka Bazar",
+  "description": "Dhaka Bazar Online Shopping App",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#198754",
-  "description": "Dhaka Bazar online shopping application.",
+  "background_color": "#f4f7f5",
+  "theme_color": "#0b8f55",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/logo.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ]
-}  
+}
