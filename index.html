@@ -92,7 +92,7 @@ button{
     font-weight:800;
     font-size:12px;
     box-shadow:0 3px 10px rgba(0,0,0,.18);
-    display: none; /* ডিফল্টভাবে লুকিয়ে রাখা হয়েছে, ইভেন্ট ফায়ার হলে দেখাবে */
+    display: none;
 }
 .search-box{
     margin-top:10px;
@@ -1825,7 +1825,7 @@ function closeModal(id){
     if(modal){ modal.classList.remove("show"); }
 }
 
-/* --- প্রফেশনাল PWA ইনস্টল হ্যান্ডলার লজিক --- */
+/* --- প্রফেশনাল PWA ইনস্টল হ্যান্ডলার লজিক (Updated) --- */
 let deferredPrompt = null;
 const topInstallBtn = document.getElementById("topInstallBtn");
 const installCard = document.getElementById("installCard");
@@ -1834,7 +1834,6 @@ window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     deferredPrompt = event;
     
-    // অ্যাপ আগে ইনস্টল করা না থাকলে বাটন দৃশ্যমান হবে
     if (!localStorage.getItem("app_installed")) {
         if(topInstallBtn) topInstallBtn.style.display = "block";
         if(installCard) installCard.style.display = "flex";
@@ -1870,7 +1869,9 @@ async function installApp(){
         deferredPrompt = null;
         closeModal("installModal");
     } else {
-        alert("অ্যান্ড্রয়েড ব্রাউজারের Menu (⋮) থেকে 'Install App' বা 'Add to Home Screen' সিলেক্ট করুন।");
+        // অ্যালার্টের পরিবর্তে মডালের ভেতরেই ব্রাউজার মেনু থেকে ইন্সটল করার সহজ গাইডলাইন দেখাবে
+        closeModal("installModal");
+        alert("দয়া করে আপনার ব্রাউজারের ওপরের ডানপাশের মেনু (⋮) থেকে 'Install App' বা 'Add to Home Screen' সিলেক্ট করুন।");
     }
 }
 
@@ -1890,6 +1891,9 @@ function updateInstallButtons(){
 
     if(isStandalone || localStorage.getItem("app_installed")){
         hideInstallButtons();
+    } else {
+        // ব্রাউজারে স্বয়ংক্রিয়ভাবে ইন্সটল কার্ডটি দৃশ্যমান রাখতে পারেন যদি ব্রাউজার প্রম্পট না দেয়
+        if(installCard) installCard.style.display = "flex";
     }
 }
 /* --------------------------------------------- */
