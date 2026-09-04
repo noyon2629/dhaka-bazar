@@ -2,143 +2,316 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>CapCut Premium — সম্পূর্ণ প্রোগ্রাম ও সেটিংস ব্লুপ্রিন্ট</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapCut Web Studio - Professional Video Editor</title>
     <style>
-        @page {
-            size: A4;
-            margin: 20mm 15mm;
-            background-color: #faf8f5;
+        :root {
+            --bg-dark: #121212;
+            --bg-panel: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --accent-color: #00e5ff;
+            --text-main: #ffffff;
+            --text-muted: #b0bec5;
+            --border-color: #333333;
         }
-        *, *::before, *::after {
-            box-sizing: border-box;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Top Navigation Bar */
+        header {
+            height: 55px;
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
-        body {
-            font-family: 'SolaimanLipi', Arial, sans-serif;
-            color: #2c3e50;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #faf8f5;
+        .logo { font-size: 18px; font-weight: bold; color: var(--accent-color); display: flex; align-items: center; gap: 10px; }
+        .top-menu { display: flex; gap: 15px; font-size: 14px; color: var(--text-muted); }
+        .top-menu span { cursor: pointer; padding: 5px 10px; border-radius: 4px; transition: 0.2s; }
+        .top-menu span:hover { background: var(--bg-secondary); color: var(--text-main); }
+        .export-btn {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .header-box {
-            background: #111111;
-            color: #ffffff;
-            margin: -20px -20px 25px -20px;
-            padding: 30px 20px;
+        .export-btn:hover { opacity: 0.9; }
+
+        /* Main Workspace Layout */
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            grid-template-rows: 1fr 220px;
+            height: calc(100vh - 55px);
+        }
+
+        /* Sidebar Tools Panel */
+        .sidebar {
+            grid-row: 1 / 2;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px 5px;
             text-align: center;
-            border-bottom: 4px solid #00e5ff;
-        }
-        .header-box h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .header-box p {
-            margin: 8px 0 0 0;
-            font-size: 13px;
-            color: #a7afb8;
-        }
-        h2 {
-            color: #00838f;
-            font-size: 15px;
-            border-left: 4px solid #00838f;
-            padding-left: 8px;
-            margin-top: 22px;
-            margin-bottom: 10px;
-        }
-        ul {
-            margin: 0 0 15px 20px;
-            padding: 0;
-        }
-        li {
             font-size: 12px;
-            margin-bottom: 6px;
-            color: #37474f;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: bold;
         }
-        strong {
-            color: #212121;
-        }
-        .footer {
+        .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); background: var(--bg-panel); }
+        .sidebar-content { padding: 15px; overflow-y: auto; flex: 1; }
+        .tool-group h4 { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
+        .media-dropzone {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
             text-align: center;
-            margin-top: 30px;
-            font-size: 10px;
-            color: #78909c;
-            border-top: 1px solid #cfd8dc;
-            padding-top: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+        .media-dropzone:hover { border-color: var(--accent-color); }
+
+        /* Preview / Player Section */
+        .preview-area {
+            grid-row: 1 / 2;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        video {
+            max-width: 100%;
+            max-height: calc(100% - 60px);
+            background: #111;
+        }
+        .player-controls {
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        .player-controls button { background: none; border: none; color: #fff; cursor: pointer; font-size: 16px; }
+
+        /* Properties / Settings Panel */
+        .properties-panel {
+            grid-row: 1 / 2;
+            background-color: var(--bg-panel);
+            border-left: 1px solid var(--border-color);
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .prop-section { margin-bottom: 20px; }
+        .prop-section h3 { font-size: 13px; margin-bottom: 10px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        .prop-control { margin-bottom: 10px; }
+        .prop-control label { font-size: 11px; display: block; margin-bottom: 4px; color: var(--text-muted); }
+        .prop-control select, .prop-control input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        /* Timeline Section */
+        .timeline-area {
+            grid-column: 1 / 4;
+            grid-row: 2 / 3;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .timeline-toolbar {
+            height: 35px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .timeline-toolbar button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; }
+        .timeline-toolbar button:hover { color: #fff; }
+        .timeline-tracks {
+            flex: 1;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .track {
+            height: 45px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            position: relative;
+            border: 1px dashed var(--border-color);
+        }
+        .clip-item {
+            height: 35px;
+            background: #00838f;
+            border-radius: 4px;
+            position: absolute;
+            left: 10px;
+            width: 200px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 11px;
+            color: #fff;
+            cursor: grab;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-box">
-        <h1>CapCut Premium — সম্পূর্ণ প্রোগ্রাম ও সেটিংস ব্লুপ্রিন্ট (Duplicate Blueprint)</h1>
-        <p>Comprehensive Feature, Program & Settings Structure Documentation</p>
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">
+            <span>⚡ CapCut Studio Pro</span>
+        </div>
+        <div class="top-menu">
+            <span>Media</span>
+            <span>Audio</span>
+            <span>Text</span>
+            <span>Effects</span>
+            <span>Transition</span>
+            <span>Templates</span>
+        </div>
+        <button class="export-btn" onclick="exportVideo()">Export</button>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+        
+        <!-- Sidebar Tools -->
+        <div class="sidebar">
+            <div class="sidebar-tabs">
+                <button class="tab-btn active">Media</button>
+                <button class="tab-btn">Audio</button>
+                <button class="tab-btn">Text</button>
+                <button class="tab-btn">Effects</button>
+            </div>
+            <div class="sidebar-content">
+                <div class="tool-group">
+                    <h4>Import Media</h4>
+                    <div class="media-dropzone" onclick="document.getElementById('fileInput').click()">
+                        <p style="font-size: 12px; color: var(--text-muted);">Click to upload video/photos</p>
+                        <input type="file" id="fileInput" style="display:none" accept="video/*,image/*" onchange="loadMedia(event)">
+                    </div>
+                </div>
+                <div class="tool-group">
+                    <h4>Presets & Stock</h4>
+                    <p style="font-size: 11px; color: var(--text-muted);">AI Auto-Captions, Body Effects, Chroma Key available.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Preview Player -->
+        <div class="preview-area">
+            <video id="videoPlayer" controls></video>
+            <div class="player-controls">
+                <button onclick="document.getElementById('videoPlayer').play()">▶</button>
+                <button onclick="document.getElementById('videoPlayer').pause()">⏸</button>
+                <button onclick="document.getElementById('videoPlayer').currentTime=0()">⏮</button>
+            </div>
+        </div>
+
+        <!-- Properties & Settings Panel -->
+        <div class="properties-panel">
+            <div class="prop-section">
+                <h3>Video Settings</h3>
+                <div class="prop-control">
+                    <label>Aspect Ratio</label>
+                    <select>
+                        <option>9:16 (TikTok / Reels)</option>
+                        <option>16:9 (YouTube)</option>
+                        <option>1:1 (Instagram)</option>
+                    </select>
+                </div>
+                <div class="prop-control">
+                    <label>Speed Ramping</label>
+                    <input type="range" min="0.2" max="5" step="0.1" value="1">
+                </div>
+            </div>
+            <div class="prop-section">
+                <h3>Audio & AI Adjustments</h3>
+                <div class="prop-control">
+                    <label>Volume Level</label>
+                    <input type="range" min="0" max="100" value="100">
+                </div>
+                <div class="prop-control">
+                    <label>Noise Reduction</label>
+                    <input type="checkbox"> Enabled
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Area -->
+        <div class="timeline-area">
+            <div class="timeline-toolbar">
+                <button>✂ Split</button>
+                <button>🗑 Delete</button>
+                <button>⏱ Speed</button>
+                <button>🔄 Reverse</button>
+            </div>
+            <div class="timeline-tracks">
+                <div class="track">
+                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 10px;">Video Track 1</span>
+                    <div class="clip-item" id="timelineClip">No media loaded</div>
+                </div>
+                <div class="track">
+                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 10px;">Audio Track 2</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <h2>১. ড্যাশবোর্ড ও প্রজেক্ট ম্যানেজমেন্ট (Dashboard & Project Management)</h2>
-    <ul>
-        <li><strong>New Project (নতুন প্রজেক্ট):</strong> ভিডিও, ছবি বা লাইভ ফুটেজ ইমপোর্ট করে টাইমলাইন শুরু করার প্রোগ্রাম।</li>
-        <li><strong>Ratio / Aspect Ratio (আস্পেক্ট রেশিও):</strong> ৯:১৬ (TikTok/Reels), ১৬:৯ (YouTube), ১:১ (Instagram), ৪:৩ এবং ২.৩৫:১ ফ্রেম ফরম্যাট সিলেকশন।</li>
-        <li><strong>Cloud Space / Drafts (ক্লাউড স্পেস ও ড্রাফটস):</strong> প্রজেক্ট অটো-সেভ ও ক্লাউড ব্যাকআপ রাখার সেটিংস।</li>
-        <li><strong>Stock Videos & Photos (স্টক মিডিয়া):</strong> অ্যাপের নিজস্ব বিল্ট-ইন ফ্রি এবং প্রিমিয়াম স্টক ফুটেজ লাইব্রেরি।</li>
-    </ul>
+    <script>
+        function loadMedia(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = url;
+                document.getElementById('timelineClip').innerText = file.name;
+            }
+        }
 
-    <h2>২. এডিটিং টাইমলাইন ও টুলস প্রোগ্রাম (Timeline & Core Editing Tools)</h2>
-    <ul>
-        <li><strong>Split & Trim (স্লিট ও ট্রিম):</strong> ভিডিও ক্লিপ নিখুঁতভাবে কাটা, ছাঁটা এবং ট্রিম করার প্রোগ্রাম।</li>
-        <li><strong>Speed Ramping (স্পিড কার্ভ ও রামপিং):</strong> ভিডিওর গতি বাড়ানো বা কমানোর জন্য নরমাল এবং কার্ভ মোড (Montage, Bullet, Hero ইত্যাদি)।</li>
-        <li><strong>Animation (অ্যানিমেশন):</strong> ইন (In), আউট (Out), এবং কম্বো (Combo) ট্রানজিশন অ্যানিমেশন সেটিংস।</li>
-        <li><strong>Mask & Chroma Key (মাস্ক ও ক্রোমা কি):</strong> গ্রিন স্ক্রিন রিমুভাল এবং বিভিন্ন আকৃতির মাস্কিং প্রোগ্রাম (Rectangle, Circle, Heart, Star)।</li>
-        <li><strong>Blend Mode (ব্লেন্ড মোড):</strong> মাল্টিপল লেয়ারের জন্য Overlay, Multiply, Screen, Filter অপসিটি কন্ট্রোল।</li>
-    </ul>
-
-    <h2>৩. এআই ও অটোমেশন ফিচারস (AI & Advanced Automation)</h2>
-    <ul>
-        <li><strong>Auto Captions (অটো ক্যাপশন):</strong> ভয়েস থেকে অটোমেটিক সাবটাইটেল জেনারেট করার প্রোগ্রাম।</li>
-        <li><strong>AI Body Effects & Avatars (এআই ইফেক্টস):</strong> ব্যাকগ্রাউন্ড রিমুভাল, বডি ট্র্যাকিং, এবং এআই কার্টুন বা অবতার ফিল্টার।</li>
-        <li><strong>Text to Speech (টেক্সট টু স্পিচ):</strong> লেখার ওপর ভিত্তি করে ন্যাচারাল ভয়েস ওভার জেনারেট করার এআই টুল।</li>
-        <li><strong>Image Upscaler & Enhancer (ভিডিও/ইমেজ এনহ্যান্সার):</strong> লো-রেজোলিউশন ফুটেজকে এআই এর মাধ্যমে ফোর-কে (4K) রূপান্তর করার সেটিংস।</li>
-    </ul>
-
-    <h2>৪. স্পেশাল ইফেক্টস, ফিল্টার ও ট্রানজিশন (Effects, Filters & Transitions)</h2>
-    <ul>
-        <li><strong>Video Effects (ভিডিও ইফেক্টস):</strong> Retro, Lens, Blur, Nightclub, Distortion এবং Optical ক্যাটাগরির হান্ড্রেড+ ইফেক্ট।</li>
-        <li><strong>Body Effects (বডি ইফেক্টস):</strong> গ্লোইং আউটলাইন, ফায়ার, উইংস এবং ফেসিয়াল ট্র্যাকিং ইফেক্ট প্রোগ্রাম।</li>
-        <li><strong>Filters (কালার ফিল্টারস):</strong> Movie, Food, Retro, B&W এবং কাস্টম LUTs ইমপোর্ট করার সেটিংস।</li>
-        <li><strong>Transitions (ট্রানজিশন):</strong> Camera, Light Effect, Slide, Split এবং Page Curl ট্রানজিশন প্রোগ্রাম।</li>
-    </ul>
-
-    <h2>৫. অডিও ও সাউন্ড ডিজাইন প্রোগ্রাম (Audio & Sound Library)</h2>
-    <ul>
-        <li><strong>Sounds & Effects (সাউন্ড ইফেক্টস):</strong> ট্রেন্ডিং মিউজিক, মেমে সাউন্ড এবং এসএফএক্স (SFX) লাইব্রেরি।</li>
-        <li><strong>Extract Audio (অডিও এক্সট্রাক্ট):</strong> যেকোনো ভিডিও থেকে অডিও আলাদা করার প্রোগ্রাম।</li>
-        <li><strong>Voice Changer & Effects (ভয়েস চেঞ্জার):</strong> রোবট, চিপmunk, ডিপ ভয়েস এবং ফান ভয়েস মডিউলেশন।</li>
-        <li><strong>Noise Reduction (নয়েজ রিডাকশন):</strong> ব্যাকগ্রাউন্ড নয়েজ ফিল্টার করে অডিও ক্রিস্টাল ক্লিয়ার করার এআই সেটিংস।</li>
-    </ul>
-
-    <h2>৬. টেক্সট, ক্যাপশন ও টেমপ্লেট সেটিংস (Text, Captions & Templates)</h2>
-    <ul>
-        <li><strong>Text Style & Font (ফন্ট ও স্টাইল):</strong> কাস্টম ফন্ট আপলোড, কালার, স্ট্রোক, শ্যাডো এবং কার্ভ টেক্সট প্রোগ্রাম।</li>
-        <li><strong>Text Templates (টেক্সট টেমপ্লেটস):</strong> প্রি-ডিজাইনড টাইটেল এবং ইন্ট্রো-আউট্রো অ্যানিমেশন।</li>
-        <li><strong>Auto Lyrics (অটো লিরিক্স):</strong> গানের কথা অনুযায়ী ডায়নামিক সাবটাইটেল সিঙ্ক করার টুল।</li>
-    </ul>
-
-    <h2>৭. এক্সপোর্ট ও রেন্ডারিং সেটিংস (Export & Rendering Settings)</h2>
-    <ul>
-        <li><strong>Resolution (রেজোলিউশন):</strong> 720p, 1080p (Full HD), এবং 4K আল্ট্রা এইচডি রেন্ডারিং প্রোগ্রাম।</li>
-        <li><strong>Frame Rate (ফ্রেম রেট):</strong> 24fps, 30fps, 50fps, এবং 60fps সিলেকশন।</li>
-        <li><strong>Codecs & Bitrate (কোডেক ও বিটরেট):</strong> Smart HDR এবং High/Standard বিটরেট সেটিংস ফাইলের সাইজ ও কোয়ালিটি নিয়ন্ত্রণের জন্য।</li>
-    </ul>
-
-    <h2>৮. প্রিমিয়াম একাউন্ট ও ক্লাউড সেটিংস (Premium & Cloud Sync Settings)</h2>
-    <ul>
-        <li><strong>VIP Subscription (ভিআইপি সাবস্ক্রিপশন):</strong> আনলকড প্রিমিয়াম ইফেক্টস, ক্লাউড স্টোরেজ এবং নো-ওয়াটারমার্ক সেটিংস।</li>
-        <li><strong>Language & Region (ভাষা ও অঞ্চল):</strong> মাল্টি-ল্যাঙ্গুয়েজ ইন্টারফেস এবং রিজিওনাল টেমপ্লেট অ্যাক্সেস।</li>
-        <li><strong>Cache Management (ক্যাশ ম্যানেজমেন্ট):</strong> অ্যাপ স্পেস খালি করার জন্য স্টোরেজ ক্লিয়ার ও প্রজেক্ট ক্যাশ ডিলিট করার সেটিংস।</li>
-    </ul>
-
-    <div class="footer">
-        <p>CapCut Premium Structure & Blueprint Document</p>
-    </div>
-
+        function exportVideo() {
+            alert('Exporting video sequence... Rendering 1080p / 4K stream.');
+        }
+    </script>
 </body>
 </html>
