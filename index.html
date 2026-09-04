@@ -1059,17 +1059,17 @@ button{
             <div class="stat-card">
                 <div class="stat-icon">👤</div>
                 <div class="stat-title">Total Users</div>
-                <div id="statUsers" class="stat-value">0</div>
+                <div id="statUsers" class="stat-value">1</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🏪</div>
                 <div class="stat-title">Total Sellers</div>
-                <div id="statSellers" class="stat-value">0</div>
+                <div id="statSellers" class="stat-value">1</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📦</div>
                 <div class="stat-title">Total Products</div>
-                <div id="statProducts" class="stat-value">0</div>
+                <div id="statProducts" class="stat-value">8</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🛒</div>
@@ -1152,7 +1152,7 @@ function renderProducts(list){
     list.forEach(product => {
         const isFav = favorites.includes(product.id);
         let imgHtml = product.isCustomImg 
-            ? `<img src="${product.image}" alt="${product.name}">` 
+            ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:cover;">` 
             : `<div style="font-size:50px;">${product.image}</div>`;
 
         let ratingVal = product.rating || 4.5;
@@ -1343,7 +1343,7 @@ function renderCart(){
     let total = 0;
     cart.forEach(item => {
         total += item.price * item.qty;
-        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="">` : `<div style="font-size:22px;">${item.image}</div>`;
+        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="" style="width:100%; height:100%; object-fit:cover;">` : `<div style="font-size:22px;">${item.image}</div>`;
         list.innerHTML += `
             <div class="cart-item">
                 <div class="cart-icon">${cartImgHtml}</div>
@@ -1601,8 +1601,7 @@ function openSellerDashboard(user){
     document.getElementById("sellerStatProducts").textContent = myProds.length;
     
     let myProdIds = myProds.map(p => p.id);
-    let allOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
-    let myOrders = allOrders.filter(o => o.items && o.items.some(item => myProdIds.includes(item.id) || item.seller === freshUser.phone));
+    let myOrders = ordersList.filter(o => o.items && o.items.some(item => myProdIds.includes(item.id)));
     document.getElementById("sellerStatOrders").textContent = myOrders.length;
 
     let ordersHtml = "";
@@ -1636,13 +1635,11 @@ function assignDeliveryMan(orderId){
     if(!dmName) return;
     let dmPhone = prompt("ডেলিভারি ম্যানের মোবাইল নাম্বার লিখুন:");
 
-    let allOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
-    let order = allOrders.find(o => o.id === orderId);
+    let order = ordersList.find(o => o.id === orderId);
     if(order){
         order.deliveryManName = dmName;
         order.deliveryManPhone = dmPhone || "01900000000";
-        localStorage.setItem("dhakaOrdersList", JSON.stringify(allOrders));
-        ordersList = allOrders;
+        localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
         alert("ডেলিভারি ম্যান সফলভাবে অ্যাসাইন করা হয়েছে! ✅");
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
@@ -1724,8 +1721,7 @@ function sellerLogout(){
 
 function openCustomerDashboard(user){
     document.getElementById("customerInfoBox").textContent = `কাস্টমার: ${user.name} (${user.phone})`;
-    let allOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
-    let myOrders = allOrders.filter(o => o.userPhone === user.phone);
+    let myOrders = ordersList.filter(o => o.userPhone === user.phone);
     let html = "";
     if(myOrders.length === 0){
         html = `<div style="text-align:center; color:#777; padding:15px;">আপনি এখনো কোনো অর্ডার করেননি</div>`;
@@ -1754,12 +1750,10 @@ function openCustomerDashboard(user){
 }
 
 function customerConfirmDelivered(orderId){
-    let allOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
-    let order = allOrders.find(o => o.id === orderId);
+    let order = ordersList.find(o => o.id === orderId);
     if(order){
         order.status = "Delivered";
-        localStorage.setItem("dhakaOrdersList", JSON.stringify(allOrders));
-        ordersList = allOrders;
+        localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
         alert("ধন্যবাদ! অর্ডার সফলভাবে সম্পন্ন হয়েছে বলে কনফার্ম করা হলো।");
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
@@ -1769,12 +1763,10 @@ function customerConfirmDelivered(orderId){
 
 function customerCancelOrder(orderId){
     if(confirm("আপনি কি এই অর্ডারটি ক্যানসেল করতে চান?")){
-        let allOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
-        let order = allOrders.find(o => o.id === orderId);
+        let order = ordersList.find(o => o.id === orderId);
         if(order){
             order.status = "Cancelled";
-            localStorage.setItem("dhakaOrdersList", JSON.stringify(allOrders));
-            ordersList = allOrders;
+            localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
             alert("অর্ডারটি বাতিল করা হয়েছে।");
             let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
             let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
@@ -1835,8 +1827,8 @@ function checkout(){
         status: "Pending",
         date: new Date().toLocaleString()
     };
-    
     ordersList.push(newOrder);
+
     localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
     localStorage.setItem("dhakaTotalOrders", totalOrdersCount);
     localStorage.setItem("dhakaTotalSales", totalSalesAmount);
@@ -1971,12 +1963,11 @@ function loadAdminDashboard(){
     let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
     let totalUsersCount = users.filter(u => !u.isSeller).length;
     let totalSellersCount = users.filter(u => u.isSeller).length;
-    let currentOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
 
     document.getElementById("statUsers").textContent = totalUsersCount;
     document.getElementById("statSellers").textContent = totalSellersCount;
     document.getElementById("statProducts").textContent = products.length;
-    document.getElementById("statOrders").textContent = currentOrders.length;
+    document.getElementById("statOrders").textContent = totalOrdersCount;
     document.getElementById("statSales").textContent = "৳" + totalSalesAmount;
     document.getElementById("statFavorites").textContent = favorites.length;
 
@@ -1990,14 +1981,13 @@ function adminAction(type){
     let contentBox = document.getElementById("adminDynamicContent");
     contentBox.style.display = "block";
     let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
-    let currentOrders = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
 
     if(type === 'users'){
-        let html = `<h4 style="margin-bottom:6px;">👤 User List</h4><div class="admin-list-box">`;
+        let html = `<h4 style="margin-bottom:6px;">👤 Customer List (Total: ${users.filter(u => !u.isSeller).length})</h4><div class="admin-list-box">`;
         let normalUsers = users.filter(u => !u.isSeller);
-        if(normalUsers.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো ইউজার নেই</div>`;
+        if(normalUsers.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো কাস্টমার নেই</div>`;
         normalUsers.forEach(u => {
-            html += `<div class="admin-item-row"><span><b>${u.name}</b> (${u.phone})</span> <button onclick="deleteUser('${u.phone}')" style="background:#ffeaea; color:red; border:none; padding:2px 6px; border-radius:4px;">ডিলিট</button></div>`;
+            html += `<div class="admin-item-row"><span><b>${u.name}</b> (${u.phone}) - ঠিকানা: ${u.address || 'নেই'}</span> <button onclick="deleteUser('${u.phone}')" style="background:#ffeaea; color:red; border:none; padding:2px 6px; border-radius:4px;">ডিলিট</button></div>`;
         });
         html += `</div>`;
         contentBox.innerHTML = html;
@@ -2034,15 +2024,15 @@ function adminAction(type){
     }
     else if(type === 'orders'){
         let html = `<h4 style="margin-bottom:6px;">🛒 Order List</h4><div class="admin-list-box">`;
-        if(currentOrders.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো অর্ডার নেই</div>`;
-        currentOrders.slice().reverse().forEach(o => {
+        if(ordersList.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো অর্ডার নেই</div>`;
+        ordersList.slice().reverse().forEach(o => {
             html += `<div class="admin-item-row"><span><b>${o.id}</b> | ${o.userName} | <b style="color:#0b8f55;">৳${o.amount}</b></span> <span>${o.status || 'Pending'}</span></div>`;
         });
         html += `</div>`;
         contentBox.innerHTML = html;
     }
     else if(type === 'sales'){
-        contentBox.innerHTML = `<h4 style="margin-bottom:6px;">💰 Sales</h4><div style="background:#eaf7f1; padding:10px; border-radius:8px; color:#0b8f55; font-weight:bold;">মোট অর্ডার: ${currentOrders.length} টি | মোট বিক্রি: ৳${totalSalesAmount}</div>`;
+        contentBox.innerHTML = `<h4 style="margin-bottom:6px;">💰 Sales</h4><div style="background:#eaf7f1; padding:10px; border-radius:8px; color:#0b8f55; font-weight:bold;">মোট অর্ডার: ${totalOrdersCount} টি | মোট বিক্রি: ৳${totalSalesAmount}</div>`;
     }
 }
 
