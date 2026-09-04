@@ -55,6 +55,7 @@ button{
     align-items:center;
     justify-content:center;
     flex-shrink:0;
+    font-size:24px;
 }
 .logo-box img{
     width:100%;
@@ -420,6 +421,7 @@ button{
     align-items:center;
     justify-content:center;
     font-size:45px;
+    background:#f1f3f2;
 }
 .install-logo img{
     width:100%;
@@ -542,6 +544,11 @@ button{
     margin:auto;
     border-radius:16px;
     overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    background:#f1f3f2;
 }
 .account-logo img{
     width:100%;
@@ -753,7 +760,6 @@ button{
     <button class="location-set" onclick="setLocation()">সেট</button>
 </div>
 
-<!-- ইনস্টল কার্ডটি ব্রাউজারে দেখা যাবে, অ্যাপ ইনস্টল হলে হাইড হবে -->
 <section class="install-card" id="installCard" style="display:none; margin:10px; padding:15px; border-radius:15px; background:linear-gradient(135deg,#0b8f55,#087443); color:white; align-items:center; gap:12px;">
     <div style="width:50px; height:50px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:30px;">🛒</div>
     <div style="flex:1;">
@@ -825,7 +831,7 @@ button{
     </button>
 </nav>
 
-<!-- SETTINGS MODAL (⚙️ SETTINGS ICON) -->
+<!-- SETTINGS MODAL -->
 <div id="settingsModal" class="modal-bg">
     <div class="modal">
         <div class="admin-header">
@@ -876,7 +882,7 @@ button{
     </div>
 </div>
 
-<!-- ACCOUNT MODAL (LOGIN & REGISTRATION) -->
+<!-- ACCOUNT MODAL -->
 <div id="accountModal" class="modal-bg">
     <div class="modal">
         <div class="account-logo">
@@ -885,7 +891,6 @@ button{
         <h2 class="account-title" id="accountModalTitle">Dhaka Bazar Account</h2>
         <div class="account-sub" id="accountModalSub">আপনার অ্যাকাউন্টে Login করুন</div>
 
-        <!-- LOGIN FORM -->
         <div id="loginFormSection">
             <input id="phoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
             <input id="passwordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
@@ -895,7 +900,6 @@ button{
             </button>
         </div>
 
-        <!-- REGISTRATION FORM -->
         <div id="registerFormSection" style="display:none;">
             <input id="regNameInput" class="input" type="text" placeholder="আপনার নাম">
             <input id="regPhoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
@@ -1078,10 +1082,6 @@ button{
 </div>
 
 <script>
-/* ==========================================
-   PRODUCT DATA & STORAGE
-========================================== */
-
 let defaultProducts = [
     { id:1, name:"কাচ্চি বিরিয়ানি", details:"সুগন্ধি বাসমতি চাল ও খাসির মাংসের সুস্বাদু ঐতিহ্যবাহী কাচ্চি বিরিয়ানি।", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin", rating:4.8, reviewsCount:15, reviews: [] },
     { id:2, name:"দেশি রুই মাছ", details:"পদ্মার তাজা ও সুস্বাদু দেশি রুই মাছ, ওজন প্রায় ১ কেজি।", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin", rating:4.5, reviewsCount:10, reviews: [] },
@@ -1101,10 +1101,6 @@ let ordersList = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
 let verificationRequests = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
 let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
 let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
-
-/* ==========================================
-   RENDER PRODUCTS
-========================================== */
 
 function renderProducts(list){
     const container = document.getElementById("productsContainer");
@@ -1380,10 +1376,6 @@ function loadLocation(){
     }
 }
 
-/* ==========================================
-   SETTINGS & PROFILE (⚙️ SETTINGS ICON)
-========================================== */
-
 function openSettingsModal(){
     const phone = localStorage.getItem("dhakaUserPhone");
     let profileBox = document.getElementById("settingsProfileContent");
@@ -1424,10 +1416,6 @@ function saveSettingsAddress(){
     closeModal("settingsModal");
     alert("লোকেশন ও ঠিকানা সফলভাবে সেভ করা হয়েছে! ✅");
 }
-
-/* ==========================================
-   USER & SELLER REGISTRATION / LOGIN
-========================================== */
 
 function openAccount(){
     if(localStorage.getItem("dhakaOwnerLoggedIn") === "true"){
@@ -1816,10 +1804,6 @@ function checkout(){
     alert("অর্ডার সফলভাবে প্লেস করা হয়েছে! 🎉 পৌঁছাতে প্রায় ৩০-৪৫ মিনিট সময় লাগবে।");
 }
 
-/* ==========================================
-   NAVIGATION & MODALS
-========================================== */
-
 function goHome(button){
     window.scrollTo({ top:0, behavior:"smooth" });
     setActive(button);
@@ -1839,10 +1823,6 @@ function closeModal(id){
     const modal = document.getElementById(id);
     if(modal){ modal.classList.remove("show"); }
 }
-
-/* ==========================================
-   PWA INSTALL LOGIC
-========================================== */
 
 let deferredPrompt = null;
 window.addEventListener("beforeinstallprompt", event => {
@@ -1890,10 +1870,6 @@ function updateInstallButtons(){
         if(installCard) installCard.style.display = "flex";
     }
 }
-
-/* ==========================================
-   OWNER / ADMIN LOGIN & DASHBOARD
-========================================== */
 
 function openOwnerLogin(){
     closeModal("accountModal");
@@ -2037,10 +2013,6 @@ function ownerLogout(){
     closeModal("adminModal");
     alert("Owner Logout হয়েছে।");
 }
-
-/* ==========================================
-   INIT
-========================================== */
 
 renderProducts(products);
 updateCartCount();
