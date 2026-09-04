@@ -1853,7 +1853,7 @@ function closeModal(id){
     if(modal){ modal.classList.remove("show"); }
 }
 
-/* --- উন্নত PWA ইনস্টল লজিক (Fixed) --- */
+/* --- প্রফেশনাল PWA ইনস্টল লজিক --- */
 let deferredPrompt = null;
 const topInstallBtn = document.getElementById("topInstallBtn");
 const installCard = document.getElementById("installCard");
@@ -1881,7 +1881,6 @@ async function handleInstallButton(){
         }
         deferredPrompt = null;
     } else {
-        // যদি ব্রাউজার থেকে অটো প্রম্পট না আসে, সরাসরি ইন্সটল গাইড বা মডাল ওপেন হবে
         openInstallModal();
     }
 }
