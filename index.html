@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapCut Web Studio - Professional Video Editor</title>
+    <title>Dhaka Bazar - CapCut Pro Web Studio</title>
     <style>
         :root {
-            --bg-dark: #121212;
-            --bg-panel: #1e1e1e;
-            --bg-secondary: #2d2d2d;
+            --bg-dark: #0f0f0f;
+            --bg-panel: #181818;
+            --bg-secondary: #242424;
             --accent-color: #00e5ff;
             --text-main: #ffffff;
-            --text-muted: #b0bec5;
-            --border-color: #333333;
+            --text-muted: #9e9e9e;
+            --border-color: #2c2c2c;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -28,27 +28,27 @@
             padding: 0 20px;
         }
         .logo { font-size: 18px; font-weight: bold; color: var(--accent-color); display: flex; align-items: center; gap: 10px; }
-        .top-menu { display: flex; gap: 15px; font-size: 14px; color: var(--text-muted); }
-        .top-menu span { cursor: pointer; padding: 5px 10px; border-radius: 4px; transition: 0.2s; }
-        .top-menu span:hover { background: var(--bg-secondary); color: var(--text-main); }
+        .top-menu { display: flex; gap: 20px; font-size: 13px; color: var(--text-muted); }
+        .top-menu span { cursor: pointer; padding: 6px 12px; border-radius: 4px; transition: 0.2s; }
+        .top-menu span:hover, .top-menu span.active { background: var(--bg-secondary); color: var(--text-main); }
         .export-btn {
             background: var(--accent-color);
             color: #000;
             border: none;
-            padding: 8px 18px;
+            padding: 8px 20px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
             transition: 0.2s;
         }
-        .export-btn:hover { opacity: 0.9; }
+        .export-btn:hover { opacity: 0.85; }
 
         /* Main Workspace Layout */
         .workspace {
             flex: 1;
             display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            grid-template-rows: 1fr 220px;
+            grid-template-columns: 300px 1fr 320px;
+            grid-template-rows: 1fr 230px;
             height: calc(100vh - 55px);
         }
 
@@ -67,28 +67,48 @@
         }
         .tab-btn {
             flex: 1;
-            padding: 12px 5px;
+            padding: 12px 2px;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             background: none;
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
         }
         .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); background: var(--bg-panel); }
         .sidebar-content { padding: 15px; overflow-y: auto; flex: 1; }
-        .tool-group h4 { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
+        .tool-group h4 { font-size: 12px; margin-bottom: 10px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
         .media-dropzone {
             border: 2px dashed var(--border-color);
-            padding: 20px;
+            padding: 25px 15px;
             text-align: center;
             border-radius: 6px;
             cursor: pointer;
             margin-bottom: 15px;
             transition: 0.2s;
+            background: var(--bg-secondary);
         }
         .media-dropzone:hover { border-color: var(--accent-color); }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent-color); color: #fff; }
 
         /* Preview / Player Section */
         .preview-area {
@@ -102,19 +122,20 @@
         }
         video {
             max-width: 100%;
-            max-height: calc(100% - 60px);
+            max-height: calc(100% - 70px);
             background: #111;
         }
         .player-controls {
             position: absolute;
-            bottom: 10px;
+            bottom: 15px;
             display: flex;
             gap: 15px;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 15px;
-            border-radius: 20px;
+            background: rgba(20,20,20,0.8);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
         }
-        .player-controls button { background: none; border: none; color: #fff; cursor: pointer; font-size: 16px; }
+        .player-controls button { background: none; border: none; color: #fff; cursor: pointer; font-size: 15px; }
 
         /* Properties / Settings Panel */
         .properties-panel {
@@ -125,17 +146,19 @@
             overflow-y: auto;
         }
         .prop-section { margin-bottom: 20px; }
-        .prop-section h3 { font-size: 13px; margin-bottom: 10px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
-        .prop-control { margin-bottom: 10px; }
-        .prop-control label { font-size: 11px; display: block; margin-bottom: 4px; color: var(--text-muted); }
-        .prop-control select, .prop-control input {
+        .prop-section h3 { font-size: 12px; margin-bottom: 10px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; text-transform: uppercase; }
+        .prop-control { margin-bottom: 12px; }
+        .prop-control label { font-size: 11px; display: block; margin-bottom: 5px; color: var(--text-muted); }
+        .prop-control select, .prop-control input[type="range"], .prop-control input[type="text"] {
             width: 100%;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             color: #fff;
-            padding: 6px;
+            padding: 7px;
             border-radius: 4px;
+            font-size: 12px;
         }
+        .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
 
         /* Timeline Section */
         .timeline-area {
@@ -147,7 +170,7 @@
             flex-direction: column;
         }
         .timeline-toolbar {
-            height: 35px;
+            height: 38px;
             background: var(--bg-secondary);
             display: flex;
             align-items: center;
@@ -155,8 +178,8 @@
             gap: 15px;
             border-bottom: 1px solid var(--border-color);
         }
-        .timeline-toolbar button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; }
-        .timeline-toolbar button:hover { color: #fff; }
+        .timeline-toolbar button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .timeline-toolbar button:hover { color: var(--accent-color); }
         .timeline-tracks {
             flex: 1;
             position: relative;
@@ -168,7 +191,7 @@
             gap: 8px;
         }
         .track {
-            height: 45px;
+            height: 48px;
             background: var(--bg-secondary);
             border-radius: 4px;
             display: flex;
@@ -178,18 +201,19 @@
             border: 1px dashed var(--border-color);
         }
         .clip-item {
-            height: 35px;
+            height: 38px;
             background: #00838f;
             border-radius: 4px;
             position: absolute;
             left: 10px;
-            width: 200px;
+            width: 240px;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 12px;
             font-size: 11px;
             color: #fff;
             cursor: grab;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -198,17 +222,15 @@
     <!-- Top Bar -->
     <header>
         <div class="logo">
-            <span>⚡ CapCut Studio Pro</span>
+            <span>⭐ Dhaka Bazar</span>
         </div>
         <div class="top-menu">
-            <span>Media</span>
-            <span>Audio</span>
-            <span>Text</span>
-            <span>Effects</span>
-            <span>Transition</span>
+            <span class="active">Editor</span>
+            <span>AI Tools</span>
             <span>Templates</span>
+            <span>Cloud Drafts</span>
         </div>
-        <button class="export-btn" onclick="exportVideo()">Export</button>
+        <button class="export-btn" onclick="exportVideo()">Export 4K / 1080p</button>
     </header>
 
     <!-- Main Workspace -->
@@ -217,22 +239,28 @@
         <!-- Sidebar Tools -->
         <div class="sidebar">
             <div class="sidebar-tabs">
-                <button class="tab-btn active">Media</button>
-                <button class="tab-btn">Audio</button>
-                <button class="tab-btn">Text</button>
-                <button class="tab-btn">Effects</button>
+                <button class="tab-btn active" onclick="switchTab('media')">Media</button>
+                <button class="tab-btn" onclick="switchTab('audio')">Audio</button>
+                <button class="tab-btn" onclick="switchTab('text')">Text</button>
+                <button class="tab-btn" onclick="switchTab('effects')">Effects</button>
+                <button class="tab-btn" onclick="switchTab('ai')">AI Tools</button>
             </div>
-            <div class="sidebar-content">
+            <div class="sidebar-content" id="sidebarContent">
                 <div class="tool-group">
-                    <h4>Import Media</h4>
+                    <h4>Import Media & Assets</h4>
                     <div class="media-dropzone" onclick="document.getElementById('fileInput').click()">
-                        <p style="font-size: 12px; color: var(--text-muted);">Click to upload video/photos</p>
-                        <input type="file" id="fileInput" style="display:none" accept="video/*,image/*" onchange="loadMedia(event)">
+                        <p style="font-size: 12px; color: var(--text-muted);">Click to upload Video, Photos & Audio</p>
+                        <input type="file" id="fileInput" style="display:none" accept="video/*,image/*,audio/*" onchange="loadMedia(event)">
                     </div>
                 </div>
                 <div class="tool-group">
-                    <h4>Presets & Stock</h4>
-                    <p style="font-size: 11px; color: var(--text-muted);">AI Auto-Captions, Body Effects, Chroma Key available.</p>
+                    <h4>CapCut Pro Presets</h4>
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="alert('Auto Captions Generated!')">Auto Captions</div>
+                        <div class="feature-card" onclick="alert('Chroma Key Applied!')">Chroma Key</div>
+                        <div class="feature-card" onclick="alert('Body Effects Active!')">Body Effects</div>
+                        <div class="feature-card" onclick="alert('AI Voice Changer Ready!')">Voice Changer</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -241,9 +269,9 @@
         <div class="preview-area">
             <video id="videoPlayer" controls></video>
             <div class="player-controls">
-                <button onclick="document.getElementById('videoPlayer').play()">▶</button>
-                <button onclick="document.getElementById('videoPlayer').pause()">⏸</button>
-                <button onclick="document.getElementById('videoPlayer').currentTime=0()">⏮</button>
+                <button onclick="document.getElementById('videoPlayer').play()">▶ Play</button>
+                <button onclick="document.getElementById('videoPlayer').pause()">⏸ Pause</button>
+                <button onclick="document.getElementById('videoPlayer').currentTime=0">⏮ Reset</button>
             </div>
         </div>
 
@@ -252,27 +280,46 @@
             <div class="prop-section">
                 <h3>Video Settings</h3>
                 <div class="prop-control">
-                    <label>Aspect Ratio</label>
+                    <label>Aspect Ratio / Canvas</label>
                     <select>
-                        <option>9:16 (TikTok / Reels)</option>
-                        <option>16:9 (YouTube)</option>
-                        <option>1:1 (Instagram)</option>
+                        <option>9:16 (TikTok / Reels / Shorts)</option>
+                        <option>16:9 (YouTube Standard)</option>
+                        <option>1:1 (Instagram Square)</option>
+                        <option>4:3 Classic</option>
                     </select>
                 </div>
                 <div class="prop-control">
-                    <label>Speed Ramping</label>
+                    <label>Speed Ramping (Curve)</label>
                     <input type="range" min="0.2" max="5" step="0.1" value="1">
                 </div>
             </div>
             <div class="prop-section">
-                <h3>Audio & AI Adjustments</h3>
+                <h3>Audio & AI Enhancer</h3>
                 <div class="prop-control">
-                    <label>Volume Level</label>
-                    <input type="range" min="0" max="100" value="100">
+                    <label>Volume Boost</label>
+                    <input type="range" min="0" max="200" value="100">
                 </div>
                 <div class="prop-control">
-                    <label>Noise Reduction</label>
-                    <input type="checkbox"> Enabled
+                    <div class="checkbox-group">
+                        <input type="checkbox" checked> Background Noise Reduction
+                    </div>
+                </div>
+                <div class="prop-control" style="margin-top: 10px;">
+                    <div class="checkbox-group">
+                        <input type="checkbox"> Auto Audio Ducking
+                    </div>
+                </div>
+            </div>
+            <div class="prop-section">
+                <h3>Animation & Mask</h3>
+                <div class="prop-control">
+                    <label>Transition Effects</label>
+                    <select>
+                        <option>Fade / Dissolve</option>
+                        <option>Camera Zoom</option>
+                        <option>Light Leak Blur</option>
+                        <option>Slide & Split</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -280,18 +327,19 @@
         <!-- Timeline Area -->
         <div class="timeline-area">
             <div class="timeline-toolbar">
-                <button>✂ Split</button>
-                <button>🗑 Delete</button>
-                <button>⏱ Speed</button>
-                <button>🔄 Reverse</button>
+                <button onclick="alert('Split Clip at Playhead')">✂ Split</button>
+                <button onclick="alert('Clip Deleted')">🗑 Delete</button>
+                <button onclick="alert('Speed Curve Mode Opened')">⏱ Speed</button>
+                <button onclick="alert('Clip Reversed')">🔄 Reverse</button>
+                <button onclick="alert('Keyframe Added')">📍 Keyframe</button>
             </div>
             <div class="timeline-tracks">
                 <div class="track">
-                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 10px;">Video Track 1</span>
-                    <div class="clip-item" id="timelineClip">No media loaded</div>
+                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 15px;">Video Track 1</span>
+                    <div class="clip-item" id="timelineClip">No media loaded — Upload to edit</div>
                 </div>
                 <div class="track">
-                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 10px;">Audio Track 2</span>
+                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 15px;">Audio Track 2</span>
                 </div>
             </div>
         </div>
@@ -305,12 +353,19 @@
                 const url = URL.createObjectURL(file);
                 const videoPlayer = document.getElementById('videoPlayer');
                 videoPlayer.src = url;
+                videoPlayer.play();
                 document.getElementById('timelineClip').innerText = file.name;
             }
         }
 
         function exportVideo() {
-            alert('Exporting video sequence... Rendering 1080p / 4K stream.');
+            alert('Rendering video at 1080p / 4K UHD. Your Dhaka Bazar video is processing for download!');
+        }
+
+        function switchTab(tabName) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
         }
     </script>
 </body>
