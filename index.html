@@ -933,6 +933,12 @@ button{
             <h2>🏪 Seller Dashboard</h2>
             <button class="close-x" onclick="closeModal('sellerModal')">×</button>
         </div>
+        
+        <!-- অ্যাপস লিংক কপি করার বাটন -->
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
         <div id="sellerInfoBox" style="margin-bottom:12px; font-weight:700; color:#0b8f55; display:flex; align-items:center; justify-content:space-between;"></div>
         
         <div class="stats-grid" style="margin-bottom:12px;">
@@ -982,6 +988,12 @@ button{
             <h2>👤 Customer Dashboard</h2>
             <button class="close-x" onclick="closeModal('customerModal')">×</button>
         </div>
+
+        <!-- অ্যাপস লিংক কপি করার বাটন -->
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
         <div id="customerInfoBox" style="margin-bottom:12px; font-weight:700; color:#0b8f55;"></div>
 
         <h3 style="font-size:15px; margin-bottom:8px;">📦 আপনার অর্ডারসমূহ ও লাইভ ট্র্যাকিং</h3>
@@ -1032,6 +1044,12 @@ button{
             <h2>📊 Owner Dashboard (Admin)</h2>
             <button class="close-x" onclick="closeModal('adminModal')">×</button>
         </div>
+
+        <!-- অ্যাপস লিংক কপি করার বাটন -->
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
         <div id="adminLoading" class="loading" style="display:none;">Loading...</div>
         <div id="adminStats" class="stats-grid">
             <div class="stat-card">
@@ -1102,6 +1120,20 @@ let ordersList = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
 let verificationRequests = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
 let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
 let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
+
+// অ্যাপস লিংক কপি করার ইউনিভার্সাল ফাংশন
+function copyAppShareLink(){
+    const appUrl = window.location.origin + window.location.pathname;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(appUrl).then(() => {
+            alert("ঢাকা বাজার অ্যাপসের লিংক সফলভাবে কপি করা হয়েছে! ✅ এখন সবার সাথে শেয়ার করতে পারবেন।");
+        }).catch(() => {
+            prompt("অ্যাপসের লিংক কপি করুন:", appUrl);
+        });
+    } else {
+        prompt("অ্যাপসের লিংক কপি করুন:", appUrl);
+    }
+}
 
 function renderProducts(list){
     const container = document.getElementById("productsContainer");
@@ -1869,7 +1901,6 @@ async function installApp(){
         deferredPrompt = null;
         closeModal("installModal");
     } else {
-        // অ্যালার্টের পরিবর্তে মডালের ভেতরেই ব্রাউজার মেনু থেকে ইন্সটল করার সহজ গাইডলাইন দেখাবে
         closeModal("installModal");
         alert("দয়া করে আপনার ব্রাউজারের ওপরের ডানপাশের মেনু (⋮) থেকে 'Install App' বা 'Add to Home Screen' সিলেক্ট করুন।");
     }
@@ -1892,7 +1923,6 @@ function updateInstallButtons(){
     if(isStandalone || localStorage.getItem("app_installed")){
         hideInstallButtons();
     } else {
-        // ব্রাউজারে স্বয়ংক্রিয়ভাবে ইন্সটল কার্ডটি দৃশ্যমান রাখতে পারেন যদি ব্রাউজার প্রম্পট না দেয়
         if(installCard) installCard.style.display = "flex";
     }
 }
