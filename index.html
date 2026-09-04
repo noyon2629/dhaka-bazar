@@ -92,7 +92,7 @@ button{
     font-weight:800;
     font-size:12px;
     box-shadow:0 3px 10px rgba(0,0,0,.18);
-    display: none;
+    display: block;
 }
 .search-box{
     margin-top:10px;
@@ -761,13 +761,13 @@ button{
     <button class="location-set" onclick="setLocation()">সেট</button>
 </div>
 
-<section class="install-card" id="installCard" style="display:none; margin:10px; padding:15px; border-radius:15px; background:linear-gradient(135deg,#0b8f55,#087443); color:white; align-items:center; gap:12px;">
+<section class="install-card" id="installCard" style="display:flex; margin:10px; padding:15px; border-radius:15px; background:linear-gradient(135deg,#0b8f55,#087443); color:white; align-items:center; gap:12px;">
     <div style="width:50px; height:50px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:30px;">🛒</div>
     <div style="flex:1;">
         <h2 style="font-size:15px;">Dhaka Bazar App</h2>
         <p style="font-size:11px; opacity:.9;">ফোনে App-এর মতো ব্যবহার করতে Install করুন।</p>
     </div>
-    <button onclick="openInstallModal()" style="border:none; background:white; color:#0b8f55; padding:7px 12px; border-radius:18px; font-weight:800; font-size:12px;">📲 Install</button>
+    <button onclick="handleInstallButton()" style="border:none; background:white; color:#0b8f55; padding:7px 12px; border-radius:18px; font-weight:800; font-size:12px;">📲 Install</button>
 </section>
 
 <section class="section">
@@ -860,7 +860,7 @@ button{
         <div class="feature"><div class="feature-icon">⚡</div><div>দ্রুত App Access</div></div>
         <div class="feature"><div class="feature-icon">📱</div><div>Android App-এর মতো ব্যবহার</div></div>
         <div class="feature"><div class="feature-icon">🏠</div><div>Home Screen-এ App Icon</div></div>
-        <button id="realInstallBtn" class="primary-btn" onclick="installApp()">📲 Install App</button>
+        <button id="realInstallBtn" class="primary-btn" onclick="installAppModalAction()">📲 Install App</button>
         <button class="secondary-btn" onclick="closeModal('installModal')">পরে করব</button>
     </div>
 </div>
@@ -934,7 +934,6 @@ button{
             <button class="close-x" onclick="closeModal('sellerModal')">×</button>
         </div>
         
-        <!-- অ্যাপস লিংক কপি করার বাটন -->
         <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
             🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
         </button>
@@ -989,7 +988,6 @@ button{
             <button class="close-x" onclick="closeModal('customerModal')">×</button>
         </div>
 
-        <!-- অ্যাপস লিংক কপি করার বাটন -->
         <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
             🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
         </button>
@@ -1045,7 +1043,6 @@ button{
             <button class="close-x" onclick="closeModal('adminModal')">×</button>
         </div>
 
-        <!-- অ্যাপস লিংক কপি করার বাটন -->
         <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
             🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
         </button>
@@ -1121,12 +1118,11 @@ let verificationRequests = JSON.parse(localStorage.getItem("dhakaVerificationReq
 let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
 let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
 
-// অ্যাপস লিংক কপি করার ইউনিভার্সাল ফাংশন
 function copyAppShareLink(){
     const appUrl = window.location.origin + window.location.pathname;
     if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(appUrl).then(() => {
-            alert("ঢাকা বাজার অ্যাপসের লিংক সফলভাবে কপি করা হয়েছে! ✅ এখন সবার সাথে শেয়ার করতে পারবেন।");
+            alert("ঢাকা বাজার অ্যাপসের লিংক সফলভাবে কপি করা হয়েছে! ✅");
         }).catch(() => {
             prompt("অ্যাপসের লিংক কপি করুন:", appUrl);
         });
@@ -1857,7 +1853,7 @@ function closeModal(id){
     if(modal){ modal.classList.remove("show"); }
 }
 
-/* --- প্রফেশনাল PWA ইনস্টল হ্যান্ডলার লজিক (Updated) --- */
+/* --- উন্নত PWA ইনস্টল লজিক (Fixed) --- */
 let deferredPrompt = null;
 const topInstallBtn = document.getElementById("topInstallBtn");
 const installCard = document.getElementById("installCard");
@@ -1865,7 +1861,6 @@ const installCard = document.getElementById("installCard");
 window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     deferredPrompt = event;
-    
     if (!localStorage.getItem("app_installed")) {
         if(topInstallBtn) topInstallBtn.style.display = "block";
         if(installCard) installCard.style.display = "flex";
@@ -1886,11 +1881,12 @@ async function handleInstallButton(){
         }
         deferredPrompt = null;
     } else {
+        // যদি ব্রাউজার থেকে অটো প্রম্পট না আসে, সরাসরি ইন্সটল গাইড বা মডাল ওপেন হবে
         openInstallModal();
     }
 }
 
-async function installApp(){
+async function installAppModalAction(){
     if(deferredPrompt){
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
@@ -1914,16 +1910,15 @@ function hideInstallButtons(){
 window.addEventListener("appinstalled", () => {
     localStorage.setItem("app_installed", "true");
     hideInstallButtons();
-    console.log('PWA was installed successfully');
 });
 
 function updateInstallButtons(){
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-
     if(isStandalone || localStorage.getItem("app_installed")){
         hideInstallButtons();
     } else {
         if(installCard) installCard.style.display = "flex";
+        if(topInstallBtn) topInstallBtn.style.display = "block";
     }
 }
 /* --------------------------------------------- */
