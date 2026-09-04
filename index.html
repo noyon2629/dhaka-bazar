@@ -1,372 +1,2121 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaka Bazar - CapCut Pro Web Studio</title>
-    <style>
-        :root {
-            --bg-dark: #0f0f0f;
-            --bg-panel: #181818;
-            --bg-secondary: #242424;
-            --accent-color: #00e5ff;
-            --text-main: #ffffff;
-            --text-muted: #9e9e9e;
-            --border-color: #2c2c2c;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
-        /* Top Navigation Bar */
-        header {
-            height: 55px;
-            background-color: var(--bg-panel);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-        .logo { font-size: 18px; font-weight: bold; color: var(--accent-color); display: flex; align-items: center; gap: 10px; }
-        .top-menu { display: flex; gap: 20px; font-size: 13px; color: var(--text-muted); }
-        .top-menu span { cursor: pointer; padding: 6px 12px; border-radius: 4px; transition: 0.2s; }
-        .top-menu span:hover, .top-menu span.active { background: var(--bg-secondary); color: var(--text-main); }
-        .export-btn {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            padding: 8px 20px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .export-btn:hover { opacity: 0.85; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dhaka Bazar - ঢাকা বাজার | Online Shopping & Grocery</title>
+<meta name="description" content="Dhaka Bazar - বাংলাদেশের সহজ ও দ্রুত অনলাইন শপিং, কাঁচাবাজার এবং হোম ডেলিভারি অ্যাপ।">
+<meta name="keywords" content="Dhaka Bazar, ঢাকা বাজার, online shopping bangladesh, grocery delivery dhaka, কাঁচাবাজার অনলাইন, Dhaka Bazar app">
+<meta name="author" content="Dhaka Bazar">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b8f55">
 
-        /* Main Workspace Layout */
-        .workspace {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 300px 1fr 320px;
-            grid-template-rows: 1fr 230px;
-            height: calc(100vh - 55px);
-        }
+<!-- Open Graph / SEO Meta Tags for Instant Search Engine Recognition -->
+<meta property="og:title" content="Dhaka Bazar - ঢাকা বাজার | Online Shopping & Grocery">
+<meta property="og:description" content="এক ক্লিকেই ঘরে বসে ফল, কাঁচাবাজার ও পছন্দের পণ্য অর্ডার করুন। ডাউনলোড করুন ঢাকা বাজার অ্যাপ।">
+<meta property="og:type" content="website">
+<meta property="og:url" content="">
+<meta property="og:image" content="./logo.png">
 
-        /* Sidebar Tools Panel */
-        .sidebar {
-            grid-row: 1 / 2;
-            background-color: var(--bg-panel);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-tabs {
-            display: flex;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 12px 2px;
-            text-align: center;
-            font-size: 11px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); background: var(--bg-panel); }
-        .sidebar-content { padding: 15px; overflow-y: auto; flex: 1; }
-        .tool-group h4 { font-size: 12px; margin-bottom: 10px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
-        .media-dropzone {
-            border: 2px dashed var(--border-color);
-            padding: 25px 15px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: 0.2s;
-            background: var(--bg-secondary);
-        }
-        .media-dropzone:hover { border-color: var(--accent-color); }
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-512.png">
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 11px;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: 0.2s;
-        }
-        .feature-card:hover { border-color: var(--accent-color); color: #fff; }
-
-        /* Preview / Player Section */
-        .preview-area {
-            grid-row: 1 / 2;
-            background-color: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        video {
-            max-width: 100%;
-            max-height: calc(100% - 70px);
-            background: #111;
-        }
-        .player-controls {
-            position: absolute;
-            bottom: 15px;
-            display: flex;
-            gap: 15px;
-            background: rgba(20,20,20,0.8);
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-        }
-        .player-controls button { background: none; border: none; color: #fff; cursor: pointer; font-size: 15px; }
-
-        /* Properties / Settings Panel */
-        .properties-panel {
-            grid-row: 1 / 2;
-            background-color: var(--bg-panel);
-            border-left: 1px solid var(--border-color);
-            padding: 15px;
-            overflow-y: auto;
-        }
-        .prop-section { margin-bottom: 20px; }
-        .prop-section h3 { font-size: 12px; margin-bottom: 10px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; text-transform: uppercase; }
-        .prop-control { margin-bottom: 12px; }
-        .prop-control label { font-size: 11px; display: block; margin-bottom: 5px; color: var(--text-muted); }
-        .prop-control select, .prop-control input[type="range"], .prop-control input[type="text"] {
-            width: 100%;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 7px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-
-        /* Timeline Section */
-        .timeline-area {
-            grid-column: 1 / 4;
-            grid-row: 2 / 3;
-            background-color: var(--bg-panel);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-        .timeline-toolbar {
-            height: 38px;
-            background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            gap: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .timeline-toolbar button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-        .timeline-toolbar button:hover { color: var(--accent-color); }
-        .timeline-tracks {
-            flex: 1;
-            position: relative;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .track {
-            height: 48px;
-            background: var(--bg-secondary);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            position: relative;
-            border: 1px dashed var(--border-color);
-        }
-        .clip-item {
-            height: 38px;
-            background: #00838f;
-            border-radius: 4px;
-            position: absolute;
-            left: 10px;
-            width: 240px;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            font-size: 11px;
-            color: #fff;
-            cursor: grab;
-            font-weight: 500;
-        }
-    </style>
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+body{
+    background:#f4f7f5;
+    color:#222;
+    padding-bottom:80px;
+}
+button{
+    cursor:pointer;
+}
+.header{
+    position:sticky;
+    top:0;
+    z-index:5000;
+    background:#0b8f55;
+    color:white;
+    padding:12px;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+.header-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+.logo-box{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    overflow:hidden;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    font-size:24px;
+}
+.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.brand-name{
+    font-size:18px;
+    font-weight:800;
+}
+.brand-sub{
+    font-size:10px;
+    opacity:.9;
+}
+.header-right-icons{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.icon-btn-top{
+    background:none;
+    border:none;
+    color:white;
+    font-size:20px;
+    position:relative;
+    padding:4px;
+}
+.install-top-btn{
+    border:none;
+    background:white;
+    color:#0b8f55;
+    padding:7px 12px;
+    border-radius:20px;
+    font-weight:800;
+    font-size:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.18);
+    display:block;
+}
+.search-box{
+    margin-top:10px;
+    background:white;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    padding:0 12px;
+}
+.search-box span{
+    font-size:18px;
+}
+.search-box input{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:10px 8px;
+    font-size:14px;
+}
+.promo-banner{
+    margin:10px;
+    background:linear-gradient(135deg,#eaf7f1,#d1ede1);
+    border-radius:14px;
+    padding:12px 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.promo-text h3{
+    font-size:15px;
+    color:#0b8f55;
+    margin-bottom:2px;
+}
+.promo-text p{
+    font-size:11px;
+    color:#444;
+}
+.promo-btn{
+    background:#0b8f55;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:15px;
+    font-size:11px;
+    font-weight:700;
+}
+.location-bar{
+    margin:10px;
+    padding:10px 12px;
+    background:white;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.location-icon{
+    font-size:22px;
+}
+.location-text{
+    flex:1;
+}
+.location-title{
+    font-size:10px;
+    color:#777;
+}
+.location-name{
+    font-size:13px;
+    font-weight:700;
+}
+.location-set{
+    border:none;
+    background:#eaf7f1;
+    color:#0b8f55;
+    padding:6px 10px;
+    border-radius:8px;
+    font-weight:700;
+    font-size:12px;
+}
+.section{
+    padding:6px 10px;
+}
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+.section-title h2{
+    font-size:16px;
+}
+.section-title span{
+    color:#0b8f55;
+    font-size:12px;
+}
+.categories{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:5px;
+}
+.categories::-webkit-scrollbar{
+    display:none;
+}
+.category{
+    min-width:72px;
+    background:white;
+    padding:8px 5px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 2px 7px rgba(0,0,0,.06);
+}
+.category-icon{
+    font-size:24px;
+}
+.category-name{
+    font-size:11px;
+    margin-top:3px;
+}
+.products{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+.product{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.07);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.product-image{
+    height:130px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f0f2f1;
+    font-size:55px;
+    overflow:hidden;
+}
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.product-info{
+    padding:8px 10px;
+}
+.product-name{
+    font-size:13px;
+    font-weight:700;
+    min-height:32px;
+}
+.product-details-text{
+    font-size:11px;
+    color:#555;
+    margin-top:3px;
+    min-height:28px;
+    line-height:1.2;
+}
+.product-price{
+    color:#0b8f55;
+    font-size:15px;
+    font-weight:800;
+    margin-top:4px;
+}
+.product-actions-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:6px 10px;
+    background:#f9fbf9;
+    border-top:1px solid #edf2ef;
+    gap:6px;
+}
+.copy-link-btn, .rating-btn-box{
+    background:none;
+    border:none;
+    font-size:11px;
+    color:#555;
+    display:flex;
+    align-items:center;
+    gap:3px;
+    font-weight:600;
+}
+.rating-stars{
+    color:#f39c12;
+    font-size:11px;
+}
+.reviews-toggle-btn{
+    width:100%;
+    background:#eaf7f1;
+    color:#0b8f55;
+    border:none;
+    padding:5px;
+    font-size:11px;
+    font-weight:700;
+    border-top:1px dashed #d1ede1;
+}
+.add-cart{
+    width:100%;
+    margin-top:6px;
+    border:none;
+    background:#0b8f55;
+    color:white;
+    padding:8px;
+    border-radius:8px;
+    font-weight:700;
+    font-size:12px;
+}
+.favorite-btn{
+    position:absolute;
+    right:8px;
+    top:8px;
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:50%;
+    background:white;
+    font-size:17px;
+    box-shadow:0 2px 7px rgba(0,0,0,.15);
+}
+.product-image-wrap{
+    position:relative;
+}
+.no-product{
+    display:none;
+    text-align:center;
+    color:#777;
+    padding:30px;
+}
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:65px;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:6000;
+    box-shadow:0 -3px 12px rgba(0,0,0,.13);
+}
+.nav-item{
+    border:none;
+    background:none;
+    color:#777;
+    font-size:11px;
+}
+.nav-item.active{
+    color:#0b8f55;
+    font-weight:800;
+}
+.nav-icon{
+    display:block;
+    font-size:21px;
+    margin-bottom:2px;
+}
+.cart-floating{
+    position:fixed;
+    right:15px;
+    bottom:78px;
+    width:52px;
+    height:52px;
+    border:none;
+    border-radius:50%;
+    background:#0b8f55;
+    color:white;
+    font-size:24px;
+    z-index:5500;
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+}
+.cart-count{
+    position:absolute;
+    right:-3px;
+    top:-3px;
+    min-width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ff3030;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:10px;
+    font-weight:bold;
+}
+.modal-bg{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.58);
+    z-index:10000;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+}
+.modal-bg.show{
+    display:flex;
+}
+.modal{
+    width:100%;
+    max-width:520px;
+    max-height:92vh;
+    overflow:auto;
+    background:white;
+    border-radius:22px 22px 0 0;
+    padding:20px;
+    animation:slideUp .25s ease;
+}
+@keyframes slideUp{
+    from{transform:translateY(100%);}
+    to{transform:translateY(0);}
+}
+.install-logo{
+    width:80px;
+    height:80px;
+    margin:0 auto 12px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 18px rgba(0,0,0,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    background:#f1f3f2;
+}
+.install-logo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.install-modal h2{
+    text-align:center;
+    font-size:20px;
+}
+.install-sub{
+    text-align:center;
+    color:#777;
+    font-size:12px;
+    margin:6px 0 15px;
+}
+.feature{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#f4f7f5;
+    padding:9px;
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:12px;
+}
+.feature-icon{
+    font-size:20px;
+}
+.primary-btn{
+    width:100%;
+    border:none;
+    background:#0b8f55;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    font-size:14px;
+    font-weight:800;
+}
+.secondary-btn{
+    width:100%;
+    border:none;
+    background:#eee;
+    padding:11px;
+    border-radius:10px;
+    margin-top:8px;
+    font-size:13px;
+}
+.cart-list{
+    max-height:280px;
+    overflow:auto;
+}
+.cart-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid #eee;
+}
+.cart-icon{
+    width:42px;
+    height:42px;
+    background:#f1f3f2;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    overflow:hidden;
+}
+.cart-icon img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.cart-info{
+    flex:1;
+}
+.cart-name{
+    font-weight:700;
+    font-size:12px;
+}
+.cart-price{
+    color:#0b8f55;
+    font-size:11px;
+}
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+.qty-btn{
+    border:none;
+    width:26px;
+    height:26px;
+    border-radius:6px;
+    background:#eaf7f1;
+    color:#0b8f55;
+    font-weight:bold;
+}
+.remove-btn{
+    border:none;
+    background:#ffeaea;
+    color:red;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+}
+.cart-total{
+    display:flex;
+    justify-content:space-between;
+    font-weight:800;
+    margin:12px 0;
+    font-size:15px;
+}
+.account-logo{
+    width:70px;
+    height:70px;
+    margin:auto;
+    border-radius:16px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    background:#f1f3f2;
+}
+.account-logo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.account-title{
+    text-align:center;
+    margin-top:8px;
+    font-size:18px;
+}
+.account-sub{
+    text-align:center;
+    color:#777;
+    font-size:12px;
+    margin:6px 0 15px;
+}
+.input{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:10px;
+    outline:none;
+    font-size:13px;
+}
+.textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:10px;
+    outline:none;
+    resize:vertical;
+    min-height:65px;
+    font-size:13px;
+}
+.checkbox-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+}
+.checkbox-group input{
+    width:16px;
+    height:16px;
+    accent-color:#0b8f55;
+}
+.owner-box{
+    margin-top:15px;
+    border-top:1px solid #eee;
+    padding-top:12px;
+}
+.owner-btn{
+    width:100%;
+    border:none;
+    background:#222;
+    color:white;
+    padding:11px;
+    border-radius:10px;
+    font-weight:800;
+    font-size:13px;
+}
+.admin-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+.admin-header h2{
+    font-size:18px;
+}
+.close-x{
+    border:none;
+    background:#eee;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    font-size:18px;
+}
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+.stat-card{
+    padding:12px;
+    border-radius:12px;
+    background:#f4f7f5;
+    border-left:4px solid #0b8f55;
+}
+.stat-icon{
+    font-size:22px;
+}
+.stat-title{
+    font-size:11px;
+    color:#777;
+    margin-top:4px;
+}
+.stat-value{
+    font-size:20px;
+    font-weight:800;
+    margin-top:2px;
+}
+.admin-menu{
+    margin-top:12px;
+}
+.admin-menu button{
+    width:100%;
+    padding:11px;
+    border:none;
+    background:#f4f7f5;
+    margin-bottom:7px;
+    border-radius:10px;
+    text-align:left;
+    font-weight:700;
+    font-size:13px;
+}
+.admin-status{
+    margin-top:10px;
+    padding:9px;
+    border-radius:10px;
+    background:#eaf7f1;
+    color:#0b8f55;
+    font-size:11px;
+}
+.loading{
+    text-align:center;
+    padding:15px;
+    color:#777;
+}
+.admin-list-box{
+    max-height:200px;
+    overflow-y:auto;
+    background:#f9f9f9;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+    border:1px solid #ddd;
+}
+.admin-item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:7px 0;
+    border-bottom:1px solid #eee;
+    font-size:12px;
+    gap:10px;
+}
+@media(min-width:700px){
+    body{
+        max-width:700px;
+        margin:auto;
+    }
+    .products{
+        grid-template-columns:repeat(3,1fr);
+    }
+    .bottom-nav{
+        max-width:700px;
+        left:50%;
+        right:auto;
+        width:700px;
+        transform:translateX(-50%);
+    }
+}
+</style>
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <header>
-        <div class="logo">
-            <span>⭐ Dhaka Bazar</span>
-        </div>
-        <div class="top-menu">
-            <span class="active">Editor</span>
-            <span>AI Tools</span>
-            <span>Templates</span>
-            <span>Cloud Drafts</span>
-        </div>
-        <button class="export-btn" onclick="exportVideo()">Export 4K / 1080p</button>
-    </header>
-
-    <!-- Main Workspace -->
-    <div class="workspace">
-        
-        <!-- Sidebar Tools -->
-        <div class="sidebar">
-            <div class="sidebar-tabs">
-                <button class="tab-btn active" onclick="switchTab('media')">Media</button>
-                <button class="tab-btn" onclick="switchTab('audio')">Audio</button>
-                <button class="tab-btn" onclick="switchTab('text')">Text</button>
-                <button class="tab-btn" onclick="switchTab('effects')">Effects</button>
-                <button class="tab-btn" onclick="switchTab('ai')">AI Tools</button>
+<header class="header">
+    <div class="header-top">
+        <div class="logo-area">
+            <div class="logo-box">
+                <img src="./logo.png" alt="Dhaka Bazar" onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
             </div>
-            <div class="sidebar-content" id="sidebarContent">
-                <div class="tool-group">
-                    <h4>Import Media & Assets</h4>
-                    <div class="media-dropzone" onclick="document.getElementById('fileInput').click()">
-                        <p style="font-size: 12px; color: var(--text-muted);">Click to upload Video, Photos & Audio</p>
-                        <input type="file" id="fileInput" style="display:none" accept="video/*,image/*,audio/*" onchange="loadMedia(event)">
-                    </div>
-                </div>
-                <div class="tool-group">
-                    <h4>CapCut Pro Presets</h4>
-                    <div class="feature-grid">
-                        <div class="feature-card" onclick="alert('Auto Captions Generated!')">Auto Captions</div>
-                        <div class="feature-card" onclick="alert('Chroma Key Applied!')">Chroma Key</div>
-                        <div class="feature-card" onclick="alert('Body Effects Active!')">Body Effects</div>
-                        <div class="feature-card" onclick="alert('AI Voice Changer Ready!')">Voice Changer</div>
-                    </div>
-                </div>
+            <div>
+                <div class="brand-name">ঢাকা বাজার</div>
+                <div class="brand-sub">Dhaka Bazar • Online Shopping</div>
             </div>
         </div>
-
-        <!-- Video Preview Player -->
-        <div class="preview-area">
-            <video id="videoPlayer" controls></video>
-            <div class="player-controls">
-                <button onclick="document.getElementById('videoPlayer').play()">▶ Play</button>
-                <button onclick="document.getElementById('videoPlayer').pause()">⏸ Pause</button>
-                <button onclick="document.getElementById('videoPlayer').currentTime=0">⏮ Reset</button>
-            </div>
+        <div class="header-right-icons">
+            <button class="icon-btn-top" onclick="openSettingsModal()" title="Settings">⚙️</button>
+            <button id="topInstallBtn" class="install-top-btn" onclick="handleInstallButton()">📲 Install App</button>
         </div>
-
-        <!-- Properties & Settings Panel -->
-        <div class="properties-panel">
-            <div class="prop-section">
-                <h3>Video Settings</h3>
-                <div class="prop-control">
-                    <label>Aspect Ratio / Canvas</label>
-                    <select>
-                        <option>9:16 (TikTok / Reels / Shorts)</option>
-                        <option>16:9 (YouTube Standard)</option>
-                        <option>1:1 (Instagram Square)</option>
-                        <option>4:3 Classic</option>
-                    </select>
-                </div>
-                <div class="prop-control">
-                    <label>Speed Ramping (Curve)</label>
-                    <input type="range" min="0.2" max="5" step="0.1" value="1">
-                </div>
-            </div>
-            <div class="prop-section">
-                <h3>Audio & AI Enhancer</h3>
-                <div class="prop-control">
-                    <label>Volume Boost</label>
-                    <input type="range" min="0" max="200" value="100">
-                </div>
-                <div class="prop-control">
-                    <div class="checkbox-group">
-                        <input type="checkbox" checked> Background Noise Reduction
-                    </div>
-                </div>
-                <div class="prop-control" style="margin-top: 10px;">
-                    <div class="checkbox-group">
-                        <input type="checkbox"> Auto Audio Ducking
-                    </div>
-                </div>
-            </div>
-            <div class="prop-section">
-                <h3>Animation & Mask</h3>
-                <div class="prop-control">
-                    <label>Transition Effects</label>
-                    <select>
-                        <option>Fade / Dissolve</option>
-                        <option>Camera Zoom</option>
-                        <option>Light Leak Blur</option>
-                        <option>Slide & Split</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Timeline Area -->
-        <div class="timeline-area">
-            <div class="timeline-toolbar">
-                <button onclick="alert('Split Clip at Playhead')">✂ Split</button>
-                <button onclick="alert('Clip Deleted')">🗑 Delete</button>
-                <button onclick="alert('Speed Curve Mode Opened')">⏱ Speed</button>
-                <button onclick="alert('Clip Reversed')">🔄 Reverse</button>
-                <button onclick="alert('Keyframe Added')">📍 Keyframe</button>
-            </div>
-            <div class="timeline-tracks">
-                <div class="track">
-                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 15px;">Video Track 1</span>
-                    <div class="clip-item" id="timelineClip">No media loaded — Upload to edit</div>
-                </div>
-                <div class="track">
-                    <span style="font-size: 10px; color: var(--text-muted); position: absolute; right: 15px;">Audio Track 2</span>
-                </div>
-            </div>
-        </div>
-
     </div>
+    <div class="search-box">
+        <span>🔍</span>
+        <input id="searchInput" type="search" placeholder="পণ্য বা খাবার খুঁজুন..." oninput="searchProducts()">
+    </div>
+</header>
 
-    <script>
-        function loadMedia(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const url = URL.createObjectURL(file);
-                const videoPlayer = document.getElementById('videoPlayer');
-                videoPlayer.src = url;
-                videoPlayer.play();
-                document.getElementById('timelineClip').innerText = file.name;
+<div class="promo-banner">
+    <div class="promo-text">
+        <h3>এক ক্লিকেই ঘরে বসে ফল ও কাঁচাবাজার</h3>
+        <p>সুপার ফাস্ট হোম ডেলিভারি ৩০-৪৫ মিনিটে!</p>
+    </div>
+    <button class="promo-btn" onclick="scrollProducts()">Shop Now</button>
+</div>
+
+<div class="location-bar">
+    <div class="location-icon">📍</div>
+    <div class="location-text">
+        <div class="location-title">Delivery Address</div>
+        <div class="location-name" id="locationName">আপনার লোকেশন সেট করুন</div>
+    </div>
+    <button class="location-set" onclick="setLocation()">সেট</button>
+</div>
+
+<section class="install-card" id="installCard" style="display:flex; margin:10px; padding:15px; border-radius:15px; background:linear-gradient(135deg,#0b8f55,#087443); color:white; align-items:center; gap:12px;">
+    <div style="width:50px; height:50px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:30px;">🛒</div>
+    <div style="flex:1;">
+        <h2 style="font-size:15px;">Dhaka Bazar App</h2>
+        <p style="font-size:11px; opacity:.9;">ফোনে অ্যাপের মতো সরাসরি ব্যবহার ও ইনস্টল করতে ক্লিক করুন।</p>
+    </div>
+    <button onclick="handleInstallButton()" style="border:none; background:white; color:#0b8f55; padding:7px 12px; border-radius:18px; font-weight:800; font-size:12px;">📲 Install</button>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <h2>ক্যাটাগরি</h2>
+        <span>সব দেখুন</span>
+    </div>
+    <div class="categories">
+        <div class="category" onclick="filterCategory('all')">
+            <div class="category-icon">🛍️</div>
+            <div class="category-name">সব</div>
+        </div>
+        <div class="category" onclick="filterCategory('food')">
+            <div class="category-icon">🍔</div>
+            <div class="category-name">খাবার</div>
+        </div>
+        <div class="category" onclick="filterCategory('grocery')">
+            <div class="category-icon">🥦</div>
+            <div class="category-name">মুদি</div>
+        </div>
+        <div class="category" onclick="filterCategory('fish')">
+            <div class="category-icon">🐟</div>
+            <div class="category-name">মাছ</div>
+        </div>
+        <div class="category" onclick="filterCategory('clothes')">
+            <div class="category-icon">👕</div>
+            <div class="category-name">পোশাক</div>
+        </div>
+        <div class="category" onclick="filterCategory('electronics')">
+            <div class="category-icon">📱</div>
+            <div class="category-name">ইলেকট্রনিক্স</div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <h2>জনপ্রিয় পণ্য</h2>
+        <span>Dhaka Bazar</span>
+    </div>
+    <div class="products" id="productsContainer"></div>
+    <div id="noProduct" class="no-product">😔 কোনো পণ্য পাওয়া যায়নি</div>
+</section>
+
+<button class="cart-floating" onclick="openCart()">
+    🛒
+    <span id="cartCount" class="cart-count">0</span>
+</button>
+
+<nav class="bottom-nav">
+    <button class="nav-item active" onclick="goHome(this)">
+        <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="nav-item" onclick="scrollProducts(this)">
+        <span class="nav-icon">🛍️</span>Products
+    </button>
+    <button class="nav-item" onclick="openCart()">
+        <span class="nav-icon">🛒</span>Cart
+    </button>
+    <button class="nav-item" onclick="openAccount()">
+        <span class="nav-icon">👤</span>Account
+    </button>
+</nav>
+
+<!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2>⚙️ App Settings & Profile</h2>
+            <button class="close-x" onclick="closeModal('settingsModal')">×</button>
+        </div>
+        <div id="settingsProfileContent" style="margin-bottom:15px; background:#f4f7f5; padding:12px; border-radius:10px;"></div>
+        
+        <h3 style="font-size:15px; margin-bottom:8px;">📍 ঠিকানা ও লোকেশন আপডেট</h3>
+        <input id="settingsAddressInput" class="input" type="text" placeholder="আপনার সম্পূর্ণ ডেলিভারি ঠিকানা লিখুন">
+        <button class="primary-btn" onclick="saveSettingsAddress()">লোকেশন ও ঠিকানা সেভ করুন</button>
+
+        <button class="secondary-btn" onclick="closeModal('settingsModal')" style="margin-top:12px;">বন্ধ করুন</button>
+    </div>
+</div>
+
+<!-- INSTALL MODAL -->
+<div id="installModal" class="modal-bg">
+    <div class="modal install-modal">
+        <div class="install-logo">
+            <img src="./logo.png" alt="Dhaka Bazar" onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
+        </div>
+        <h2>Dhaka Bazar App</h2>
+        <div class="install-sub">আপনার ফোনে অ্যাপের মতো ইনস্টল করুন</div>
+        <div class="feature"><div class="feature-icon">⚡</div><div>দ্রুত App Access ও ফাস্ট লোডিং</div></div>
+        <div class="feature"><div class="feature-icon">📱</div><div>অ্যান্ড্রয়েড অ্যাপের মতো ফুল স্ক্রিন অভিজ্ঞতা</div></div>
+        <div class="feature"><div class="feature-icon">🏠</div><div>হোম স্ক্রিনেই ঢাকা বাজার আইকন</div></div>
+        <button id="realInstallBtn" class="primary-btn" onclick="installAppModalAction()">📲 Install Now</button>
+        <button class="secondary-btn" onclick="closeModal('installModal')">পরে করব</button>
+    </div>
+</div>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal-bg">
+    <div class="modal">
+        <h2>🛒 আপনার Cart</h2>
+        <div id="cartList" class="cart-list"></div>
+        <div style="margin-top:12px;">
+            <label style="font-size:12px; font-weight:700; color:#0b8f55; display:block; margin-bottom:4px;">ডেলিভারি ঠিকানা দিন:</label>
+            <input id="checkoutAddress" class="input" type="text" placeholder="বাসা নং, রোড, এলাকা...">
+        </div>
+        <div class="cart-total">
+            <span>মোট</span>
+            <span id="cartTotal">৳0</span>
+        </div>
+        <button class="primary-btn" onclick="checkout()">অর্ডার করুন</button>
+        <button class="secondary-btn" onclick="closeModal('cartModal')">বন্ধ করুন</button>
+    </div>
+</div>
+
+<!-- ACCOUNT MODAL -->
+<div id="accountModal" class="modal-bg">
+    <div class="modal">
+        <div class="account-logo">
+            <img src="./logo.png" alt="Dhaka Bazar" onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
+        </div>
+        <h2 class="account-title" id="accountModalTitle">Dhaka Bazar Account</h2>
+        <div class="account-sub" id="accountModalSub">আপনার অ্যাকাউন্টে Login করুন</div>
+
+        <div id="loginFormSection">
+            <input id="phoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
+            <input id="passwordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
+            <button class="primary-btn" onclick="loginUser()">Login</button>
+            <button class="secondary-btn" onclick="toggleAuthMode('register')" style="margin-top:10px; background:#eaf7f1; color:#0b8f55; font-weight:700;">
+                নতুন অ্যাকাউন্ট নেই? রেজিস্টার করুন
+            </button>
+        </div>
+
+        <div id="registerFormSection" style="display:none;">
+            <input id="regNameInput" class="input" type="text" placeholder="আপনার নাম">
+            <input id="regPhoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
+            <input id="regPasswordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
+            <input id="regConfirmPasswordInput" class="input" type="password" placeholder="কনফার্ম পাসওয়ার্ড">
+            <input id="regAddressInput" class="input" type="text" placeholder="ডেলিভারি ঠিকানা (ঐচ্ছিক)">
+            <label class="checkbox-group">
+                <input type="checkbox" id="regIsSeller"> সেলার হিসেবে রেজিস্টার করুন (পণ্য বিক্রি করতে)
+            </label>
+            <button class="primary-btn" onclick="registerUser()">Registration</button>
+            <button class="secondary-btn" onclick="toggleAuthMode('login')" style="margin-top:10px;">
+                একাউন্ট আছে? Login করুন
+            </button>
+        </div>
+
+        <div class="owner-box">
+            <button class="owner-btn" onclick="openOwnerLogin()">
+                🔐 Owner / Admin Login
+            </button>
+        </div>
+
+        <button class="secondary-btn" onclick="closeModal('accountModal')" style="margin-top:10px;">বন্ধ করুন</button>
+    </div>
+</div>
+
+<!-- SELLER DASHBOARD MODAL -->
+<div id="sellerModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2>🏪 Seller Dashboard</h2>
+            <button class="close-x" onclick="closeModal('sellerModal')">×</button>
+        </div>
+        
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
+        <div id="sellerInfoBox" style="margin-bottom:12px; font-weight:700; color:#0b8f55; display:flex; align-items:center; justify-content:space-between;"></div>
+        
+        <div class="stats-grid" style="margin-bottom:12px;">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-title">My Products</div>
+                <div id="sellerStatProducts" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-title">My Orders</div>
+                <div id="sellerStatOrders" class="stat-value">0</div>
+            </div>
+        </div>
+
+        <div id="sellerOrdersListBox" style="margin-bottom:15px;">
+            <h3 style="font-size:14px; margin-bottom:6px;">অর্ডার ও ডেলিভারি ম্যান অ্যাসাইন প্যানেল:</h3>
+            <div id="sellerOrdersListContent" class="admin-list-box" style="max-height:180px;"></div>
+        </div>
+
+        <h3 style="font-size:15px; margin-bottom:8px;">নতুন পণ্য যোগ করুন (আসল ছবিসহ)</h3>
+        <input id="newProdName" class="input" type="text" placeholder="পণ্যের নাম">
+        <textarea id="newProdDesc" class="textarea" placeholder="পণ্যের বিবরণ (উপাদান, ওজন ইত্যাদি)..."></textarea>
+        <input id="newProdPrice" class="input" type="number" placeholder="দাম (টাকা)">
+        <select id="newProdCat" class="input">
+            <option value="food">খাবার</option>
+            <option value="grocery">মুদি</option>
+            <option value="fish">মাছ</option>
+            <option value="clothes">পোশাক</option>
+            <option value="electronics">ইলেকট্রনিক্স</option>
+        </select>
+        
+        <div style="margin-bottom:10px;">
+            <label style="font-size:12px; font-weight:600; color:#0b8f55; display:block; margin-bottom:3px;">🖼️ পণ্যের ছবি সিলেক্ট করুন:</label>
+            <input id="newProdImageFile" class="input" type="file" accept="image/*" style="padding:6px; background:#fff;">
+        </div>
+
+        <button class="primary-btn" onclick="addNewProductBySeller()">পণ্য পোস্ট করুন</button>
+        <button class="secondary-btn" onclick="sellerLogout()" style="margin-top:12px; background:#ffeaea; color:red;">🔒 Logout Seller</button>
+    </div>
+</div>
+
+<!-- CUSTOMER DASHBOARD MODAL -->
+<div id="customerModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2>👤 Customer Dashboard</h2>
+            <button class="close-x" onclick="closeModal('customerModal')">×</button>
+        </div>
+
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
+        <div id="customerInfoBox" style="margin-bottom:12px; font-weight:700; color:#0b8f55;"></div>
+
+        <h3 style="font-size:15px; margin-bottom:8px;">📦 আপনার অর্ডারসমূহ ও লাইভ ট্র্যাকিং</h3>
+        <div id="customerOrdersList" class="admin-list-box" style="max-height:250px; margin-bottom:12px;"></div>
+
+        <button class="secondary-btn" onclick="customerLogout()" style="background:#ffeaea; color:red;">🔒 Logout</button>
+    </div>
+</div>
+
+<!-- REVIEWS & COMMENTS MODAL -->
+<div id="reviewsModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2 id="reviewModalTitle" style="font-size:17px;">⭐ পণ্যের রিভিউ ও কমেন্ট</h2>
+            <button class="close-x" onclick="closeModal('reviewsModal')">×</button>
+        </div>
+        <div id="reviewsListContent" class="admin-list-box" style="max-height:200px; margin-bottom:12px;"></div>
+        
+        <h3 style="font-size:14px; margin-bottom:6px;">আপনার মূল্যবান রিভিউ দিন:</h3>
+        <select id="userRatingSelect" class="input" style="margin-bottom:8px; width:120px;">
+            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+            <option value="4">⭐⭐⭐⭐ (4)</option>
+            <option value="3">⭐⭐⭐ (3)</option>
+            <option value="2">⭐⭐ (2)</option>
+            <option value="1">⭐ (1)</option>
+        </select>
+        <textarea id="userReviewComment" class="textarea" placeholder="পণ্যটি সম্পর্কে লিখুন..."></textarea>
+        <button class="primary-btn" onclick="submitProductReview()">রিভিউ সাবমিট করুন</button>
+    </div>
+</div>
+
+<!-- OWNER EMAIL LOGIN MODAL -->
+<div id="ownerLoginModal" class="modal-bg">
+    <div class="modal">
+        <h2>🔐 Owner Email Login</h2>
+        <p style="color:#777;font-size:12px;margin:6px 0 15px;">Dhaka Bazar Secure Owner Access</p>
+        <input id="ownerEmailInput" class="input" type="email" placeholder="ইমেল আইডি (e.g. blackdonyt7@gmail.com)">
+        <input id="ownerPasswordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
+        <button class="primary-btn" onclick="requestOwnerOTP()">✉️ Send OTP to Email</button>
+        <button class="secondary-btn" onclick="closeModal('ownerLoginModal')">বন্ধ করুন</button>
+    </div>
+</div>
+
+<!-- OWNER OTP VERIFY MODAL -->
+<div id="ownerOtpModal" class="modal-bg">
+    <div class="modal">
+        <h2>🔑 Email OTP Verification</h2>
+        <p style="color:#777;font-size:12px;margin:6px 0 15px;" id="otpSubText">আপনার ইমেল ইনবক্সে ওটিপি পাঠানো হয়েছে।</p>
+        <input id="ownerOtpInput" class="input" type="text" placeholder="6-digit OTP কোড দিন">
+        <button class="primary-btn" onclick="verifyOwnerOTP()">✅ Verify & Login</button>
+        <button class="secondary-btn" onclick="closeModal('ownerOtpModal')">বাতিল</button>
+    </div>
+</div>
+
+<!-- OWNER DASHBOARD -->
+<div id="adminModal" class="modal-bg">
+    <div class="modal">
+        <div class="admin-header">
+            <h2>📊 Owner Dashboard (Admin)</h2>
+            <button class="close-x" onclick="closeModal('adminModal')">×</button>
+        </div>
+
+        <button class="secondary-btn" onclick="copyAppShareLink()" style="margin-bottom:12px; background:#eaf7f1; color:#0b8f55; font-weight:700; border:1px dashed #0b8f55;">
+            🔗 ঢাকা বাজার অ্যাপসের লিংক কপি করুন
+        </button>
+
+        <div id="adminLoading" class="loading" style="display:none;">Loading...</div>
+        <div id="adminStats" class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-title">Total Users</div>
+                <div id="statUsers" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏪</div>
+                <div class="stat-title">Total Sellers</div>
+                <div id="statSellers" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-title">Total Products</div>
+                <div id="statProducts" class="stat-value">8</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-title">Total Orders</div>
+                <div id="statOrders" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-title">Total Sales</div>
+                <div id="statSales" class="stat-value">৳0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-title">Favorites</div>
+                <div id="statFavorites" class="stat-value">0</div>
+            </div>
+        </div>
+        <div id="adminStatus" class="admin-status">✅ Owner Logged in Successfully</div>
+        
+        <div class="admin-menu">
+            <button onclick="adminAction('users')">👤 User Management</button>
+            <button onclick="adminAction('sellers')">🏪 Seller Management & Verification</button>
+            <button onclick="adminAction('products')">📦 Product Management</button>
+            <button onclick="adminAction('orders')">🛒 Order Management</button>
+            <button onclick="adminAction('sales')">💰 Sales & Commission</button>
+        </div>
+
+        <div id="adminDynamicContent" style="margin-top:12px; display:none;"></div>
+
+        <button class="primary-btn" onclick="loadAdminDashboard()" style="margin-top:8px;">🔄 Refresh Dashboard</button>
+        <button class="secondary-btn" onclick="ownerLogout()" style="background:#ffeaea; color:red; margin-top:7px;">🔒 Logout Owner</button>
+    </div>
+</div>
+
+<script>
+let defaultProducts = [
+    { id:1, name:"কাচ্চি বিরিয়ানি", details:"সুগন্ধি বাসমতি চাল ও খাসির মাংসের সুস্বাদু ঐতিহ্যবাহী কাচ্চি বিরিয়ানি।", price:250, category:"food", image:"🍛", isCustomImg:false, seller:"Admin", rating:4.8, reviewsCount:15, reviews: [] },
+    { id:2, name:"দেশি রুই মাছ", details:"পদ্মার তাজা ও সুস্বাদু দেশি রুই মাছ, ওজন প্রায় ১ কেজি।", price:350, category:"fish", image:"🐟", isCustomImg:false, seller:"Admin", rating:4.5, reviewsCount:10, reviews: [] },
+    { id:3, name:"ফ্রেশ সবজি", details:"সরাসরি ক্ষেত থেকে সংগৃহীত বিষমুক্ত টাটকা শাকসবজির সমাহার।", price:120, category:"grocery", image:"🥦", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:22, reviews: [] },
+    { id:4, name:"চিকেন বার্গার", details:"juicy চিকেন প্যাটি ও স্পেশাল সস দিয়ে তৈরি সুস্বাদু বার্গার।", price:180, category:"food", image:"🍔", isCustomImg:false, seller:"Admin", rating:4.6, reviewsCount:18, reviews: [] },
+    { id:5, name:"টি-শার্ট", details:"১০০% সুতি আরামদায়ক প্রিমিয়াম কোয়ালিটি ক্যাজুয়াল টি-শার্ট।", price:450, category:"clothes", image:"👕", isCustomImg:false, seller:"Admin", rating:4.4, reviewsCount:9, reviews: [] },
+    { id:6, name:"স্মার্টফোন", details:"হাই পারফরম্যান্স ক্যামেরা ও দীর্ঘস্থায়ী ব্যাটারিযুক্ত আধুনিক স্মার্টফোন।", price:15000, category:"electronics", image:"📱", isCustomImg:false, seller:"Admin", rating:4.9, reviewsCount:30, reviews: [] },
+    { id:7, name:"চাল ৫ কেজি", details:"সেরা মানের সুস্বাদু মিনিকেট চাল, ৫ কেজির সাশ্রয়ী প্যাক।", price:420, category:"grocery", image:"🍚", isCustomImg:false, seller:"Admin", rating:4.7, reviewsCount:25, reviews: [] },
+    { id:8, name:"ইলিশ মাছ", details:"পদ্মার সুস্বাদু ও রূপালি তাজা বড় সাইজের ইলিশ মাছ।", price:850, category:"fish", image:"🐠", isCustomImg:false, seller:"Admin", rating:5.0, reviewsCount:40, reviews: [] }
+];
+
+let products = JSON.parse(localStorage.getItem("dhakaProducts") || JSON.stringify(defaultProducts));
+let cart = JSON.parse(localStorage.getItem("dhakaCart") || "[]");
+let favorites = JSON.parse(localStorage.getItem("dhakaFavorites") || "[]");
+let registeredUsers = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+let ordersList = JSON.parse(localStorage.getItem("dhakaOrdersList") || "[]");
+let verificationRequests = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
+let totalOrdersCount = parseInt(localStorage.getItem("dhakaTotalOrders") || "0");
+let totalSalesAmount = parseInt(localStorage.getItem("dhakaTotalSales") || "0");
+
+function copyAppShareLink(){
+    const appUrl = window.location.origin + window.location.pathname;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(appUrl).then(() => {
+            alert("ঢাকা বাজার অ্যাপসের লিংক সফলভাবে কপি করা হয়েছে! ✅");
+        }).catch(() => {
+            prompt("অ্যাপসের লিংক কপি করুন:", appUrl);
+        });
+    } else {
+        prompt("অ্যাপসের লিংক কপি করুন:", appUrl);
+    }
+}
+
+function renderProducts(list){
+    const container = document.getElementById("productsContainer");
+    const noProduct = document.getElementById("noProduct");
+    container.innerHTML = "";
+
+    if(!list.length){
+        noProduct.style.display = "block";
+        return;
+    }
+    noProduct.style.display = "none";
+
+    list.forEach(product => {
+        const isFav = favorites.includes(product.id);
+        let imgHtml = product.isCustomImg 
+            ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:cover;">` 
+            : `<div style="font-size:50px;">${product.image}</div>`;
+
+        let ratingVal = product.rating || 4.5;
+        let reviewsCount = product.reviewsCount || (product.reviews ? product.reviews.length : 10);
+        let prodDetails = product.details || "উন্নত মানের চমৎকার পণ্য।";
+
+        container.innerHTML += `
+            <div class="product">
+                <div class="product-image-wrap">
+                    <div class="product-image">${imgHtml}</div>
+                    <button class="favorite-btn" onclick="toggleFavorite(${product.id})">
+                        ${isFav ? "❤️" : "🤍"}
+                    </button>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-details-text">${prodDetails}</div>
+                    <div class="product-price">৳${product.price}</div>
+                </div>
+                <div class="product-actions-bar">
+                    <button class="copy-link-btn" onclick="copyProductLink(${product.id}, '${product.name}')">
+                        🔗 লিঙ্ক
+                    </button>
+                    <div class="rating-btn-box" onclick="openReviewsModal(${product.id})">
+                        <span class="rating-stars">⭐ ${ratingVal}</span>
+                        <span style="font-size:10px; color:#777;">(${reviewsCount})</span>
+                    </div>
+                </div>
+                <button class="reviews-toggle-btn" onclick="openReviewsModal(${product.id})">💬 রিভিউ ও কমেন্ট</button>
+                <div style="padding:6px 8px 8px 8px;">
+                    <button class="add-cart" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function toggleFavorite(id){
+    if(favorites.includes(id)){
+        favorites = favorites.filter(x => x !== id);
+    }else{
+        favorites.push(id);
+    }
+    localStorage.setItem("dhakaFavorites", JSON.stringify(favorites));
+    renderProducts(products);
+}
+
+function copyProductLink(id, name){
+    const dummyUrl = window.location.origin + window.location.pathname + "#product-" + id;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(dummyUrl).then(() => {
+            alert(`"${name}" প্রোডাক্টের লিঙ্ক কপি করা হয়েছে! ✅`);
+        }).catch(() => {
+            prompt("লিঙ্ক কপি করুন:", dummyUrl);
+        });
+    } else {
+        prompt("লিঙ্ক কপি করুন:", dummyUrl);
+    }
+}
+
+let currentReviewProductId = null;
+
+function openReviewsModal(id){
+    let product = products.find(p => p.id === id);
+    if(!product) return;
+    currentReviewProductId = id;
+
+    document.getElementById("reviewModalTitle").textContent = `⭐ ${product.name} - রিভিউ`;
+    renderReviewsList(product);
+    document.getElementById("reviewsModal").classList.add("show");
+}
+
+function renderReviewsList(product){
+    const listContent = document.getElementById("reviewsListContent");
+    let reviews = product.reviews || [];
+
+    if(reviews.length === 0){
+        listContent.innerHTML = `<div style="text-align:center; color:#777; padding:12px;">এখনো কোনো কমেন্ট নেই। প্রথম রিভিউটি আপনি দিন!</div>`;
+        return;
+    }
+
+    let html = "";
+    reviews.slice().reverse().forEach(rev => {
+        let stars = "⭐".repeat(rev.rating);
+        html += `
+            <div style="border-bottom:1px solid #eee; padding:7px 0;">
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:12px;">
+                    <span>👤 ${rev.userName}</span>
+                    <span style="color:#f39c12; font-size:11px;">${stars}</span>
+                </div>
+                <div style="font-size:12px; color:#333; margin-top:2px;">${rev.comment}</div>
+                <div style="font-size:10px; color:#888; margin-top:2px;">${rev.date}</div>
+            </div>
+        `;
+    });
+    listContent.innerHTML = html;
+}
+
+function submitProductReview(){
+    const phone = localStorage.getItem("dhakaUserPhone");
+    if(!phone){
+        alert("রিভিউ দেওয়ার জন্য আগে Login করুন।");
+        closeModal("reviewsModal");
+        openAccount();
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let me = users.find(u => u.phone === phone);
+    let userName = me ? me.name : "গ্রাহক";
+
+    let ratingVal = parseInt(document.getElementById("userRatingSelect").value);
+    let commentText = document.getElementById("userReviewComment").value.trim();
+
+    if(!commentText){
+        alert("দয়া করে কমেন্ট লিখুন।");
+        return;
+    }
+
+    let product = products.find(p => p.id === currentReviewProductId);
+    if(!product) return;
+
+    if(!product.reviews) product.reviews = [];
+    product.reviews.push({ userName, rating: ratingVal, comment: commentText, date: new Date().toLocaleDateString() });
+
+    let totalScore = product.reviews.reduce((sum, r) => sum + r.rating, 0);
+    product.reviewsCount = product.reviews.length;
+    product.rating = (totalScore / product.reviewsCount).toFixed(1);
+
+    localStorage.setItem("dhakaProducts", JSON.stringify(products));
+    renderProducts(products);
+    renderReviewsList(product);
+
+    document.getElementById("userReviewComment").value = "";
+    alert("আপনার রিভিউ সফলভাবে যোগ হয়েছে! ⭐");
+}
+
+function addToCart(id){
+    const currentUserPhone = localStorage.getItem("dhakaUserPhone");
+    if(currentUserPhone){
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let me = users.find(u => u.phone === currentUserPhone);
+        if(me && me.isSeller){
+            alert("সেলাররা পণ্য কিনতে পারবেন না!");
+            return;
+        }
+    }
+
+    const product = products.find(p => p.id === id);
+    if(!product) return;
+    const existing = cart.find(item => item.id === id);
+    if(existing){
+        existing.qty++;
+    }else{
+        cart.push({ ...product, qty:1 });
+    }
+    saveCart();
+    updateCartCount();
+}
+
+function saveCart(){
+    localStorage.setItem("dhakaCart", JSON.stringify(cart));
+}
+
+function updateCartCount(){
+    const count = cart.reduce((sum,item) => sum + item.qty, 0);
+    document.getElementById("cartCount").textContent = count;
+}
+
+function openCart(){
+    renderCart();
+    let savedAddr = localStorage.getItem("dhakaUserAddress") || "";
+    document.getElementById("checkoutAddress").value = savedAddr;
+    document.getElementById("cartModal").classList.add("show");
+}
+
+function renderCart(){
+    const list = document.getElementById("cartList");
+    const totalBox = document.getElementById("cartTotal");
+    list.innerHTML = "";
+
+    if(cart.length === 0){
+        list.innerHTML = `<div style="text-align:center; padding:25px; color:#777;">🛒 আপনার Cart খালি</div>`;
+        totalBox.textContent = "৳0";
+        return;
+    }
+
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.qty;
+        let cartImgHtml = item.isCustomImg ? `<img src="${item.image}" alt="" style="width:100%; height:100%; object-fit:cover;">` : `<div style="font-size:22px;">${item.image}</div>`;
+        list.innerHTML += `
+            <div class="cart-item">
+                <div class="cart-icon">${cartImgHtml}</div>
+                <div class="cart-info">
+                    <div class="cart-name">${item.name}</div>
+                    <div class="cart-price">৳${item.price}</div>
+                </div>
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+                    <b>${item.qty}</b>
+                    <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+                </div>
+                <button class="remove-btn" onclick="removeFromCart(${item.id})">×</button>
+            </div>
+        `;
+    });
+    totalBox.textContent = "৳" + total;
+}
+
+function changeQty(id,change){
+    const item = cart.find(x => x.id === id);
+    if(!item) return;
+    item.qty += change;
+    if(item.qty <= 0){
+        cart = cart.filter(x => x.id !== id);
+    }
+    saveCart();
+    updateCartCount();
+    renderCart();
+}
+
+function removeFromCart(id){
+    cart = cart.filter(item => item.id !== id);
+    saveCart();
+    updateCartCount();
+    renderCart();
+}
+
+function searchProducts(){
+    const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+    const result = products.filter(product => product.name.toLowerCase().includes(keyword) || (product.details && product.details.toLowerCase().includes(keyword)));
+    renderProducts(result);
+}
+
+function filterCategory(category){
+    if(category === "all"){
+        renderProducts(products);
+        return;
+    }
+    renderProducts(products.filter(product => product.category === category));
+}
+
+function setLocation(){
+    const current = localStorage.getItem("dhakaLocation") || "";
+    const location = prompt("আপনার এলাকার নাম লিখুন:", current);
+    if(location){
+        localStorage.setItem("dhakaLocation", location);
+        document.getElementById("locationName").textContent = location;
+    }
+}
+
+function loadLocation(){
+    const location = localStorage.getItem("dhakaLocation");
+    if(location){
+        document.getElementById("locationName").textContent = location;
+    }
+}
+
+function openSettingsModal(){
+    const phone = localStorage.getItem("dhakaUserPhone");
+    let profileBox = document.getElementById("settingsProfileContent");
+    
+    if(!phone){
+        profileBox.innerHTML = `<div><b>Status:</b> Guest User</div><div style="font-size:12px; color:#777; margin-top:3px;">অ্যাকাউন্টে লগইন করতে নিচে Account-এ যান।</div>`;
+        document.getElementById("settingsAddressInput").value = localStorage.getItem("dhakaLocation") || "";
+    } else {
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let me = users.find(u => u.phone === phone);
+        if(me){
+            profileBox.innerHTML = `<div><b>নাম:</b> ${me.name}</div><div><b>নাম্বার:</b> ${me.phone}</div><div><b>রোল:</b> ${me.isSeller ? 'সেলার (Seller)' : 'কাস্টমার'}</div>`;
+            document.getElementById("settingsAddressInput").value = me.address || localStorage.getItem("dhakaLocation") || "";
+        }
+    }
+    document.getElementById("settingsModal").classList.add("show");
+}
+
+function saveSettingsAddress(){
+    let addr = document.getElementById("settingsAddressInput").value.trim();
+    if(!addr){
+        alert("দয়া করে ঠিকানা লিখুন।");
+        return;
+    }
+    localStorage.setItem("dhakaLocation", addr);
+    localStorage.setItem("dhakaUserAddress", addr);
+
+    const phone = localStorage.getItem("dhakaUserPhone");
+    if(phone){
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let me = users.find(u => u.phone === phone);
+        if(me){
+            me.address = addr;
+            localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+        }
+    }
+    loadLocation();
+    closeModal("settingsModal");
+    alert("লোকেশন ও ঠিকানা সফলভাবে সেভ করা হয়েছে! ✅");
+}
+
+function openAccount(){
+    if(localStorage.getItem("dhakaOwnerLoggedIn") === "true"){
+        openAdminDashboard();
+        return;
+    }
+
+    const activePhone = localStorage.getItem("dhakaUserPhone");
+    if(activePhone){
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let user = users.find(u => u.phone === activePhone);
+        if(user){
+            if(user.isSeller){
+                openSellerDashboard(user);
+            } else {
+                openCustomerDashboard(user);
             }
+            return;
         }
+    }
+    toggleAuthMode('login');
+    document.getElementById("accountModal").classList.add("show");
+}
 
-        function exportVideo() {
-            alert('Rendering video at 1080p / 4K UHD. Your Dhaka Bazar video is processing for download!');
-        }
+function toggleAuthMode(mode){
+    const loginSec = document.getElementById("loginFormSection");
+    const regSec = document.getElementById("registerFormSection");
+    const title = document.getElementById("accountModalTitle");
+    const sub = document.getElementById("accountModalSub");
 
-        function switchTab(tabName) {
-            const btns = document.querySelectorAll('.tab-btn');
-            btns.forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+    if(mode === 'register'){
+        loginSec.style.display = "none";
+        regSec.style.display = "block";
+        title.textContent = "Create Account";
+        sub.textContent = "নতুন অ্যাকাউন্ট তৈরি করুন";
+    } else {
+        loginSec.style.display = "block";
+        regSec.style.display = "none";
+        title.textContent = "Dhaka Bazar Account";
+        sub.textContent = "আপনার অ্যাকাউন্টে Login করুন";
+    }
+}
+
+function registerUser(){
+    const name = document.getElementById("regNameInput").value.trim();
+    const phone = document.getElementById("regPhoneInput").value.trim();
+    const password = document.getElementById("regPasswordInput").value;
+    const confirmPassword = document.getElementById("regConfirmPasswordInput").value;
+    const address = document.getElementById("regAddressInput").value.trim();
+    const isSeller = document.getElementById("regIsSeller").checked;
+
+    if(!name || !phone || !password){
+        alert("সবগুলো বাধ্যতামূলক ঘর পূরণ করুন।");
+        return;
+    }
+    if(password !== confirmPassword){
+        alert("পাসওয়ার্ড মিলছে না।");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    if(users.some(u => u.phone === phone)){
+        alert("এই নাম্বারে ইতিমধ্যে অ্যাকাউন্ট রয়েছে!");
+        return;
+    }
+
+    const newUser = { 
+        name, 
+        phone, 
+        password, 
+        address, 
+        isSeller, 
+        verified: false, 
+        date: new Date().toLocaleDateString() 
+    };
+    users.push(newUser);
+    localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+
+    if(address){
+        localStorage.setItem("dhakaLocation", address);
+        localStorage.setItem("dhakaUserAddress", address);
+        loadLocation();
+    }
+
+    alert("রেজিস্ট্রেশন সফল হয়েছে! ✅ এখন লগইন করুন।");
+    toggleAuthMode('login');
+    document.getElementById("phoneInput").value = phone;
+}
+
+function loginUser(){
+    const phone = document.getElementById("phoneInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+
+    if(!phone || !password){
+        alert("মোবাইল নাম্বার এবং পাসওয়ার্ড দিন।");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let user = users.find(u => u.phone === phone && u.password === password);
+
+    if(!user){
+        alert("ভুল নাম্বার অথবা পাসওয়ার্ড!");
+        return;
+    }
+
+    localStorage.setItem("dhakaUserPhone", phone);
+    if(user.address){
+        localStorage.setItem("dhakaLocation", user.address);
+        localStorage.setItem("dhakaUserAddress", user.address);
+        loadLocation();
+    }
+
+    closeModal("accountModal");
+
+    if(!user.isSeller && (!user.address || user.address === "")){
+        let addr = prompt("আপনার ডেলিভারির ঠিকানা (লোকেশন) দিন:");
+        if(addr){
+            user.address = addr;
+            localStorage.setItem("dhakaLocation", addr);
+            localStorage.setItem("dhakaUserAddress", addr);
+            localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+            loadLocation();
         }
-    </script>
+    }
+
+    if(user.isSeller){
+        openSellerDashboard(user);
+    } else {
+        openCustomerDashboard(user);
+    }
+}
+
+function openSellerDashboard(user){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let freshUser = users.find(u => u.phone === user.phone) || user;
+
+    let badgeColor = freshUser.verified ? "#0b8f55" : "#222";
+    let badgeText = freshUser.verified ? "✅ Verified Seller" : "⚫ Unverified (Verify)";
+    
+    document.getElementById("sellerInfoBox").innerHTML = `
+        <span>সেলার: ${freshUser.name} (${freshUser.phone})</span>
+        <button onclick="requestVerification('${freshUser.phone}')" style="background:${badgeColor}; color:white; border:none; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:bold;">${badgeText}</button>
+    `;
+
+    let myProds = products.filter(p => p.seller === freshUser.phone);
+    document.getElementById("sellerStatProducts").textContent = myProds.length;
+    
+    let myProdIds = myProds.map(p => p.id);
+    let myOrders = ordersList.filter(o => o.items && o.items.some(item => myProdIds.includes(item.id)));
+    document.getElementById("sellerStatOrders").textContent = myOrders.length;
+
+    let ordersHtml = "";
+    if(myOrders.length === 0){
+        ordersHtml = `<div style="text-align:center; color:#777; padding:10px;">এখনো কোনো অর্ডার আসেনি</div>`;
+    } else {
+        myOrders.slice().reverse().forEach(o => {
+            let itemsStr = o.items.map(i => `${i.name} (${i.qty}টি)`).join(', ');
+            let deliveryManName = o.deliveryManName || "অ্যাসাইন করা হয়নি";
+            let deliveryManPhone = o.deliveryManPhone || "";
+
+            ordersHtml += `
+                <div class="admin-item-row" style="flex-direction:column; align-items:flex-start; gap:4px; padding:8px 0;">
+                    <div><b>অর্ডার আইডি:</b> ${o.id} | <b style="color:#0b8f55;">৳${o.amount}</b></div>
+                    <div><b>কাস্টমার:</b> ${o.userName} (${o.userPhone})</div>
+                    <div><b>ঠিকানা:</b> ${o.location || 'দেওয়া হয়নি'}</div>
+                    <div><b>আইটেম:</b> ${itemsStr}</div>
+                    <div style="font-size:11px; background:#eaf7f1; padding:4px 8px; border-radius:6px; width:100%; margin-top:3px;">
+                        🚚 <b>ডেলিভারি ম্যান:</b> ${deliveryManName} ${deliveryManPhone ? '('+deliveryManPhone+')' : ''}
+                        <button onclick="assignDeliveryMan('${o.id}')" style="float:right; background:#0b8f55; color:white; border:none; padding:2px 6px; border-radius:4px; font-size:10px;">ডেলিভারি ম্যান সিলেক্ট করুন</button>
+                    </div>
+                </div>`;
+        });
+    }
+    document.getElementById("sellerOrdersListContent").innerHTML = ordersHtml;
+    document.getElementById("sellerModal").classList.add("show");
+}
+
+function assignDeliveryMan(orderId){
+    let dmName = prompt("ডেলিভারি ম্যানের নাম লিখুন:");
+    if(!dmName) return;
+    let dmPhone = prompt("ডেলিভারি ম্যানের মোবাইল নাম্বার লিখুন:");
+
+    let order = ordersList.find(o => o.id === orderId);
+    if(order){
+        order.deliveryManName = dmName;
+        order.deliveryManPhone = dmPhone || "01900000000";
+        localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
+        alert("ডেলিভারি ম্যান সফলভাবে অ্যাসাইন করা হয়েছে! ✅");
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
+        if(me) openSellerDashboard(me);
+    }
+}
+
+function requestVerification(phone){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let user = users.find(u => u.phone === phone);
+    if(user && user.verified){
+        alert("অ্যাকাউন্ট ইতিমধ্যে ভেরিফাইড!");
+        return;
+    }
+    let reqList = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
+    if(!reqList.includes(phone)){
+        reqList.push(phone);
+        localStorage.setItem("dhakaVerificationRequests", JSON.stringify(reqList));
+        verificationRequests = reqList;
+    }
+    alert("ভেরিফিকেশনের জন্য অ্যাডমিনের কাছে রিকোয়েস্ট পাঠানো হয়েছে! ✅");
+}
+
+function addNewProductBySeller(){
+    const activePhone = localStorage.getItem("dhakaUserPhone");
+    const name = document.getElementById("newProdName").value.trim();
+    const details = document.getElementById("newProdDesc").value.trim();
+    const price = parseInt(document.getElementById("newProdPrice").value);
+    const category = document.getElementById("newProdCat").value;
+    const fileInput = document.getElementById("newProdImageFile");
+
+    if(!name || !price || !details){
+        alert("সবগুলো ঘর পূরণ করুন।");
+        return;
+    }
+
+    if(!fileInput.files || !fileInput.files[0]){
+        alert("পণ্যের আসল ছবি সিলেক্ট করা বাধ্যতামূলক!");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        saveNewProduct(name, details, price, category, e.target.result, true, activePhone);
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+}
+
+function saveNewProduct(name, details, price, category, image, isCustomImg, seller){
+    const newProduct = {
+        id: Date.now(),
+        name,
+        details,
+        price,
+        category,
+        image,
+        isCustomImg,
+        seller,
+        rating: 5.0,
+        reviewsCount: 1,
+        reviews: []
+    };
+
+    products.push(newProduct);
+    localStorage.setItem("dhakaProducts", JSON.stringify(products));
+    renderProducts(products);
+
+    alert("পণ্য সফলভাবে পোস্ট করা হয়েছে! ✅");
+    document.getElementById("newProdName").value = "";
+    document.getElementById("newProdDesc").value = "";
+    document.getElementById("newProdPrice").value = "";
+    document.getElementById("newProdImageFile").value = "";
+    closeModal("sellerModal");
+}
+
+function sellerLogout(){
+    localStorage.removeItem("dhakaUserPhone");
+    closeModal("sellerModal");
+    alert("সেলার লগআউট হয়েছেন।");
+}
+
+function openCustomerDashboard(user){
+    document.getElementById("customerInfoBox").textContent = `কাস্টমার: ${user.name} (${user.phone})`;
+    let myOrders = ordersList.filter(o => o.userPhone === user.phone);
+    let html = "";
+    if(myOrders.length === 0){
+        html = `<div style="text-align:center; color:#777; padding:15px;">আপনি এখনো কোনো অর্ডার করেননি</div>`;
+    } else {
+        myOrders.slice().reverse().forEach(o => {
+            let dmText = o.deliveryManName ? `🚚 ডেলিভারি ম্যান: <b>${o.deliveryManName}</b> (${o.deliveryManPhone || ''})` : `⏳ ডেলিভারি ম্যান অ্যাসাইন হচ্ছে...`;
+            let statusText = o.status === 'Cancelled' ? '<span style="color:red; font-weight:bold;">অর্ডার বাতিল করা হয়েছে</span>' : (o.status === 'Delivered' ? '<span style="color:#0b8f55; font-weight:bold;">অর্ডার সফলভাবে পৌঁছে গেছে ✅</span>' : '<span style="color:#e67e22; font-weight:bold;">প্রক্রিয়াধীন রয়েছে (৩০-৪৫ মিনিট)</span>');
+
+            html += `
+                <div class="admin-item-row" style="flex-direction:column; align-items:flex-start; gap:4px; padding:10px 0;">
+                    <div><b>অর্ডার আইডি:</b> ${o.id} | <b style="color:#0b8f55;">৳${o.amount}</b></div>
+                    <div style="font-size:11px; color:#555;">সময়: ${o.date}</div>
+                    <div style="font-size:12px; background:#f0f2f1; padding:4px 8px; border-radius:6px; width:100%;">${dmText}</div>
+                    <div style="font-size:12px; margin-top:2px;">স্ট্যাটাস: ${statusText}</div>
+                    ${o.status !== 'Delivered' && o.status !== 'Cancelled' ? `
+                        <div style="display:flex; gap:6px; margin-top:5px; width:100%;">
+                            <button onclick="customerConfirmDelivered('${o.id}')" style="flex:1; background:#0b8f55; color:white; border:none; padding:5px; border-radius:5px; font-weight:bold; font-size:11px;">📦 অর্ডার রিসিভ করলাম (Order Delivered)</button>
+                            <button onclick="customerCancelOrder('${o.id}')" style="background:#ffeaea; color:red; border:none; padding:5px 8px; border-radius:5px; font-weight:bold; font-size:11px;">রদ করুন</button>
+                        </div>
+                    ` : ''}
+                </div>`;
+        });
+    }
+    document.getElementById("customerOrdersList").innerHTML = html;
+    document.getElementById("customerModal").classList.add("show");
+}
+
+function customerConfirmDelivered(orderId){
+    let order = ordersList.find(o => o.id === orderId);
+    if(order){
+        order.status = "Delivered";
+        localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
+        alert("ধন্যবাদ! অর্ডার সফলভাবে সম্পন্ন হয়েছে বলে কনফার্ম করা হলো।");
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
+        if(me) openCustomerDashboard(me);
+    }
+}
+
+function customerCancelOrder(orderId){
+    if(confirm("আপনি কি এই অর্ডারটি ক্যানসেল করতে চান?")){
+        let order = ordersList.find(o => o.id === orderId);
+        if(order){
+            order.status = "Cancelled";
+            localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
+            alert("অর্ডারটি বাতিল করা হয়েছে।");
+            let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+            let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
+            if(me) openCustomerDashboard(me);
+        }
+    }
+}
+
+function customerLogout(){
+    localStorage.removeItem("dhakaUserPhone");
+    closeModal("customerModal");
+    alert("লগআউট সফল হয়েছে।");
+}
+
+function checkout(){
+    if(cart.length === 0){
+        alert("আপনার Cart খালি।");
+        return;
+    }
+    const phone = localStorage.getItem("dhakaUserPhone");
+    if(!phone){
+        alert("অর্ডার করার আগে Account Login করুন।");
+        closeModal("cartModal");
+        openAccount();
+        return;
+    }
+
+    let userAddress = document.getElementById("checkoutAddress").value.trim();
+    if(!userAddress){
+        userAddress = localStorage.getItem("dhakaLocation") || "ঢাকা সদর";
+    }
+    localStorage.setItem("dhakaLocation", userAddress);
+    localStorage.setItem("dhakaUserAddress", userAddress);
+    loadLocation();
+
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let me = users.find(u => u.phone === phone);
+    if(me && me.isSeller){
+        alert("সেলাররা অর্ডার করতে পারবেন না!");
+        return;
+    }
+
+    let cartTotalAmt = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    totalOrdersCount++;
+    totalSalesAmount += cartTotalAmt;
+
+    let newOrder = {
+        id: "ORD-" + Date.now().toString().slice(-6),
+        userPhone: phone,
+        userName: me ? me.name : "Customer",
+        amount: cartTotalAmt,
+        itemsCount: cart.length,
+        items: [...cart],
+        location: userAddress,
+        deliveryTime: "৩০ থেকে ৪৫ মিনিট",
+        deliveryManName: "",
+        deliveryManPhone: "",
+        status: "Pending",
+        date: new Date().toLocaleString()
+    };
+    ordersList.push(newOrder);
+
+    localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
+    localStorage.setItem("dhakaTotalOrders", totalOrdersCount);
+    localStorage.setItem("dhakaTotalSales", totalSalesAmount);
+
+    cart = [];
+    saveCart();
+    updateCartCount();
+    closeModal("cartModal");
+    alert("অর্ডার সফলভাবে প্লেস করা হয়েছে! 🎉 পৌঁছাতে প্রায় ৩০-৪৫ মিনিট সময় লাগবে।");
+}
+
+function goHome(button){
+    window.scrollTo({ top:0, behavior:"smooth" });
+    setActive(button);
+}
+
+function scrollProducts(button){
+    document.getElementById("productsContainer").scrollIntoView({ behavior:"smooth" });
+    if(button) setActive(button);
+}
+
+function setActive(button){
+    document.querySelectorAll(".nav-item").forEach(item => item.classList.remove("active"));
+    if(button){ button.classList.add("active"); }
+}
+
+function closeModal(id){
+    const modal = document.getElementById(id);
+    if(modal){ modal.classList.remove("show"); }
+}
+
+let deferredPrompt = null;
+const topInstallBtn = document.getElementById("topInstallBtn");
+const installCard = document.getElementById("installCard");
+
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredPrompt = event;
+    if (!localStorage.getItem("app_installed")) {
+        if(topInstallBtn) topInstallBtn.style.display = "block";
+        if(installCard) installCard.style.display = "flex";
+    }
+});
+
+function openInstallModal(){
+    document.getElementById("installModal").classList.add("show");
+}
+
+async function handleInstallButton(){
+    if(deferredPrompt){
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            localStorage.setItem("app_installed", "true");
+            hideInstallButtons();
+        }
+        deferredPrompt = null;
+    } else {
+        openInstallModal();
+    }
+}
+
+async function installAppModalAction(){
+    if(deferredPrompt){
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            localStorage.setItem("app_installed", "true");
+            hideInstallButtons();
+        }
+        deferredPrompt = null;
+        closeModal("installModal");
+    } else {
+        closeModal("installModal");
+        alerthttps://noyon2629.github.io/dhaka-bazar/
+}
+
+function hideInstallButtons(){
+    if(topInstallBtn) topInstallBtn.style.display = "none";
+    if(installCard) installCard.style.display = "none";
+}
+
+window.addEventListener("appinstalled", () => {
+    localStorage.setItem("app_installed", "true");
+    hideInstallButtons();
+});
+
+function updateInstallButtons(){
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if(isStandalone || localStorage.getItem("app_installed")){
+        hideInstallButtons();
+    } else {
+        if(installCard) installCard.style.display = "flex";
+        if(topInstallBtn) topInstallBtn.style.display = "block";
+    }
+}
+
+function openOwnerLogin(){
+    closeModal("accountModal");
+    document.getElementById("ownerLoginModal").classList.add("show");
+}
+
+let generatedOTP = "";
+const correctOwnerEmail = "blackdonyt7@gmail.com";
+const correctOwnerPass = "DhakaBazar@2026#Owner";
+
+function requestOwnerOTP(){
+    const email = document.getElementById("ownerEmailInput").value.trim();
+    const pass = document.getElementById("ownerPasswordInput").value;
+
+    if(email !== correctOwnerEmail || pass !== correctOwnerPass){
+        alert("ভুল ইমেল আইডি অথবা পাসওয়ার্ড!");
+        return;
+    }
+
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    alert(`[Simulation Email Sent to ${correctOwnerEmail}]\nআপনার ঢাকা বাজার ওনার ওটিপি কোড হলো: ${generatedOTP}`);
+    
+    closeModal("ownerLoginModal");
+    document.getElementById("otpSubText").textContent = `${correctOwnerEmail} ইমেলে ওটিপি পাঠানো হয়েছে।`;
+    document.getElementById("ownerOtpModal").classList.add("show");
+}
+
+function verifyOwnerOTP(){
+    const enteredOTP = document.getElementById("ownerOtpInput").value.trim();
+    if(enteredOTP === generatedOTP){
+        localStorage.setItem("dhakaOwnerLoggedIn", "true");
+        closeModal("ownerOtpModal");
+        document.getElementById("ownerOtpInput").value = "";
+        openAdminDashboard();
+    } else {
+        alert("ভুল ওটিপি কোড! আবার চেষ্টা করুন।");
+    }
+}
+
+function openAdminDashboard(){
+    if(localStorage.getItem("dhakaOwnerLoggedIn") !== "true"){
+        openOwnerLogin();
+        return;
+    }
+    document.getElementById("adminModal").classList.add("show");
+}
+
+function loadAdminDashboard(){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let reqs = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
+    
+    let totalUsersCount = users.filter(u => !u.isSeller).length;
+    let totalSellersCount = users.filter(u => u.isSeller).length;
+
+    document.getElementById("statUsers").textContent = totalUsersCount;
+    document.getElementById("statSellers").textContent = totalSellersCount;
+    document.getElementById("statProducts").textContent = products.length;
+    document.getElementById("statOrders").textContent = ordersList.length;
+    document.getElementById("statSales").textContent = "৳" + totalSalesAmount;
+    document.getElementById("statFavorites").textContent = favorites.length;
+
+    document.getElementById("adminLoading").style.display = "none";
+    document.getElementById("adminStats").style.display = "grid";
+    document.getElementById("adminStatus").textContent = `✅ Owner Active • রিকোয়েস্ট: ${reqs.length} টি`;
+    document.getElementById("adminDynamicContent").style.display = "none";
+}
+
+function adminAction(type){
+    let contentBox = document.getElementById("adminDynamicContent");
+    contentBox.style.display = "block";
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let reqs = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
+
+    if(type === 'users'){
+        let html = `<h4 style="margin-bottom:6px;">👤 Customer List (Total: ${users.filter(u => !u.isSeller).length})</h4><div class="admin-list-box">`;
+        let normalUsers = users.filter(u => !u.isSeller);
+        if(normalUsers.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো কাস্টমার নেই</div>`;
+        normalUsers.forEach(u => {
+            html += `<div class="admin-item-row"><span><b>${u.name}</b> (${u.phone}) - ঠিকানা: ${u.address || 'নেই'}</span> <button onclick="deleteUser('${u.phone}')" style="background:#ffeaea; color:red; border:none; padding:2px 6px; border-radius:4px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'sellers'){
+        let html = `<h4 style="margin-bottom:6px;">🏪 Seller Management & Verification</h4>`;
+        html += `<div class="admin-list-box" style="margin-bottom:10px;">`;
+        if(reqs.length === 0){
+            html += `<div style="text-align:center; color:#777; padding:8px;">কোনো নতুন ভেরিফিকেশন রিকোয়েস্ট নেই</div>`;
+        } else {
+            reqs.forEach(reqPhone => {
+                let s = users.find(u => u.phone === reqPhone);
+                let sName = s ? s.name : reqPhone;
+                html += `<div class="admin-item-row"><span><b>${sName}</b> (${reqPhone})</span> <button onclick="verifySeller('${reqPhone}')" style="background:#0b8f55; color:white; border:none; padding:3px 8px; border-radius:4px; font-weight:bold;">Verify</button></div>`;
+            });
+        }
+        html += `</div><div class="admin-list-box">`;
+        let sellers = users.filter(u => u.isSeller);
+        if(sellers.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো সেলার নেই</div>`;
+        sellers.forEach(s => {
+            let badge = s.verified ? '<span style="color:#0b8f55;">(Verified ✅)</span>' : '';
+            html += `<div class="admin-item-row"><span><b>${s.name}</b> (${s.phone}) ${badge}</span> <button onclick="deleteUser('${s.phone}')" style="background:#ffeaea; color:red; border:none; padding:2px 6px; border-radius:4px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'products'){
+        let html = `<h4 style="margin-bottom:6px;">📦 Product Management</h4><div class="admin-list-box">`;
+        products.forEach(p => {
+            html += `<div class="admin-item-row"><span><b>${p.name}</b> - ৳${p.price}</span> <button onclick="adminDeleteProduct(${p.id})" style="background:#ffeaea; color:red; border:none; padding:2px 6px; border-radius:4px;">ডিলিট</button></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'orders'){
+        let html = `<h4 style="margin-bottom:6px;">🛒 Order List</h4><div class="admin-list-box">`;
+        if(ordersList.length === 0) html += `<div style="text-align:center; color:#777; padding:8px;">কোনো অর্ডার নেই</div>`;
+        ordersList.slice().reverse().forEach(o => {
+            html += `<div class="admin-item-row"><span><b>${o.id}</b> | ${o.userName} | <b style="color:#0b8f55;">৳${o.amount}</b></span> <span>${o.status || 'Pending'}</span></div>`;
+        });
+        html += `</div>`;
+        contentBox.innerHTML = html;
+    }
+    else if(type === 'sales'){
+        contentBox.innerHTML = `<h4 style="margin-bottom:6px;">💰 Sales</h4><div style="background:#eaf7f1; padding:10px; border-radius:8px; color:#0b8f55; font-weight:bold;">মোট অর্ডার: ${totalOrdersCount} টি | মোট বিক্রি: ৳${totalSalesAmount}</div>`;
+    }
+}
+
+function verifySeller(phone){
+    let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+    let user = users.find(u => u.phone === phone);
+    if(user){
+        user.verified = true;
+        localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+        let reqs = JSON.parse(localStorage.getItem("dhakaVerificationRequests") || "[]");
+        reqs = reqs.filter(p => p !== phone);
+        localStorage.setItem("dhakaVerificationRequests", JSON.stringify(reqs));
+        verificationRequests = reqs;
+        alert("সেলার ভেরিফাই করা হয়েছে! ✅");
+        adminAction('sellers');
+        loadAdminDashboard();
+    }
+}
+
+function deleteUser(phone){
+    if(confirm("ডিলিট করতে চান?")) {
+        let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
+        users = users.filter(u => u.phone !== phone);
+        localStorage.setItem("dhakaUsersList", JSON.stringify(users));
+        adminAction('users');
+        loadAdminDashboard();
+    }
+}
+
+function adminDeleteProduct(id){
+    if(confirm("ডিলিট করতে চান?")) {
+        products = products.filter(p => p.id !== id);
+        localStorage.setItem("dhakaProducts", JSON.stringify(products));
+        renderProducts(products);
+        adminAction('products');
+        loadAdminDashboard();
+    }
+}
+
+function ownerLogout(){
+    localStorage.removeItem("dhakaOwnerLoggedIn");
+    closeModal("adminModal");
+    alert("Owner Logout হয়েছে।");
+}
+
+renderProducts(products);
+updateCartCount();
+loadLocation();
+setTimeout(updateInstallButtons, 500);
+</script>
+
 </body>
-</html>
+    </html>
