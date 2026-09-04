@@ -3,9 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dhaka Bazar - ঢাকা বাজার</title>
-<meta name="description" content="Dhaka Bazar - বাংলাদেশের সহজ ও দ্রুত অনলাইন শপিং">
+<title>Dhaka Bazar - ঢাকা বাজার | Online Shopping & Grocery</title>
+<meta name="description" content="Dhaka Bazar - বাংলাদেশের সহজ ও দ্রুত অনলাইন শপিং, কাঁচাবাজার এবং হোম ডেলিভারি অ্যাপ।">
+<meta name="keywords" content="Dhaka Bazar, ঢাকা বাজার, online shopping bangladesh, grocery delivery dhaka, kacci biriyani, fresh fish">
 <meta name="theme-color" content="#0b8f55">
+
+<!-- Open Graph / SEO Meta Tags for Search Engines & Social Media -->
+<meta property="og:title" content="Dhaka Bazar - ঢাকা বাজার">
+<meta property="og:description" content="এক ক্লিকেই ঘরে বসে ফল, কাঁচাবাজার ও পছন্দের পণ্য অর্ডার করুন।">
+<meta property="og:type" content="website">
+
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-512.png">
@@ -735,7 +742,7 @@ button{
         </div>
         <div class="header-right-icons">
             <button class="icon-btn-top" onclick="openSettingsModal()" title="Settings">⚙️</button>
-            <button id="topInstallBtn" class="install-top-btn" onclick="handleInstallButton()">📲 Install</button>
+            <button id="topInstallBtn" class="install-top-btn" onclick="handleInstallButton()">📲 Install App</button>
         </div>
     </div>
     <div class="search-box">
@@ -765,7 +772,7 @@ button{
     <div style="width:50px; height:50px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:30px;">🛒</div>
     <div style="flex:1;">
         <h2 style="font-size:15px;">Dhaka Bazar App</h2>
-        <p style="font-size:11px; opacity:.9;">ফোনে App-এর মতো ব্যবহার করতে Install করুন।</p>
+        <p style="font-size:11px; opacity:.9;">ফোনে অ্যাপের মতো সরাসরি ব্যবহার ও ইনস্টল করতে ক্লিক করুন।</p>
     </div>
     <button onclick="handleInstallButton()" style="border:none; background:white; color:#0b8f55; padding:7px 12px; border-radius:18px; font-weight:800; font-size:12px;">📲 Install</button>
 </section>
@@ -855,12 +862,12 @@ button{
         <div class="install-logo">
             <img src="./logo.png" alt="Dhaka Bazar" onerror="this.style.display='none';this.parentElement.innerHTML='🛒';">
         </div>
-        <h2>Dhaka Bazar</h2>
-        <div class="install-sub">আপনার ফোনে App-এর মতো ব্যবহার করুন</div>
-        <div class="feature"><div class="feature-icon">⚡</div><div>দ্রুত App Access</div></div>
-        <div class="feature"><div class="feature-icon">📱</div><div>Android App-এর মতো ব্যবহার</div></div>
-        <div class="feature"><div class="feature-icon">🏠</div><div>Home Screen-এ App Icon</div></div>
-        <button id="realInstallBtn" class="primary-btn" onclick="installAppModalAction()">📲 Install App</button>
+        <h2>Dhaka Bazar App</h2>
+        <div class="install-sub">আপনার ফোনে অ্যাপের মতো ইনস্টল করুন</div>
+        <div class="feature"><div class="feature-icon">⚡</div><div>দ্রুত App Access ও ফাস্ট লোডিং</div></div>
+        <div class="feature"><div class="feature-icon">📱</div><div>অ্যান্ড্রয়েড অ্যাপের মতো ফুল স্ক্রিন অভিজ্ঞতা</div></div>
+        <div class="feature"><div class="feature-icon">🏠</div><div>হোম স্ক্রিনেই ঢাকা বাজার আইকন</div></div>
+        <button id="realInstallBtn" class="primary-btn" onclick="installAppModalAction()">📲 Install Now</button>
         <button class="secondary-btn" onclick="closeModal('installModal')">পরে করব</button>
     </div>
 </div>
@@ -906,7 +913,7 @@ button{
             <input id="regPhoneInput" class="input" type="tel" placeholder="মোবাইল নাম্বার">
             <input id="regPasswordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
             <input id="regConfirmPasswordInput" class="input" type="password" placeholder="কনফার্ম পাসওয়ার্ড">
-            <input id="regAddressInput" class="input" type="text" placeholder="ডেলিভারি ঠিকানা (ঐচ্ছিক, পরে দেওয়া যাবে)">
+            <input id="regAddressInput" class="input" type="text" placeholder="ডেলিভারি ঠিকানা (ঐচ্ছিক)">
             <label class="checkbox-group">
                 <input type="checkbox" id="regIsSeller"> সেলার হিসেবে রেজিস্টার করুন (পণ্য বিক্রি করতে)
             </label>
@@ -1747,7 +1754,7 @@ function customerConfirmDelivered(orderId){
     if(order){
         order.status = "Delivered";
         localStorage.setItem("dhakaOrdersList", JSON.stringify(ordersList));
-        alert("ধন্যবাদ! অর্ডার সফলভাবে সম্পন্ন হয়েছে বলে কনফার্ম করা হলো। সেলারকে নোটিফিকেশন পাঠানো হয়েছে।");
+        alert("ধন্যবাদ! অর্ডার সফলভাবে সম্পন্ন হয়েছে বলে কনফার্ম করা হলো।");
         let users = JSON.parse(localStorage.getItem("dhakaUsersList") || "[]");
         let me = users.find(u => u.phone === localStorage.getItem("dhakaUserPhone"));
         if(me) openCustomerDashboard(me);
@@ -1853,7 +1860,7 @@ function closeModal(id){
     if(modal){ modal.classList.remove("show"); }
 }
 
-/* --- প্রফেশনাল PWA ইনস্টল লজিক --- */
+/* --- প্রফেশনাল PWA ইনস্টল ও অ্যাপ ডাউনলোড লজিক --- */
 let deferredPrompt = null;
 const topInstallBtn = document.getElementById("topInstallBtn");
 const installCard = document.getElementById("installCard");
