@@ -1030,15 +1030,26 @@ button{
     </div>
 </div>
 
-<!-- OWNER LOGIN -->
+<!-- OWNER EMAIL LOGIN MODAL -->
 <div id="ownerLoginModal" class="modal-bg">
     <div class="modal">
-        <h2>🔐 Owner Login</h2>
-        <p style="color:#777;font-size:12px;margin:6px 0 15px;">Dhaka Bazar Owner Dashboard</p>
-        <input id="ownerUsername" class="input" type="text" placeholder="Owner Username / UID">
-        <input id="ownerPassword" class="input" type="password" placeholder="Owner Password">
-        <button class="primary-btn" onclick="ownerLogin()">🔐 Login</button>
+        <h2>🔐 Owner Email Login</h2>
+        <p style="color:#777;font-size:12px;margin:6px 0 15px;">Dhaka Bazar Secure Owner Access</p>
+        <input id="ownerEmailInput" class="input" type="email" placeholder="ইমেল আইডি (e.g. blackdonyt7@gmail.com)">
+        <input id="ownerPasswordInput" class="input" type="password" placeholder="পাসওয়ার্ড">
+        <button class="primary-btn" onclick="requestOwnerOTP()">✉️ Send OTP to Email</button>
         <button class="secondary-btn" onclick="closeModal('ownerLoginModal')">বন্ধ করুন</button>
+    </div>
+</div>
+
+<!-- OWNER OTP VERIFY MODAL -->
+<div id="ownerOtpModal" class="modal-bg">
+    <div class="modal">
+        <h2>🔑 Email OTP Verification</h2>
+        <p style="color:#777;font-size:12px;margin:6px 0 15px;" id="otpSubText">আপনার ইমেল ইনবক্সে ওটিপি পাঠানো হয়েছে।</p>
+        <input id="ownerOtpInput" class="input" type="text" placeholder="6-digit OTP কোড দিন">
+        <button class="primary-btn" onclick="verifyOwnerOTP()">✅ Verify & Login</button>
+        <button class="secondary-btn" onclick="closeModal('ownerOtpModal')">বাতিল</button>
     </div>
 </div>
 
@@ -1934,20 +1945,40 @@ function openOwnerLogin(){
     document.getElementById("ownerLoginModal").classList.add("show");
 }
 
-function ownerLogin(){
-    const username = document.getElementById("ownerUsername").value.trim();
-    const password = document.getElementById("ownerPassword").value;
+let generatedOTP = "";
+const correctOwnerEmail = "blackdonyt7@gmail.com";
+const correctOwnerPass = "DhakaBazar@2026#Owner";
 
-    const validUID = "2629574242";
-    const validPassword = "DhakaBazar@2026#Owner";
+function requestOwnerOTP(){
+    const email = document.getElementById("ownerEmailInput").value.trim();
+    const pass = document.getElementById("ownerPasswordInput").value;
 
-    if((username === validUID || username === "admin") && password === validPassword){
-        localStorage.setItem("dhakaOwnerLoggedIn", "true");
-        closeModal("ownerLoginModal");
-        openAdminDashboard();
+    if(email !== correctOwnerEmail || pass !== correctOwnerPass){
+        alert("ভুল ইমেল আইডি অথবা পাসওয়ার্ড!");
         return;
     }
-    alert("ভুল UID অথবা পাসওয়ার্ড!");
+
+    // Generate a secure 6-digit OTP
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Simulate sending OTP to email (Displaying in alert for secure sandbox testing purposes)
+    alert(`[Simulation Email Sent to ${correctOwnerEmail}]\nআপনার ঢাকা বাজার ওনার ওটিপি কোড হলো: ${generatedOTP}`);
+    
+    closeModal("ownerLoginModal");
+    document.getElementById("otpSubText").textContent = `${correctOwnerEmail} ইমেলে ওটিপি পাঠানো হয়েছে।`;
+    document.getElementById("ownerOtpModal").classList.add("show");
+}
+
+function verifyOwnerOTP(){
+    const enteredOTP = document.getElementById("ownerOtpInput").value.trim();
+    if(enteredOTP === generatedOTP){
+        localStorage.setItem("dhakaOwnerLoggedIn", "true");
+        closeModal("ownerOtpModal");
+        document.getElementById("ownerOtpInput").value = "";
+        openAdminDashboard();
+    } else {
+        alert("ভুল ওটিপি কোড! আবার চেষ্টা করুন।");
+    }
 }
 
 function openAdminDashboard(){
